@@ -12,7 +12,7 @@
   --ifm-color-primary-lighter: #60a5fa;
   --ifm-color-primary-lightest: #93c5fd;
 
-  --ifm-heading-font-weight: 600;
+  --ifm-heading-font-weight: 500;
   --ifm-h1-font-size: 2rem;
   --ifm-h2-font-size: 1.4rem;
   --ifm-h3-font-size: 1.1rem;
@@ -30,10 +30,4 @@
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'DM Mono', monospace;
-  letter-spacing: -0.02em;
-}
-
-body {
-  font-family: 'DM Mono', monospace;
-  font-weight: 300;
-}
+  font-weight:
