@@ -70,4 +70,41 @@ const config = {
           label: 'Documentation',
         },
         {
-          href: 'https://github.com/machinesa
+          href: 'https://github.com/machinesandwords/3dprintshopsoftware',
+          label: 'GitHub',
+          position: 'right',
+        },
+      ],
+    },
+    footer: {
+      style: 'dark',
+      links: [
+        {
+          title: 'Docs',
+          items: [
+            {
+              label: 'Getting Started',
+              to: '/docs/intro',
+            },
+          ],
+        },
+        {
+          title: 'More',
+          items: [
+            {
+              label: 'GitHub',
+              href: 'https://github.com/machinesandwords/3dprintshopsoftware',
+            },
+          ],
+        },
+      ],
+      copyright: `Copyright © ${new Date().getFullYear()} 3D Print Shop Software.`,
+    },
+    prism: {
+      theme: require('prism-react-renderer').themes.github,
+      darkTheme: require('prism-react-renderer').themes.dracula,
+    },
+  }),
+};
+
+module.exports = config;
