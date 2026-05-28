@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Print Shop Software — The Independent Guide</title>
+  <meta name="description" content="An independent guide to software tools, workflows, and economics for 3D print shop operators.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Variables ─────────────────────────────────────────── */
+    :root {
+      --bg:         #f4f4f3;
+      --surface:    #ffffff;
+      --border:     #d8d8d6;
+      --charcoal:   #2a2a28;
+      --mid:        #6b6b68;
+      --accent:     #087DA6;
+      --accent-dim: #065f80;
+      --hairline:   1px solid #d8d8d6;
+
+      --h1: 20px;
+      --h2: 16px;
+      --body: 14px;
+      --small: 12px;
+
+      --sidebar-width: 240px;
+      --content-max: 720px;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: var(--body); }
+    body {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      color: var(--charcoal);
+      background: var(--bg);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-dim); text-decoration: underline; }
+
+    /* ── Top bar ───────────────────────────────────────────── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      background: var(--surface);
+      border-bottom: var(--hairline);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 100;
+      gap: 24px;
+    }
+    .topbar-brand {
+      font-size: var(--small);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      white-space: nowrap;
+    }
+    .topbar-brand span {
+      color: var(--accent);
+    }
+    .topbar-divider {
+      width: 1px;
+      height: 16px;
+      background: var(--border);
+    }
+    .topbar-tagline {
+      font-size: var(--small);
+      color: var(--mid);
+      font-style: italic;
+    }
+    .topbar-right {
+      margin-left: auto;
+      font-size: var(--small);
+      color: var(--mid);
+    }
+    .topbar-right a {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── Layout ────────────────────────────────────────────── */
+    .layout {
+      display: flex;
+      padding-top: 44px;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ───────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      position: fixed;
+      top: 44px;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      border-right: var(--hairline);
+      background: var(--surface);
+      padding: 24px 0 48px;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .nav-section {
+      margin-bottom: 4px;
+    }
+
+    .nav-section-label {
+      font-size: var(--small);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding: 12px 20px 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-section-label::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 12px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .nav-item {
+      display: block;
+      font-size: var(--small);
+      color: var(--charcoal);
+      padding: 4px 20px 4px 20px;
+      line-height: 1.5;
+      position: relative;
+    }
+    .nav-item:hover { color: var(--accent); text-decoration: none; }
+    .nav-item.active {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent);
+    }
+
+    /* pipe-style hierarchy */
+    .nav-item.depth-0 { padding-left: 20px; }
+    .nav-item.depth-1 {
+      padding-left: 32px;
+      color: var(--mid);
+    }
+    .nav-item.depth-1::before {
+      content: '│ ';
+      color: var(--border);
+      position: static;
+      width: auto;
+      height: auto;
+      background: none;
+      margin-right: 0;
+    }
+    .nav-item.depth-1.last::before {
+      content: '└ ';
+      color: var(--border);
+    }
+    .nav-item.depth-1:hover { color: var(--accent); }
+
+    .nav-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 12px 20px;
+    }
+
+    /* ── Main content ──────────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+      padding: 48px 48px 96px;
+    }
+
+    .content {
+      width: 100%;
+      max-width: var(--content-max);
+    }
+
+    /* ── Breadcrumb ────────────────────────────────────────── */
+    .breadcrumb {
+      font-size: var(--small);
+      color: var(--mid);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .breadcrumb a { color: var(--mid); }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb-sep { color: var(--border); }
+
+    /* ── Typography ────────────────────────────────────────── */
+    h1 {
+      font-size: var(--h1);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--charcoal);
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    h2 {
+      font-size: var(--h2);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--charcoal);
+      margin-top: 40px;
+      margin-bottom: 12px;
+      padding-top: 40px;
+      border-top: var(--hairline);
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-size: var(--body);
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-top: 28px;
+      margin-bottom: 8px;
+    }
+    p {
+      margin-bottom: 16px;
+      color: var(--charcoal);
+    }
+    .lead {
+      font-size: 15px;
+      color: var(--mid);
+      margin-bottom: 32px;
+      border-left: 2px solid var(--accent);
+      padding-left: 16px;
+      font-style: italic;
+    }
+
+    /* ── Divider ───────────────────────────────────────────── */
+    hr {
+      border: none;
+      border-top: var(--hairline);
+      margin: 40px 0;
+    }
+
+    /* ── Tables ────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--small);
+      margin-bottom: 24px;
+    }
+    th {
+      text-align: left;
+      font-weight: 700;
+      font-size: var(--small);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--charcoal);
+    }
+    td {
+      padding: 8px 12px;
+      border-bottom: var(--hairline);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg); }
+
+    /* ── Tags / badges ─────────────────────────────────────── */
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      color: var(--mid);
+      margin-right: 4px;
+    }
+    .tag-accent {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Cards ─────────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      border: var(--hairline);
+      margin-bottom: 32px;
+    }
+    .card {
+      background: var(--surface);
+      padding: 20px;
+      border: none;
+    }
+    .card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 6px;
+    }
+    .card-value {
+      font-size: var(--h2);
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+    .card-sub {
+      font-size: var(--small);
+      color: var(--mid);
+      margin-top: 4px;
+    }
+
+    /* ── Inline accent elements ────────────────────────────── */
+    .accent-text { color: var(--accent); }
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ── Section intro block ───────────────────────────────── */
+    .section-intro {
+      background: var(--surface);
+      border: var(--hairline);
+      border-left: 3px solid var(--accent);
+      padding: 20px 24px;
+      margin-bottom: 40px;
+    }
+    .section-intro p { margin-bottom: 0; color: var(--mid); font-size: var(--small); }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .page-footer {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: var(--hairline);
+    }
+
+    /* Newsletter block */
+    .newsletter-block {
+      background: var(--surface);
+      border: var(--hairline);
+      padding: 24px;
+      margin-top: 48px;
+    }
+    .newsletter-block .label { display: block; margin-bottom: 8px; }
+    .newsletter-block p { font-size: var(--small); color: var(--mid); margin-bottom: 16px; }
+    .newsletter-form {
+      display: flex;
+      gap: 8px;
+    }
+    .newsletter-form input {
+      flex: 1;
+      font-family: 'Space Mono', monospace;
+      font-size: var(--small);
+      padding: 8px 12px;
+      border: var(--hairline);
+      background: var(--bg);
+      color: var(--charcoal);
+      outline: none;
+    }
+    .newsletter-form input:focus { border-color: var(--accent); }
+    .newsletter-form button {
+      font-family: 'Space Mono', monospace;
+      font-size: var(--small);
+      font-weight: 700;
+      padding: 8px 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+    }
+    .newsletter-form button:hover { background: var(--accent-dim); }
+
+    /* ── Utility ───────────────────────────────────────────── */
+    .mono { font-family: 'Space Mono', monospace; }
+    ul { padding-left: 20px; margin-bottom: 16px; }
+    li { margin-bottom: 4px; font-size: var(--body); }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide</div>
+    <div class="topbar-right">
+      <a href="/subscribe">Subscribe</a>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+
+      <div class="nav-section">
+        <div class="nav-section-label">Why</div>
+        <a href="/why" class="nav-item depth-0">Manifesto</a>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Landscape</div>
+        <a href="/landscape" class="nav-item depth-0">Overview</a>
+        <a href="/landscape/printer-control" class="nav-item depth-1">├ Printer control</a>
+        <a href="/landscape/fleet-management" class="nav-item depth-1">├ Fleet management</a>
+        <a href="/landscape/job-economics" class="nav-item depth-1">├ Job economics</a>
+        <a href="/landscape/inventory" class="nav-item depth-1">├ Inventory &amp; materials</a>
+        <a href="/landscape/customer-management" class="nav-item depth-1 last">└ Customer management</a>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Tools</div>
+        <a href="/tools" class="nav-item depth-0">All tools</a>
+        <a href="/tools/fleet-management" class="nav-item depth-1">├ Fleet management</a>
+        <a href="/tools/job-costing" class="nav-item depth-1">├ Job costing</a>
+        <a href="/tools/inventory" class="nav-item depth-1 last">└ Inventory</a>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Comparisons</div>
+        <a href="/comparisons/3dprintops-vs-flowq" class="nav-item depth-0">3DPrintOps vs. FlowQ</a>
+        <a href="/comparisons/spreadsheet-vs-mrpeasy" class="nav-item depth-0">Spreadsheet vs. MRPeasy</a>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Guides</div>
+        <a href="/guides/job-costing-101" class="nav-item depth-0">Job costing 101</a>
+        <a href="/guides/choosing-first-software" class="nav-item depth-0">Choosing your first software</a>
+        <a href="/guides/fleet-management" class="nav-item depth-0">Do you need fleet management?</a>
+        <a href="/guides/custom-stack" class="nav-item depth-0">Building a custom stack</a>
+        <a href="/guides/migrating-spreadsheets" class="nav-item depth-0">Migrating from spreadsheets</a>
+        <a href="/guides/when-to-upgrade" class="nav-item depth-0">When to upgrade your tooling</a>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-section">
+        <a href="/subscribe" class="nav-item depth-0 accent-text">Subscribe →</a>
+      </div>
+
+    </nav>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="content">
+
+        <div class="breadcrumb">
+          <a href="/">home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>landscape</span>
+          <span class="breadcrumb-sep">/</span>
+          <span>overview</span>
+        </div>
+
+        <div class="label">Landscape</div>
+        <h1>The 3D Print Shop Tech Stack</h1>
+
+        <p class="lead">
+          Most print shop operators are flying blind — tracking jobs in spreadsheets, quoting from gut feel, and finding out they lost money on a job after it shipped. This guide maps the software landscape so you can make informed decisions.
+        </p>
+
+        <div class="section-intro">
+          <p>This is an overview of the major software categories relevant to 3D print shop operators — from printer control to customer management. Each section links to deeper coverage.</p>
+        </div>
+
+        <!-- Stats row -->
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-label">Categories</div>
+            <div class="card-value">5</div>
+            <div class="card-sub">distinct tool layers</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Tools tracked</div>
+            <div class="card-value">24+</div>
+            <div class="card-sub">across all categories</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Price range</div>
+            <div class="card-value">$0–$400</div>
+            <div class="card-sub">per month</div>
+          </div>
+        </div>
+
+        <h2>Printer Control Layer</h2>
+        <p>
+          The printer control layer manages direct communication with your hardware. These tools handle slicing, print queuing, remote monitoring, and failure detection. OctoPrint remains the dominant open-source option; SimplyPrint and AstroPrint add cloud infrastructure on top.
+        </p>
+        <p>
+          <span class="tag">Free tier available</span>
+          <span class="tag tag-accent">Open source</span>
+        </p>
+
+        <h2>Fleet Management Layer</h2>
+        <p>
+          Fleet management tools sit above printer control, providing a unified dashboard across multiple machines. Key capabilities include job routing, utilization tracking, and farm-wide analytics. This layer matters most when you're running 5+ printers.
+        </p>
+
+        <h2>Job Economics Layer</h2>
+        <p>
+          The most underdeveloped layer in the ecosystem. Job costing tools calculate the real cost of a print — material, machine time, labor, overhead — and generate quotes with defensible margins. Most operators either ignore this layer entirely or build their own spreadsheet solutions.
+        </p>
+
+        <hr>
+
+        <!-- Tools table sample -->
+        <h2>Tools at a Glance</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Category</th>
+              <th>Pricing</th>
+              <th>Best for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="/tools/octoprint">OctoPrint</a></td>
+              <td>Printer control</td>
+              <td>Free / open source</td>
+              <td>DIY operators</td>
+            </tr>
+            <tr>
+              <td><a href="/tools/simplyprint">SimplyPrint</a></td>
+              <td>Printer control + fleet</td>
+              <td>Free – $129/mo</td>
+              <td>Small farms</td>
+            </tr>
+            <tr>
+              <td><a href="/tools/flowq">FlowQ</a></td>
+              <td>Fleet management</td>
+              <td>$49–$199/mo</td>
+              <td>Mid-size farms</td>
+            </tr>
+            <tr>
+              <td><a href="/tools/3dprintops">3DPrintOps</a></td>
+              <td>Fleet + job costing</td>
+              <td>$79/mo</td>
+              <td>Full-service shops</td>
+            </tr>
+            <tr>
+              <td><a href="/tools/offsetos">OffsetOS</a></td>
+              <td>Job economics</td>
+              <td>One-time purchase</td>
+              <td>Independent operators</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Newsletter block -->
+        <div class="newsletter-block">
+          <span class="label">Stay current</span>
+          <p>New tools, pricing changes, and honest takes — when there's something worth saying.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com">
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+
+        <!-- Page footer -->
+        <div class="page-footer">
+          <span class="label">3D Print Shop Software</span>
+          <p style="font-size:var(--small); color:var(--mid); margin-top:8px;">
+            An independent guide. No sponsored rankings. No affiliate pressure. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.
+          </p>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+</body>
+</html>
