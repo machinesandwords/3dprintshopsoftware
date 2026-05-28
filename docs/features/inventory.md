@@ -53,8 +53,7 @@ Track multiple suppliers per material:
 - **Backup Supplier**: Alternative if preferred is out of stock
 - **Unit Cost**: Price from each supplier (update when pricing changes)
 - **Lead Time**: Days from order to delivery
-- **Discount Tiers**: Bulk pricing (e.g., $20/kg for <5kg, $18/kg for 5–20kg)
-
+- **Discount Tiers**: Bulk pricing (e.g., $20/kg for &lt;5kg, $18/kg for 5–20kg)
 ## Reorder Process
 
 ### Manual Reordering

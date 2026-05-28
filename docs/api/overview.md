@@ -108,7 +108,7 @@ Returns all active printing jobs for your dashboard.
 ### Calculate Monthly Revenue
 
 ```
-SELECT SUM(Price) FROM Quotes WHERE Date >= '2026-05-01' AND Date <= '2026-05-31'
+SELECT SUM(Price) FROM Quotes WHERE Date &gt;= '2026-05-01' AND Date &lt;= '2026-05-31'
 ```
 
 Useful for financial reporting.
@@ -116,7 +116,7 @@ Useful for financial reporting.
 ### Alert on Low Inventory
 
 ```
-SELECT * FROM Materials WHERE CurrentStock < ReorderLevel
+SELECT * FROM Materials WHERE CurrentStock &lt; ReorderLevel
 ```
 
 Trigger notifications for your procurement team.
@@ -124,7 +124,7 @@ Trigger notifications for your procurement team.
 ### Maintenance Schedule
 
 ```
-SELECT * FROM Machines WHERE NextMaintenanceDate <= TODAY() + 7
+SELECT * FROM Machines WHERE NextMaintenanceDate &lt;= TODAY() + 7
 ```
 
 List machines due for service in the next week.
