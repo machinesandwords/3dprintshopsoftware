@@ -1,0 +1,57 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a simple framework built on top of CSS
+ * modules that exposes a few useful CSS custom properties (CSS variables)
+ * for theming, as documented in:
+ * https://infima.dev/docs/reference/custom-properties
+ *
+ * The standard properties are documented here:
+ * https://infima.dev/docs/reference/custom-properties/#css-custom-properties
+ **/
+
+:root {
+  --ifm-color-primary: #2563eb;
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #60a5fa;
+  --ifm-color-primary-dark: #3b82f6;
+  --ifm-color-primary-darker: #2563eb;
+  --ifm-color-primary-darkest: #1d4ed8;
+  --ifm-color-primary-light: #93c5fd;
+  --ifm-color-primary-lighter: #bfdbfe;
+  --ifm-color-primary-lightest: #dbeafe;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.docusaurus-mt-lg {
+  margin-top: 2rem;
+}
+
+code {
+  border: 0.1rem solid var(--ifm-color-emphasis-300);
+  border-radius: 0.25rem;
+  padding: 0 0.1rem;
+}
+
+pre {
+  background-color: var(--ifm-pre-background);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+pre code {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
