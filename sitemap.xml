@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Core -->
+  <url>
+    <loc>https://3dprintshopsoftware.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/why/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Landscape -->
+  <url>
+    <loc>https://3dprintshopsoftware.com/landscape/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Comparisons -->
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/octoprint-vs-klipper/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/mainsail-vs-fluidd/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/printago-vs-simplyprint/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/flowq-vs-simplyprint/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/3dpboss-vs-3dprintops/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/3dpboss-vs-offset3d/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/3dprintops-vs-offset3d/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/3dpboss-vs-mrpeasy/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/mrpeasy-vs-offset3d/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/comparisons/filametrics-vs-spoolman/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Guides -->
+  <url>
+    <loc>https://3dprintshopsoftware.com/guides/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/guides/calculate-true-cost-of-sku/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/guides/comparing-software-costs/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/guides/hiring-first-employee/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/guides/hire-vs-equipment/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Tools -->
+  <url>
+    <loc>https://3dprintshopsoftware.com/tools/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/tools/job-pricing-tool/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/tools/wheres-your-operation-leaking/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/tools/does-this-tool-pencil-out/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/tools/tool-stack-builder/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://3dprintshopsoftware.com/tools/normalize-your-software-costs/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

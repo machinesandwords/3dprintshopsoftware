@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+
+  <!-- SEO -->
+  <title>Filametrics vs. Spoolman: Filament Tracking for Print Shops | 3D Print Shop Software</title>
+  <meta name="description" content="Filametrics vs. Spoolman: freemium SaaS vs. self-hosted open source filament tracking. Spoolman integrates natively with OctoPrint and Moonraker. Full comparison." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://3dprintshopsoftware.com/comparisons/filametrics-vs-spoolman/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Filametrics vs. Spoolman: Filament Tracking for Print Shops" />
+  <meta property="og:description" content="Filametrics vs. Spoolman: freemium SaaS vs. self-hosted open source filament tracking. Spoolman integrates natively with OctoPrint and Moonraker. Full comparison." />
+  <meta property="og:url" content="https://3dprintshopsoftware.com/comparisons/filametrics-vs-spoolman/" />
+  <meta property="og:site_name" content="3D Print Shop Software" />
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Filametrics vs. Spoolman: Filament Tracking for Print Shops",
+    "description": "Filametrics vs. Spoolman: freemium SaaS vs. self-hosted open source filament tracking.",
+    "url": "https://3dprintshopsoftware.com/comparisons/filametrics-vs-spoolman/",
+    "publisher": { "@type": "Organization", "name": "3D Print Shop Software", "url": "https://3dprintshopsoftware.com" },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://3dprintshopsoftware.com" },
+        { "@type": "ListItem", "position": 2, "name": "Comparisons", "item": "https://3dprintshopsoftware.com/comparisons/" },
+        { "@type": "ListItem", "position": 3, "name": "Filametrics vs. Spoolman", "item": "https://3dprintshopsoftware.com/comparisons/filametrics-vs-spoolman/" }
+      ]
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/comparisons">Comparisons</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Filametrics vs. Spoolman</span>
+        </nav>
+
+        <span class="page-label">Inventory &mdash; Head-to-Head</span>
+        <h1>Filametrics vs. Spoolman</h1>
+
+        <p class="lead">Both tools track filament inventory for multi-printer shops. Spoolman is free, open source, and self-hosted. Filametrics is a managed SaaS with a free tier and paid plans. The functional overlap is significant. The decision comes down to whether you want to own the infrastructure or pay someone else to run it.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 200px;">Criteria</th>
+                <th>Filametrics</th>
+                <th>Spoolman</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td><strong>Layer coverage</strong></td>
+                <td>Inventory</td>
+                <td>Inventory</td>
+              </tr>
+
+              <tr>
+                <td><strong>Pricing model</strong></td>
+                <td>Freemium SaaS</td>
+                <td>Free / OSS</td>
+              </tr>
+
+              <tr>
+                <td><strong>Price</strong></td>
+                <td>Free &ndash; $30 / mo</td>
+                <td>$0</td>
+              </tr>
+
+              <tr>
+                <td><strong>Shop size fit</strong></td>
+                <td>Sub-$50K, $50K&ndash;$500K</td>
+                <td>Sub-$50K, $50K&ndash;$500K</td>
+              </tr>
+
+              <tr>
+                <td><strong>Implementation</strong></td>
+                <td>Browser-based; no installation. Account setup and data entry is the entire onboarding process</td>
+                <td>Self-hosted via Docker or direct install. Requires comfort with the command line and basic server administration. Runs on a Raspberry Pi or any local machine</td>
+              </tr>
+
+              <tr>
+                <td><strong>Self-hosted</strong></td>
+                <td>No &mdash; cloud-hosted</td>
+                <td>Yes &mdash; runs on your own hardware</td>
+              </tr>
+
+              <tr>
+                <td><strong>Open source</strong></td>
+                <td>No</td>
+                <td>Yes (MIT license)</td>
+              </tr>
+
+              <tr>
+                <td><strong>Hosting model</strong></td>
+                <td>Vendor manages uptime, backups, and updates. Data lives on vendor servers. Free tier available with limits; paid plans unlock higher spool counts and features</td>
+                <td>You manage uptime, backups, and updates. Data stays on your hardware. No vendor dependency; the project continues as long as the OSS community maintains it</td>
+              </tr>
+
+              <tr>
+                <td><strong>OctoPrint / Moonraker integration</strong></td>
+                <td>Integration availability not confirmed across all setups. Verify against your current printer control stack before committing</td>
+                <td>Native OctoPrint plugin and Moonraker integration available. Spool tracking updates automatically as prints run -- no manual weight entry required if integrated</td>
+              </tr>
+
+              <tr>
+                <td><strong>Hardware sensor support</strong></td>
+                <td>Not confirmed. Check current feature set against your hardware</td>
+                <td>Supports filament weight sensors via integration. Automatic consumption tracking without manual input where hardware supports it</td>
+              </tr>
+
+              <tr>
+                <td><strong>Multi-printer tracking</strong></td>
+                <td>Supported. Spool assignment across multiple printers is a core feature</td>
+                <td>Supported. Designed for multi-printer environments; spool location and assignment tracked per printer</td>
+              </tr>
+
+              <tr>
+                <td><strong>Low-stock alerts</strong></td>
+                <td>Available on paid tiers. Threshold-based alerts when spool weight drops below a set level</td>
+                <td>Low-stock alerts available. Configurable thresholds per spool or material type</td>
+              </tr>
+
+              <tr>
+                <td><strong>Ongoing maintenance</strong></td>
+                <td>None required. Vendor handles all updates and infrastructure</td>
+                <td>Moderate. Self-hosted instances require occasional updates and basic server maintenance</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <p style="font-size: 12px; color: var(--faint); margin-top: -20px; margin-bottom: 40px;">Pricing verified against vendor sources. For current figures see the <a href="/landscape/inventory">Inventory index</a>.</p>
+
+        <div class="callout">
+          <span class="callout-label">The real decision</span>
+          <p>If you are already running OctoPrint or Klipper with Moonraker, Spoolman's native integrations give you automatic consumption tracking that Filametrics cannot confirm matching. If you have no interest in managing a self-hosted service and just want filament tracking to work without touching a command line, Filametrics' free tier is the lower-friction starting point. The paid tier at $30/mo is harder to justify given that Spoolman covers the same ground for free -- that gap only closes if Filametrics adds features Spoolman doesn't have and your shop actually needs them.</p>
+        </div>
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>Software pricing and features move fast. The newsletter covers changes to the landscape as they happen.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" />
+            <button type="button">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

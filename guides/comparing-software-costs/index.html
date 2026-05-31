@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <!-- SEO -->
+  <title>How to Compare Software Costs When Every Vendor Prices Differently — 3D Print Shop Software</title>
+  <meta name="description" content="Vendor pricing models are too fragmented to compare directly. Here's a practical framework for normalizing any pricing model to the same four metrics.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/guides/comparing-software-costs">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Compare Software Costs When Every Vendor Prices Differently — 3D Print Shop Software">
+  <meta property="og:description" content="Vendor pricing models are too fragmented to compare directly. Here's a practical framework for normalizing any pricing model to the same four metrics.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/guides/comparing-software-costs">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Compare Software Costs When Every Vendor Prices Differently",
+    "description": "Vendor pricing models are too fragmented to compare directly. Here's a practical framework for normalizing any pricing model to the same four metrics.",
+    "url": "https://3dprintshopsoftware.com/guides/comparing-software-costs",
+    "publisher": {
+      "@type": "Organization",
+      "name": "3D Print Shop Software",
+      "url": "https://3dprintshopsoftware.com"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://3dprintshopsoftware.com" },
+        { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://3dprintshopsoftware.com/guides" },
+        { "@type": "ListItem", "position": 3, "name": "How to Compare Software Costs When Every Vendor Prices Differently", "item": "https://3dprintshopsoftware.com/guides/comparing-software-costs" }
+      ]
+    }
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/guides">guides</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>comparing software costs</span>
+        </nav>
+
+        <span class="page-label">Guide</span>
+        <h1>How to Compare Software Costs When Every Vendor Prices Differently</h1>
+
+        <p class="lead">Vendor pricing in the 3D print shop software market is too fragmented for direct comparison. This guide gives you a framework to normalize any pricing model — per-printer, flat monthly, one-time, freemium — to the same four metrics, so you can evaluate tools on a level playing field.</p>
+
+        <div class="section-intro">
+          <p>For operators at the $15K–$500K revenue scale evaluating software for any operational layer. No assumed starting point — the framework works whether you're building your first stack or auditing one you've accumulated.</p>
+        </div>
+
+
+        <!-- ─── Why Pricing Is a Mess ──────────────────────── -->
+        <h2>Why Pricing Is a Mess</h2>
+
+        <p>Vendors choose their pricing models for their own reasons, not yours. Per-printer pricing scales with capacity. Per-seat pricing scales with headcount. Flat monthly pricing is simple to sell. One-time pricing removes the <em>do I keep paying this?</em> question. Usage-based pricing looks free until you're not on the free tier.</p>
+
+        <p>None of these models are inherently better or worse. They reflect the vendor's business model, not yours.</p>
+
+        <p>For example, take a look at three vendors from the printer control and fleet management layer:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Vendor</th>
+                <th>Pricing model</th>
+                <th>Stated price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Printago</td>
+                <td>Per printer/month</td>
+                <td>$4/printer/mo</td>
+              </tr>
+              <tr>
+                <td>SimplyPrint</td>
+                <td>Flat monthly</td>
+                <td>$31.49/mo</td>
+              </tr>
+              <tr>
+                <td>OctoPrint</td>
+                <td>Free / open source</td>
+                <td>$0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Is Printago cheap? That depends on how many printers you have. Is SimplyPrint expensive? That depends on your job volume. Is OctoPrint really free? That depends on what you're giving up.</p>
+
+        <p>You can't answer any of those questions from the sticker price. You need a framework.</p>
+
+
+        <!-- ─── The Normalization Framework ───────────────── -->
+        <h2>The Normalization Framework</h2>
+
+        <p>The goal is to convert every pricing model into the same four metrics so you can compare them head to head.</p>
+
+        <h3>Metric 1: Monthly Cost</h3>
+
+        <p>The baseline. Convert everything to what you're actually spending per month.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Pricing model</th>
+                <th>How to convert</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Subscription (monthly)</td>
+                <td>Use the stated price</td>
+              </tr>
+              <tr>
+                <td>Subscription (annual)</td>
+                <td>Annual price ÷ 12</td>
+              </tr>
+              <tr>
+                <td>One-time purchase</td>
+                <td>Purchase price ÷ expected months of use</td>
+              </tr>
+              <tr>
+                <td>Freemium (free tier)</td>
+                <td>$0 — but see The Freemium Trap below</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <span class="callout-label">On amortizing one-time purchases</span>
+          <p>Be realistic about the denominator. If you expect to use a $50 tool for two years before the market changes or your needs grow, that's 24 months: $50 ÷ 24 = $2.08/mo. If you expect to replace it in a year, it's $4.17/mo. The lifespan is usually somewhere between 18–36 months for tools at this price point.</p>
+        </div>
+
+        <h3>Metric 2: Cost Per Job</h3>
+
+        <p>Monthly cost divided by your average monthly job volume. It tells you how much each job is "carrying" in software overhead.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cost per job = Monthly cost ÷ Jobs per month</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>This metric connects software spend to production output. If you're running 200 jobs a month, a $40/mo tool is $0.20/job — nearly invisible. If you're running 15 jobs a month, that same tool is $2.67/job, which starts to feel real when you're already accounting for material, machine time, and labor.</p>
+
+        <h3>Metric 3: Cost as % of Revenue</h3>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Software cost % = (Monthly cost ÷ Monthly revenue) × 100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>This is the sanity check metric. It tells you whether a tool is proportionate to your business. A $40/month tool looks different at $5K/month revenue (0.8%) than at $500/month revenue (8%).</p>
+
+        <h3>Metric 4: Cost Per Printer</h3>
+
+        <p>For per-printer pricing models, calculate your actual spend based on your fleet size, then convert that to monthly cost for comparison with flat-rate tools.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Monthly cost (per-printer model) = Price per printer × Number of printers</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>If Printago is $4/printer and you have 8 printers, your monthly cost is $32 — nearly identical to SimplyPrint's flat $31.49. If you have 12 printers, it's $48. That changes the comparison entirely.</p>
+
+
+        <!-- ─── Why Each Metric Matters ────────────────────── -->
+        <h2>Why Each Metric Matters</h2>
+
+        <p>These aren't interchangeable. Each one answers a different question.</p>
+
+        <p><strong>Monthly cost</strong> is a cash flow question. If you're watching your monthly burn closely — and at the $50K–$150K revenue level, you probably are — this is the number that determines whether you can absorb a tool without restructuring your budget. Use it as your first filter.</p>
+
+        <p><strong>Cost per job</strong> is an efficiency question. It connects software overhead to production. If you're trying to understand what your real cost-per-job is (for pricing purposes, margin analysis, or just sanity), this metric reveals what software is actually costing you at the unit level. A tool might look affordable at the monthly level but punishing at the per-job level if your volume is low.</p>
+
+        <p><strong>Cost as % of revenue</strong> is a proportionality question. This is useful when you're building or auditing a full software stack, not evaluating a single tool. At the $50K–$250K revenue scale, if a single tool is eating more than 3% of your gross revenue on recurring software, that warrants a hard look. If your full stack is under 2%, you're in good shape.</p>
+
+        <p><strong>Cost per printer</strong> is a scaling question. If you're growing your fleet, a per-printer model means your software costs grow with your hardware investment. That's either a fair trade (you're getting more value as you scale) or a trap (your costs compound faster than your revenue). Know which one you're in.</p>
+
+
+        <!-- ─── The Math in Action ─────────────────────────── -->
+        <h2>The Math in Action</h2>
+
+        <h3>Scenario 1: The Part-Time Shop</h3>
+
+        <p><strong>Profile:</strong> 3 machines, 40 orders/month, ~$30K annual revenue (~$2,500/mo)</p>
+        <p>Comparing Printago ($4/printer/mo) vs. SimplyPrint ($31.49/mo flat) vs. OctoPrint (free).</p>
+
+        <div class="table-wrap">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Printago</th>
+                <th>SimplyPrint</th>
+                <th>OctoPrint</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Monthly cost</td>
+                <td class="compare-win">$12 (3 × $4)</td>
+                <td>$31.49</td>
+                <td>$0</td>
+              </tr>
+              <tr>
+                <td>Cost per job</td>
+                <td class="compare-win">$0.30</td>
+                <td>$0.79</td>
+                <td>$0</td>
+              </tr>
+              <tr>
+                <td>% of revenue</td>
+                <td class="compare-win">0.48%</td>
+                <td>1.26%</td>
+                <td>0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>At 3 machines, Printago's per-printer model actually wins on monthly cost — $12 vs. $31.49. OctoPrint is free on every metric.</p>
+
+        <p>But the question isn't which is cheapest. It's whether SimplyPrint's features justify paying $19/month more than Printago, or $31.49/month more than OctoPrint. If you're running 3 machines and 40 jobs, that feature gap needs to be doing real work to earn its cost.</p>
+
+        <h3>Scenario 2: The Growing Fleet</h3>
+
+        <p><strong>Profile:</strong> 12 machines, 200 orders/month, ~$100K annual revenue (~$8,300/mo)</p>
+        <p>Now per-printer pricing starts to bite.</p>
+
+        <div class="table-wrap">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Printago</th>
+                <th>SimplyPrint</th>
+                <th>OctoPrint</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Monthly cost</td>
+                <td>$48 (12 × $4)</td>
+                <td class="compare-win">$31.49</td>
+                <td>$0</td>
+              </tr>
+              <tr>
+                <td>Cost per job</td>
+                <td>$0.24</td>
+                <td class="compare-win">$0.16</td>
+                <td>$0</td>
+              </tr>
+              <tr>
+                <td>% of revenue</td>
+                <td>0.58%</td>
+                <td class="compare-win">0.38%</td>
+                <td>0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>The crossover has happened. Printago is now 52% more expensive than SimplyPrint per month, and that gap widens with every printer you add. At 20 machines, it's $80 vs. $31.49. At 30, it's $120 vs. $31.49.</p>
+
+        <p>The per-printer model made sense at 3 machines. At 12, you should be asking whether Printago is delivering value so much greater than SimplyPrint that the difference is justified. That's a judgment call, but you need to run the math before you can make it.</p>
+
+        <h3>Scenario 3: The High-Output Shop</h3>
+
+        <p><strong>Profile:</strong> 35 machines, 800 orders/month, ~$250K annual revenue (~$20,800/mo)</p>
+
+        <div class="table-wrap">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Printago</th>
+                <th>SimplyPrint</th>
+                <th>OctoPrint</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Monthly cost</td>
+                <td>$140 (35 × $4)</td>
+                <td class="compare-win">$31.49</td>
+                <td>$0</td>
+              </tr>
+              <tr>
+                <td>Cost per job</td>
+                <td>$0.18</td>
+                <td class="compare-win">$0.04</td>
+                <td>$0</td>
+              </tr>
+              <tr>
+                <td>% of revenue</td>
+                <td>0.67%</td>
+                <td class="compare-win">0.15%</td>
+                <td>0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>At this scale, the percentage-of-revenue numbers look trivial for all three tools. That's a trap. "It's only 0.67% of revenue" is how software stacks quietly balloon to 5–6% of revenue across five or six tools.</p>
+
+        <p>The more useful frame here is cost per job — not for this tool in isolation, but stacked. Add job costing software, inventory tools, and a customer management layer, and you might be carrying $2–4/job in total software overhead before labor and materials enter the calculation. At 800 jobs a month, that's $1,600–$3,200/month in software alone. At $250K revenue, that math matters.</p>
+
+
+        <!-- ─── The Freemium Trap ───────────────────────────── -->
+        <h2>The Freemium Trap</h2>
+
+        <p>Freemium tools are the easiest to undercalculate because operators don't budget for the premium tier; they budget for $0 and then discover they're hobbled by the free tier's limitations.</p>
+
+        <p>Obico and Filametrics both use this model. The free tiers are real and genuinely useful. But they have caps: on printers, on features, on data retention, and on integrations.</p>
+
+        <p>You would be wise to include the paid tier in your comparison math from the start, because once you're dependent on the tool, the upgrade conversation is no longer <em>Should I pay for this?</em> It's <em>How bad will it hurt to lose this?</em></p>
+
+        <div class="callout">
+          <span class="callout-label">How to handle freemium in your normalization</span>
+          <p>Run the numbers twice. First with the free tier as a permanent assumption. Then with the paid tier. If the paid tier number would change your decision, assume you're paying it — because the moment you depend on the tool, the upgrade stops being optional.</p>
+        </div>
+
+
+        <!-- ─── What's a Reasonable Percentage ────────────── -->
+        <h2>What's a Reasonable Percentage of Revenue?</h2>
+
+        <p>Discrete manufacturing benchmarks put total IT spend at 1.4–3.2% of revenue. Your operational software stack is a slice of that, not the whole thing. If your software alone is approaching 3%, you're likely over-indexed.</p>
+
+        <p>Percentages compress as revenue grows because fixed and semi-fixed software costs don't scale linearly with revenue — one of the few genuine economies of scale available to small operators.</p>
+
+        <p><strong>Red flags:</strong></p>
+        <ul>
+          <li>A single operational layer eating more than 2% of gross revenue</li>
+          <li>Your full stack above 3% of gross at any revenue level</li>
+          <li>Any tool where the monthly cost doesn't change when your business shrinks (pure per-seat or per-printer models can become painful in a slow month)</li>
+        </ul>
+
+        <div class="callout">
+          <span class="callout-label">A note on "cheap" one-time tools</span>
+          <p>They're often genuinely cheaper, especially if you use them for 2–3 years. The risk isn't price. The risk is that they may stop being maintained, may not integrate with tools you add later, or may hit feature ceilings that cost you more in workarounds than the subscription alternative would have cost outright. Price is one variable. It's not the only variable.</p>
+        </div>
+
+
+        <!-- ─── Putting It Together ────────────────────────── -->
+        <h2>Putting It Together</h2>
+
+        <p>Before you evaluate any tool, run these four numbers:</p>
+
+        <ul class="step-list">
+          <li>
+            <span class="step-num">01</span>
+            <div class="step-body">
+              <strong>What's the monthly cost?</strong>
+              Convert everything — subscriptions, annual plans, one-time purchases, freemium expected cost.
+            </div>
+          </li>
+          <li>
+            <span class="step-num">02</span>
+            <div class="step-body">
+              <strong>What's the cost per job at my current volume?</strong>
+              Monthly cost ÷ jobs per month.
+            </div>
+          </li>
+          <li>
+            <span class="step-num">03</span>
+            <div class="step-body">
+              <strong>What percent of my monthly revenue is this?</strong>
+              (Monthly cost ÷ monthly revenue) × 100.
+            </div>
+          </li>
+          <li>
+            <span class="step-num">04</span>
+            <div class="step-body">
+              <strong>If this is per-printer pricing, what happens when I add 5 printers?</strong>
+              Run the number at your current fleet size and at your likely fleet size in 12 months.
+            </div>
+          </li>
+        </ul>
+
+        <p>Every vendor leads with the metric that flatters their pricing. Run the numbers before you commit and find the one that reflects your operation.</p>
+
+        <hr>
+
+        <div class="section-intro">
+          <p>The <a href="/tools/roi-calculator">ROI calculator</a> and <a href="/tools/stack-cost">stack cost tool</a> on this site use these same normalization metrics. If the framework above makes sense, those tools are doing the math for you.</p>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New tools, pricing changes, and honest takes — when there's something worth saying.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

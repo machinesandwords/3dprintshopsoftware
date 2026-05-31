@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Software Comparisons | 3D Print Shop Software</title>
+  <meta name="description" content="Head-to-head comparisons of 3D print shop software. Printer control, fleet management, job economics, inventory, and customer management." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .comparison-list { list-style: none; padding: 0; margin-bottom: 8px; }
+    .comparison-list li {
+      border-bottom: var(--hairline);
+    }
+    .comparison-list li:last-child { border-bottom: none; }
+    .comparison-list a {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0;
+      color: var(--charcoal);
+      text-decoration: none;
+      font-size: var(--small);
+    }
+    .comparison-list a:hover { color: var(--accent); }
+    .comparison-list a:hover .comparison-arrow { color: var(--accent); }
+    .comparison-title { font-weight: 700; }
+    .comparison-meta { color: var(--faint); font-size: 11px; white-space: nowrap; }
+    .comparison-arrow { color: var(--border); font-size: 11px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Comparisons</span>
+        </nav>
+
+        <span class="page-label">Head-to-Head</span>
+        <h1>Software Comparisons</h1>
+
+        <p class="lead">Each comparison covers a real operator decision: two tools that serve the same layer, priced differently, built differently, or optimized for different shop sizes. No filler rows. The table either settles the question or the callout does.</p>
+
+        <h2>Printer Control</h2>
+
+        <ul class="comparison-list">
+          <li>
+            <a href="/comparisons/octoprint-vs-klipper">
+              <span class="comparison-title">OctoPrint vs. Klipper</span>
+              <span class="comparison-meta">Plugin ecosystem vs. firmware replacement</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/comparisons/mainsail-vs-fluidd">
+              <span class="comparison-title">Mainsail vs. Fluidd</span>
+              <span class="comparison-meta">Klipper frontend UI choice</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <h2>Fleet Management</h2>
+
+        <ul class="comparison-list">
+          <li>
+            <a href="/comparisons/printago-vs-simplyprint">
+              <span class="comparison-title">Printago vs. SimplyPrint</span>
+              <span class="comparison-meta">Per-printer pricing vs. flat rate</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/comparisons/flowq-vs-simplyprint">
+              <span class="comparison-title">FlowQ vs. SimplyPrint</span>
+              <span class="comparison-meta">Inventory-first vs. broader fleet platform</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <h2>Job Economics</h2>
+
+        <ul class="comparison-list">
+          <li>
+            <a href="/comparisons/3dpboss-vs-3dprintops">
+              <span class="comparison-title">3DPBOSS vs. 3DPrintOps</span>
+              <span class="comparison-meta">One-time purchase vs. subscription</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/comparisons/3dpboss-vs-offset3d">
+              <span class="comparison-title">3DPBOSS vs. Offset3D</span>
+              <span class="comparison-meta">Native app vs. spreadsheet ERP, both one-time</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/comparisons/3dprintops-vs-offset3d">
+              <span class="comparison-title">3DPrintOps vs. Offset3D</span>
+              <span class="comparison-meta">Subscription SaaS vs. one-time spreadsheet</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/comparisons/3dpboss-vs-mrpeasy">
+              <span class="comparison-title">MRPeasy vs. 3DPBOSS</span>
+              <span class="comparison-meta">Full MRP vs. shop-specific tool</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/comparisons/mrpeasy-vs-offset3d">
+              <span class="comparison-title">MRPeasy vs. Offset3D</span>
+              <span class="comparison-meta">Enterprise ERP vs. lean spreadsheet</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <h2>Inventory</h2>
+
+        <ul class="comparison-list">
+          <li>
+            <a href="/comparisons/filametrics-vs-spoolman">
+              <span class="comparison-title">Filametrics vs. Spoolman</span>
+              <span class="comparison-meta">Freemium SaaS vs. self-hosted OSS</span>
+              <span class="comparison-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New comparisons publish as the landscape shifts. The newsletter covers additions and any pricing or feature changes that affect existing pages.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" />
+            <button type="button">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

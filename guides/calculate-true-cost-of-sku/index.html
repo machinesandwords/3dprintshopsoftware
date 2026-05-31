@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <!-- SEO -->
+  <title>How to Calculate Your True Cost Per SKU — 3D Print Shop Software</title>
+  <meta name="description" content="Most 3D print shop operators undercount their cost per unit. Here's the complete four-layer framework for calculating it correctly — and using it to make better pricing and investment decisions.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/guides/cost-per-sku">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Calculate Your True Cost Per SKU — 3D Print Shop Software">
+  <meta property="og:description" content="Most 3D print shop operators undercount their cost per unit. Here's the complete four-layer framework for calculating it correctly — and using it to make better pricing and investment decisions.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/guides/cost-per-sku">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Calculate Your True Cost Per SKU",
+    "description": "Most 3D print shop operators undercount their cost per unit. Here's the complete four-layer framework for calculating it correctly — and using it to make better pricing and investment decisions.",
+    "url": "https://3dprintshopsoftware.com/guides/cost-per-sku",
+    "publisher": {
+      "@type": "Organization",
+      "name": "3D Print Shop Software",
+      "url": "https://3dprintshopsoftware.com"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://3dprintshopsoftware.com" },
+        { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://3dprintshopsoftware.com/guides" },
+        { "@type": "ListItem", "position": 3, "name": "How to Calculate Your True Cost Per SKU", "item": "https://3dprintshopsoftware.com/guides/cost-per-sku" }
+      ]
+    }
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/guides">guides</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>cost per SKU</span>
+        </nav>
+
+        <span class="page-label">Guide</span>
+        <h1>How to Calculate Your True Cost Per SKU</h1>
+
+        <p class="lead">Most 3D print shop operators know their material cost. Some know their machine cost. Almost none know what it actually costs to produce a product unit. This guide walks through a complete calculation and explains how to use it.</p>
+
+        <div class="section-intro">
+          <p>For operators at the $50K–$500K revenue scale. The framework applies regardless of what you're printing — the inputs change, but the structure is constant.</p>
+        </div>
+
+
+        <!-- ─── Why Most Operators Underprice ─────────────── -->
+        <h2>Why Most Operators Underprice Their Work</h2>
+
+        <p>Underpricing almost always follows the same pattern. An operator knows the cost of a spool of filament, knows roughly how much a unit weighs, and does the math. That's their cost per piece. Everything else — machine depreciation, electricity, failed prints, operator time, software — either doesn't get counted or gets waved away as "overhead."</p>
+
+        <p>The problem with that approach is that it's systematically wrong in the same direction every time. Material-only cost per unit always results in a price that is too low, never too high. Every price you set on top of it is built on a floor that's lower than you think.</p>
+
+        <p>This matters more at some moments than others. It matters most when you're pricing a new product, evaluating a new machine, or trying to figure out why a job that looked profitable didn't feel profitable.</p>
+
+
+        <!-- ─── The Four Cost Layers ───────────────────────── -->
+        <h2>The Four Cost Layers</h2>
+
+        <h3>Layer 1: Material Cost</h3>
+
+        <p>For the most part, operators get this right. The formula is simple: material cost per gram multiplied by grams consumed per unit.</p>
+
+        <p>This goes wrong in two ways. First, slicer estimates are optimistic. Real-world material consumption includes purge lines, skirts, brims, supports, and the filament that gets pulled through during heat-up and cool-down cycles. Add 5–15% to your slicer estimate depending on your profile and printer behavior, and verify it periodically against actual spool consumption.</p>
+
+        <p>Second, waste from failed prints doesn't always get allocated. If one in ten prints fails on a given SKU, 10% of your material cost for that SKU is consumed without producing revenue. That's a material cost that belongs in your per-SKU calculation, not in a separate "losses" bucket you don't look at.</p>
+
+        <div class="callout">
+          <span class="callout-label">On allocating failure cost</span>
+          <p>Whether you allocate failure cost to the SKU or track it separately is a matter of preference, but you need to account for it somewhere. Operators who track failure rate by SKU often discover that a small number of SKUs or materials are responsible for a disproportionate share of their waste cost.</p>
+        </div>
+
+        <h3>Layer 2: Machine Cost</h3>
+
+        <p>Machine cost is where the underpricing usually starts. Most operators think of their printer as a capital expense that's already been paid, especially if they bought it outright. But a printer that's printing is consuming its own lifespan. That consumption has a cost, whether you've written a check for it recently or not.</p>
+
+        <p>The calculation has two components: depreciation and consumables.</p>
+
+        <p>Depreciation is the cost of the machine spread across its useful life. If a printer costs $800 and you expect to use it for three years before replacing it, that's roughly $0.037 per hour. The exact number depends on your machine cost, expected lifespan, and actual utilization rate, but the number is never zero.</p>
+
+        <p>Consumables are the parts that wear out on a schedule: nozzles, beds, PTFE tubes, build plates. These have known replacement intervals and known costs. Divide the cost of a consumable by the number of print hours it's expected to last, and you have a per-hour consumable cost. Add it to depreciation and you have your machine cost per hour.</p>
+
+        <p>Machine cost per unit = (depreciation per hour + consumables per hour) &times; print time in hours.</p>
+
+        <div class="callout">
+          <span class="callout-label">On utilization rate</span>
+          <p>A printer running 24 hours a day spreads its depreciation across more SKUs than a printer running 8 hours a day. Low utilization doesn't reduce your machine cost; it concentrates it. If you're running at 40% utilization, your effective machine cost per SKU is more than twice what it would be at 90%. This is one of the reasons throughput matters so much at the shop level.</p>
+        </div>
+
+        <h3>Layer 3: Operational Cost</h3>
+
+        <p>Operational cost covers everything that keeps the printer running that isn't the printer itself: electricity, climate control if relevant to your setup, and operator time.</p>
+
+        <p>Electricity is calculable. Your printer has a rated wattage. Multiply by print hours, multiply by your cost per kWh, and you have your electricity cost per SKU. It's usually small — a few cents for most FDM jobs — but it compounds across a fleet.</p>
+
+        <p>Operator time is where most operators draw a blank. If you're the operator, you may not have a clean sense of how much time each SKU actually requires: setup, bed prep, print monitoring, part removal, post-processing, and quality check. For simple SKUs on a dialed-in printer, this might be five minutes. For complex SKUs with supports, it might be thirty. Either way, it has a cost; your time has a floor value, even if you haven't assigned one to it.</p>
+
+        <p>Pick a per-hour rate for operator time that reflects what you'd pay someone else to do it, or what your own time is worth to you. Apply it to your actual time per SKU. Include it in the calculation.</p>
+
+        <h3>Layer 4: Overhead</h3>
+
+        <p>Overhead is everything it costs to run the business that isn't directly tied to a specific print: software subscriptions, payment processing fees, packaging and shipping materials, office supplies, computers and equipment, storage, rent or utilities that support the operation.</p>
+
+        <p>The cleanest way to allocate overhead is to total your monthly overhead costs and divide by your monthly units produced. If you track orders rather than units, that's a workable approximation. Just know it gets less accurate as your average order size grows.</p>
+
+        <p>For current pricing on the software tools that make up a typical shop's overhead layer, see the <a href="/landscape/vendors">vendor index</a> — overhead allocations shift when pricing changes.</p>
+
+
+        <!-- ─── The Full Calculation ───────────────────────── -->
+        <h2>The Full Calculation</h2>
+
+        <p>Put the four layers together and you have a cost per SKU you can trust.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cost layer</th>
+                <th>Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Material</td>
+                <td>(Cost per gram &times; grams used) &times; (1 &divide; (1 &minus; failure rate))</td>
+              </tr>
+              <tr>
+                <td>Machine</td>
+                <td>(Depreciation per hour + consumables per hour) &times; print hours</td>
+              </tr>
+              <tr>
+                <td>Operational</td>
+                <td>(Printer wattage &times; print hours &times; cost per kWh) + (operator rate &times; operator hours)</td>
+              </tr>
+              <tr>
+                <td>Overhead</td>
+                <td>Monthly overhead &divide; monthly units produced</td>
+              </tr>
+              <tr>
+                <td><strong>Total cost per SKU</strong></td>
+                <td><strong>Sum of all four layers</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>You don't need software to run this calculation. A spreadsheet handles it cleanly. What you do need is accurate inputs, particularly on operator time, failure rate, and utilization. Those three variables move the number more than anything else, and they're the three most commonly estimated rather than measured.</p>
+
+
+        <!-- ─── What the Number Tells You ─────────────────── -->
+        <h2>What the Number Tells You</h2>
+
+        <p>Cost per SKU is a floor, not a price. It tells you the minimum you can charge before you start losing money on the job. Everything above it contributes toward profit. Everything at or below it is a slow leak.</p>
+
+        <p>That framing sounds obvious, but it produces non-obvious implications when you look at it across different job types, machines, or configurations.</p>
+
+        <h3>For pricing decisions</h3>
+
+        <p>A cost per SKU calculation reveals which jobs are structurally cheap to produce and which ones are structurally expensive, independent of what you're charging for them. A simple high-volume SKU with a fast print time and predictable failure rate might cost $0.80 to produce. A complex architectural model with long print times, extensive post-processing, and a 20% failure rate might cost $18. If you're not calculating both carefully, you're guessing at which jobs are worth taking.</p>
+
+        <p>If your true cost is $1.80 and you're charging $6.00, you have margin to absorb a bad week, negotiate on volume, or let a job run long without it hurting. Knowing which situation you're in changes how you respond to pricing pressure.</p>
+
+        <h3>For machine investment decisions</h3>
+
+        <p>When you're evaluating a new printer, the question is: what will this machine's cost per unit be for the jobs I run most often, and how does that compare to what I'm producing now?</p>
+
+        <p>A faster printer reduces print time, which reduces machine cost per SKU and frees operator time. But a faster printer also costs more, which increases depreciation. A more reliable printer reduces failure rate, which reduces effective material cost. But reliability has a price too. The only way to evaluate these tradeoffs reliably is to run the numbers at the unit level, not the machine level.</p>
+
+        <h3>For finding where you're leaking</h3>
+
+        <p>If your cost per SKU feels higher than it should, the four-layer breakdown tells you where to look. High machine cost per SKU usually points to low utilization or premature consumable wear. High operational cost usually points to operator time — either the job is more labor-intensive than you thought, or your processes have friction you haven't systematized. High material cost usually points to failure rate or slicer estimates that don't match reality.</p>
+
+
+        <!-- ─── The Inputs That Move the Number Most ──────── -->
+        <h2>The Inputs That Move the Number Most</h2>
+
+        <p>Not all inputs are equal. Three variables have outsized leverage on the final number, and they're the three most likely to be estimated loosely.</p>
+
+        <p><strong>Failure rate.</strong> A 5% failure rate on a $2 SKU adds $0.10 to your cost. A 20% failure rate adds $0.50. On a $10 SKU, those become $0.53 and $2.50 respectively. Failure rate compounds because failed prints consume material, machine time, and operator time simultaneously. If you don't know your actual failure rate by SKU or material, your cost per SKU is a guess with a decimal point in it.</p>
+
+        <p><strong>Operator time.</strong> The difference between a 5-minute and a 20-minute touch time on a SKU at a $25/hour operator rate is $0.21 per unit. At 500 units a month, that's $105 in labor cost you may not have accounted for. At 2,000 units, it's $420. Measure actual touch time on your highest-volume jobs at least once.</p>
+
+        <p><strong>Utilization rate.</strong> At 50% utilization, your depreciation cost per SKU is double what it is at 100%. If you have machines sitting idle for significant portions of the day, your cost per SKU on jobs those machines run is higher than your math suggests — because the idle time doesn't reduce the machine's depreciation, it just means fewer units are absorbing it.</p>
+
+
+        <!-- ─── Putting It Together ────────────────────────── -->
+        <h2>Putting It Together</h2>
+
+        <p>Before you price a job, evaluate a machine, or audit why a product line isn't returning what it should, run these five steps:</p>
+
+        <ul class="step-list">
+          <li>
+            <span class="step-num">01</span>
+            <div class="step-body">
+              <strong>Material cost per unit</strong>
+              (Cost per gram &times; grams consumed) &times; (1 &divide; (1 &minus; failure rate))
+            </div>
+          </li>
+          <li>
+            <span class="step-num">02</span>
+            <div class="step-body">
+              <strong>Machine cost per unit</strong>
+              ((Machine purchase price &divide; expected lifespan in hours) + consumables per hour) &times; print time in hours
+            </div>
+          </li>
+          <li>
+            <span class="step-num">03</span>
+            <div class="step-body">
+              <strong>Operational cost per unit</strong>
+              (Printer wattage &times; print time &times; cost per kWh) + (operator rate &times; operator hours)
+            </div>
+          </li>
+          <li>
+            <span class="step-num">04</span>
+            <div class="step-body">
+              <strong>Overhead per unit</strong>
+              Total monthly overhead &divide; monthly units produced
+            </div>
+          </li>
+          <li>
+            <span class="step-num">05</span>
+            <div class="step-body">
+              <strong>Sum the four layers</strong>
+              That's your floor. Set your price above it with enough margin to absorb variance. If you can't, the job is underpriced or the SKU isn't worth running at your current configuration.
+            </div>
+          </li>
+        </ul>
+
+        <p>The calculation doesn't need to be precise to be useful. A cost per unit that's 90% accurate and actually gets run is more valuable than a theoretically perfect model that never gets built. Start with your highest-volume SKUs, verify the inputs you're least confident about, and refine from there.</p>
+
+        <hr>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New tools, pricing changes, and honest takes — when there's something worth saying.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

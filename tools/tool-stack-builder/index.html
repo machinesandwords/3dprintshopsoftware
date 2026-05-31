@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+  <title>Build Your Stack — 3D Print Shop Software</title>
+  <meta name="description" content="Select one tool per operational layer and see your total monthly software spend, cost as a percentage of revenue, and any gaps or over-indexing in your stack.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/tools/stack-builder">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Build Your Stack — 3D Print Shop Software">
+  <meta property="og:description" content="Select one tool per operational layer and see your total monthly software spend.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/tools/stack-builder">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    .tool-section { margin-bottom: 2rem; }
+    .tool-section-label {
+      font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.75rem;
+    }
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
+    .input-row.single { grid-template-columns: 1fr; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-label { font-size: 12px; font-weight: 700; color: var(--text); }
+    .input-hint  { font-size: 11px; color: var(--text-muted); margin-top: -2px; }
+    .input-prefix-wrap {
+      display: flex; align-items: center;
+      border: 0.5px solid var(--border); border-radius: 4px; overflow: hidden;
+    }
+    .input-prefix {
+      padding: 8px 10px; font-size: 13px; font-family: 'Space Mono', monospace;
+      color: var(--text-muted); background: var(--bg-subtle);
+      border-right: 0.5px solid var(--border); white-space: nowrap;
+    }
+    .input-prefix-wrap input { border: none; border-radius: 0; flex: 1; min-width: 0; }
+    select, input[type="number"] {
+      padding: 8px 10px; border: 0.5px solid var(--border); border-radius: 4px;
+      font-family: 'Space Mono', monospace; font-size: 13px;
+      color: var(--text); background: var(--bg); width: 100%;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--text-muted); }
+    .tool-divider { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+
+    /* Layer rows */
+    .layer-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    .layer-table th {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-muted); text-align: left; padding: 6px 8px;
+      border-bottom: 0.5px solid var(--border); white-space: nowrap;
+    }
+    .layer-table td { padding: 10px 8px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+    .layer-table tr:last-child td { border-bottom: none; }
+
+    .layer-name-cell { width: 160px; }
+    .layer-badge {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 3px 8px; border-radius: 3px; white-space: nowrap;
+    }
+    .badge-printer  { background: #E1F5EE; color: #085041; }
+    .badge-fleet    { background: #E6F1FB; color: #0C447C; }
+    .badge-jobs     { background: #FAEEDA; color: #633806; }
+    .badge-inventory{ background: #EAF3DE; color: #27500A; }
+    .badge-customer { background: #FAECE7; color: #711B13; }
+
+    .layer-select-cell { min-width: 200px; }
+    .layer-cost-cell   { width: 120px; text-align: right; font-family: 'Space Mono', monospace; font-size: 13px; }
+    .layer-cost-cell .cost-value { font-weight: 700; color: var(--text); }
+    .layer-cost-cell .cost-included {
+      font-size: 11px; color: var(--text-muted); font-style: italic;
+      display: flex; align-items: center; gap: 4px; justify-content: flex-end;
+    }
+    .cost-included-dot {
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+    }
+    .layer-note-cell { font-size: 11px; color: var(--text-muted); width: 140px; }
+
+    .partial-note {
+      font-size: 11px; color: var(--text-muted); margin-top: 4px; font-style: italic;
+    }
+    .gap-indicator {
+      font-size: 11px; color: #854F0B; font-style: italic;
+    }
+
+    /* Multi-layer tie line */
+    .multi-group-row td { background: #f9f9f8; }
+    .multi-group-row td:first-child { border-left: 2px solid var(--accent); }
+
+    /* Results */
+    .results { display: none; margin-top: 2rem; }
+    .results.visible { display: block; }
+
+    .metric-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+        gap: 10px; margin-bottom: 1.5rem;
+        align-items: start;}
+
+    .metric-label {
+        font-size: 11px; color: var(--text-muted); text-transform: uppercase;
+        letter-spacing: 0.5px; margin-bottom: 4px;
+        min-height: 3.9em;}
+
+    .metric-card { background: var(--bg-subtle); border-radius: 4px; padding: 1rem; }
+    
+    .metric-value { font-size: 22px; font-weight: 700; color: var(--text); font-family: 'Space Mono', monospace; }
+    .metric-sub   { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Verdict */
+    .verdict-block {
+      border-left: 3px solid var(--border); padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem; border-radius: 0 4px 4px 0;
+    }
+    .verdict-block.trivial     { border-color: #3B6D11; background: #EAF3DE; }
+    .verdict-block.reasonable  { border-color: #185FA5; background: #E6F1FB; }
+    .verdict-block.significant { border-color: #854F0B; background: #FAEEDA; }
+    .verdict-block.unjustified { border-color: #A32D2D; background: #FCEBEB; }
+    .verdict-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .trivial     .verdict-label { color: #27500A; }
+    .reasonable  .verdict-label { color: #0C447C; }
+    .significant .verdict-label { color: #633806; }
+    .unjustified .verdict-label { color: #791F1F; }
+    .verdict-text { font-size: 13px; line-height: 1.6; }
+    .trivial     .verdict-text  { color: #27500A; }
+    .reasonable  .verdict-text  { color: #0C447C; }
+    .significant .verdict-text  { color: #633806; }
+    .unjustified .verdict-text  { color: #791F1F; }
+
+    /* Stack breakdown table */
+    .breakdown-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .breakdown-table th {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-muted); text-align: left; padding: 6px 8px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .breakdown-table td { font-size: 13px; padding: 8px; border-bottom: 0.5px solid var(--border); color: var(--text); }
+    .breakdown-table tr:last-child td { border-bottom: none; }
+    .breakdown-table .total-row td { font-weight: 700; border-top: 1px solid var(--text); }
+    .breakdown-table .gap-row td { color: #854F0B; font-style: italic; }
+
+    /* Flags */
+    .flags-section { margin-top: 1.5rem; }
+    .flags-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .flag-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 14px; border: 0.5px solid #854F0B; border-radius: 4px;
+      background: #FAEEDA; margin-bottom: 8px; font-size: 12px; color: #633806; line-height: 1.6;
+    }
+    .flag-item::before { content: '⚑'; color: #854F0B; font-size: 12px; flex-shrink: 0; padding-top: 1px; }
+    .gap-flag {
+      border-color: var(--border); background: var(--bg-subtle); color: var(--text-muted);
+    }
+    .gap-flag::before { color: var(--text-muted); }
+
+    .guide-link-block {
+      margin-top: 2rem; padding: 12px 16px; background: var(--bg-subtle);
+      border: 0.5px solid var(--border); border-radius: 4px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .guide-link-block a { color: var(--accent); font-weight: 700; }
+
+    @media (max-width: 768px) {
+      .input-row { grid-template-columns: 1fr; }
+      .layer-name-cell { width: auto; }
+      .layer-note-cell { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools">tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>build your stack</span>
+        </nav>
+
+        <span class="page-label">Tool</span>
+        <h1>Build Your Stack</h1>
+
+        <p class="lead">Select one tool per operational layer. Multi-layer tools populate automatically across the layers they cover. See your total monthly spend, what percentage of revenue it represents, and any gaps or over-indexing in your stack.</p>
+
+        <hr class="tool-divider">
+
+        <!-- Operation -->
+        <div class="tool-section">
+          <div class="tool-section-label">Your operation</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label class="input-label" for="op-revenue">Monthly revenue</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="op-revenue" min="1" placeholder="2500" inputmode="numeric">
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="op-printers">Printers in fleet</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">#</span>
+                <input type="number" id="op-printers" min="1" placeholder="3" inputmode="numeric">
+              </div>
+            </div>
+          </div>
+          <div class="input-row single">
+            <div class="input-group">
+              <label class="input-label" for="op-months">Expected tool lifespan (months)</label>
+              <input type="number" id="op-months" min="1" value="24" inputmode="numeric">
+              <div class="input-hint">Used to amortize one-time purchases. 18–36 months is typical.</div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="tool-divider">
+
+        <!-- Layer selector -->
+        <div class="tool-section">
+          <div class="tool-section-label">Your stack</div>
+          <div style="overflow-x:auto;">
+            <table class="layer-table" id="layer-table">
+              <thead>
+                <tr>
+                  <th class="layer-name-cell">Layer</th>
+                  <th class="layer-select-cell">Tool</th>
+                  <th class="layer-cost-cell" style="text-align:right;">Monthly cost</th>
+                  <th class="layer-note-cell">Note</th>
+                </tr>
+              </thead>
+              <tbody id="layer-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="results" id="results">
+          <hr class="tool-divider">
+          <div class="tool-section-label">Your stack cost</div>
+
+          <div class="metric-grid" id="metric-grid"></div>
+          <div id="verdict-wrap"></div>
+          <div id="breakdown-wrap"></div>
+          <div class="flags-section" id="flags-section"></div>
+        </div>
+
+        <div class="guide-link-block">
+          Want to understand what these numbers mean? Read the guide: <a href="/guides/comparing-software-costs">How to compare software costs when every vendor prices differently</a>. To compare individual tools head-to-head, use the <a href="/tools/normalize-costs">cost normalization tool</a>.
+        </div>
+
+        <hr class="tool-divider">
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New tools, pricing changes, and honest takes — when there's something worth saying.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+  <script>
+  const VENDORS = [
+    { name:'Bambu Farm Manager',          layers:['printer','fleet'],             model:'free',                    basePrice:0,      pricingDisplay:'Free' },
+    { name:'OctoPrint',                   layers:['printer'],                     model:'free',                    basePrice:0,      pricingDisplay:'Free / OSS' },
+    { name:'Klipper / Mainsail / Fluidd', layers:['printer'],                     model:'free',                    basePrice:0,      pricingDisplay:'Free / OSS' },
+    { name:'Obico',                       layers:['printer'],                     model:'monthly-plus-per-printer',basePrice:6.99,   perPrinterPrice:2,  pricingDisplay:'$6.99/mo + $2/printer' },
+    { name:'PrusaLink / Prusa Connect',   layers:['printer'],                     model:'free',                    basePrice:0,      pricingDisplay:'Free' },
+    { name:'SimplyPrint',                 layers:['fleet','jobs','inventory'],     model:'monthly',                 basePrice:31.49,  partialLayers:['jobs'], pricingDisplay:'$31.49/mo' },
+    { name:'Printago',                    layers:['fleet','customer'],            model:'per-printer',             basePrice:4,      pricingDisplay:'$4/printer/mo' },
+    { name:'FlowQ',                       layers:['fleet','inventory'],           model:'monthly',                 basePrice:16.25,  priceMin:12.50, priceMax:20, partialLayers:['inventory'], pricingDisplay:'$12.50–$20/mo' },
+    { name:'3DPrintOps',                  layers:['jobs','customer'],             model:'monthly',                 basePrice:21.50,  priceMin:14, priceMax:29,  pricingDisplay:'$14–$29/mo' },
+    { name:'3DPBOSS',                     layers:['jobs','inventory','customer'], model:'one-time',                basePrice:124,    priceMin:49, priceMax:199, pricingDisplay:'$49–$199 one-time' },
+    { name:'Filametrics',                 layers:['inventory'],                   model:'freemium',                basePrice:0,      freemiumPaidPrice:30, pricingDisplay:'Free – $30/mo' },
+    { name:'Spoolman',                    layers:['inventory'],                   model:'free',                    basePrice:0,      pricingDisplay:'Free / OSS' },
+    { name:'Layers.app',                  layers:['customer'],                    model:'monthly',                 basePrice:99,     priceMin:49, priceMax:149, pricingDisplay:'$49–$149/mo' },
+    { name:'Shopify',                     layers:['customer'],                    model:'monthly',                 basePrice:39,     pricingDisplay:'$39/mo+' },
+    { name:'Offset3D',                    layers:['jobs','inventory','customer'], model:'one-time',                basePrice:50,     pricingDisplay:'$50 one-time' },
+    { name:'MRPeasy',                     layers:['jobs','inventory','customer'], model:'monthly',                 basePrice:74,     priceMin:49, priceMax:99,  pricingDisplay:'$49–$99/mo' },
+  ];
+
+  const LAYERS = [
+    { key:'printer',   label:'Printer Control',       badgeClass:'badge-printer',   dotColor:'#0F6E56' },
+    { key:'fleet',     label:'Fleet Management',      badgeClass:'badge-fleet',     dotColor:'#185FA5' },
+    { key:'jobs',      label:'Job Economics',         badgeClass:'badge-jobs',      dotColor:'#854F0B' },
+    { key:'inventory', label:'Inventory & Materials', badgeClass:'badge-inventory', dotColor:'#3B6D11' },
+    { key:'customer',  label:'Customer Management',   badgeClass:'badge-customer',  dotColor:'#993C1D' },
+  ];
+
+  // selections[layerKey] = vendor name or '' or 'none'
+  const selections = { printer:'', fleet:'', jobs:'', inventory:'', customer:'' };
+
+  function getMonthlyCost(vendor) {
+    const printers = parseFloat(document.getElementById('op-printers').value) || 0;
+    const months   = parseFloat(document.getElementById('op-months').value)   || 24;
+    const m = vendor.model;
+    if (m==='free')     return 0;
+    if (m==='freemium') return vendor.freemiumPaidPrice || 0;
+    if (m==='monthly')  return vendor.basePrice;
+    if (m==='annual')   return vendor.basePrice; // basePrice already monthly equiv
+    if (m==='per-printer') return printers > 0 ? vendor.basePrice * printers : null;
+    if (m==='monthly-plus-per-printer') return printers > 0 ? vendor.basePrice + (vendor.perPrinterPrice||0)*printers : null;
+    if (m==='one-time') return months > 0 ? vendor.basePrice / months : null;
+    return null;
+  }
+
+  function buildLayerSelect(layerKey) {
+    const inLayer = VENDORS.filter(v => v.layers.includes(layerKey));
+    let html = `<select onchange="handleLayerChange('${layerKey}', this.value)">`;
+    html += `<option value="">— select —</option>`;
+    inLayer.forEach(v => {
+      html += `<option value="${v.name}">${v.name} — ${v.pricingDisplay}</option>`;
+    });
+    html += `<option value="none">None / not needed</option>`;
+    html += `</select>`;
+    return html;
+  }
+
+  function renderLayerTable() {
+    const tbody = document.getElementById('layer-tbody');
+    tbody.innerHTML = '';
+    const printers = parseFloat(document.getElementById('op-printers').value) || 0;
+
+    // Track which vendor is the "primary" instance (first layer it appears in)
+    const primaryLayer = {}; // vendorName -> first layerKey it was selected for
+
+    LAYERS.forEach(layer => {
+      const sel = selections[layer.key];
+      const vendor = sel ? VENDORS.find(v => v.name === sel) : null;
+      const tr = document.createElement('tr');
+
+      // Cost cell content
+      let costHTML = '';
+      let noteHTML = '';
+
+      if (!sel) {
+        costHTML = `<span class="gap-indicator">— no tool selected</span>`;
+      } else if (sel === 'none') {
+        costHTML = `<span style="font-size:11px;color:var(--text-muted);font-style:italic;">skipped</span>`;
+      } else if (vendor) {
+        const isPartial = vendor.partialLayers && vendor.partialLayers.includes(layer.key);
+
+        // Is this the primary instance of a multi-layer vendor?
+        if (!primaryLayer[vendor.name]) {
+          primaryLayer[vendor.name] = layer.key;
+        }
+        const isPrimary = primaryLayer[vendor.name] === layer.key;
+        const isMultiLayer = vendor.layers.length > 1;
+
+        if (isPrimary) {
+          const mc = getMonthlyCost(vendor);
+          if (mc === null) {
+            costHTML = `<span style="font-size:11px;color:var(--text-muted);">enter printers above</span>`;
+          } else if (mc === 0) {
+            costHTML = `<span class="cost-value">$0</span>`;
+          } else {
+            costHTML = `<span class="cost-value">$${mc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`;
+          }
+          if (isMultiLayer && vendor.layers.length > 1) {
+            const otherLayers = vendor.layers.filter(l => l !== layer.key).map(l => LAYERS.find(x=>x.key===l).label).join(', ');
+            noteHTML = `also covers ${otherLayers}`;
+          }
+        } else {
+          // Secondary instance — show "included"
+          const dot = `<span class="cost-included-dot" style="background:${LAYERS.find(l=>l.key===primaryLayer[vendor.name]).dotColor};"></span>`;
+          costHTML = `<div class="cost-included">${dot}included</div>`;
+          noteHTML = `same tool`;
+        }
+
+        if (isPartial) {
+          noteHTML += (noteHTML ? ' · ' : '') + '<span style="color:#854F0B;">partial coverage</span>';
+        }
+
+        if (isMultiLayer) {
+          tr.classList.add('multi-group-row');
+        }
+      }
+
+      tr.innerHTML = `
+        <td class="layer-name-cell"><span class="layer-badge ${layer.badgeClass}">${layer.label}</span></td>
+        <td class="layer-select-cell" id="select-cell-${layer.key}">
+          ${buildLayerSelect(layer.key)}
+        </td>
+        <td class="layer-cost-cell" id="cost-cell-${layer.key}">${costHTML}</td>
+        <td class="layer-note-cell" id="note-cell-${layer.key}" style="font-size:11px;color:var(--text-muted);">${noteHTML}</td>`;
+
+      // Restore selection state after re-render
+      tbody.appendChild(tr);
+      const selectEl = tr.querySelector('select');
+      if (sel) selectEl.value = sel;
+    });
+  }
+
+  function handleLayerChange(layerKey, value) {
+    selections[layerKey] = value;
+
+    // If a multi-layer vendor is selected, propagate to other layers
+    // but only if those layers are currently empty
+    if (value && value !== 'none') {
+      const vendor = VENDORS.find(v => v.name === value);
+      if (vendor && vendor.layers.length > 1) {
+        vendor.layers.forEach(l => {
+          if (l !== layerKey && !selections[l]) {
+            selections[l] = value;
+          }
+        });
+      }
+    }
+
+    // If deselecting, remove propagated instances of same vendor from other layers
+    if (!value || value === 'none') {
+      const prevVendor = Object.entries(selections).find(([k,v]) => k !== layerKey && false); // placeholder
+    }
+
+    renderLayerTable();
+    calculate();
+  }
+
+  function f$(n, dec=2) {
+    if (n===null||n===undefined||isNaN(n)) return '—';
+    if (n===0) return '$0';
+    return '$'+n.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+  }
+  function fPct(n) { if(n===null||isNaN(n)) return '—'; if(n===0) return '0%'; return n.toFixed(1)+'%'; }
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function calculate() {
+    const revenue  = parseFloat(document.getElementById('op-revenue').value)  || 0;
+    const printers = parseFloat(document.getElementById('op-printers').value) || 0;
+
+    // Deduplicate: only count each vendor's cost once
+    const counted = new Set();
+    let totalMonthly = 0;
+    let hasAnySelection = false;
+    const lineItems = [];
+    const gaps = [];
+    const partials = [];
+
+    LAYERS.forEach(layer => {
+      const sel = selections[layer.key];
+      if (!sel) { gaps.push(layer.label); return; }
+      if (sel === 'none') { hasAnySelection = true; return; }
+      hasAnySelection = true;
+      const vendor = VENDORS.find(v => v.name === sel);
+      if (!vendor) return;
+
+      const isPartial = vendor.partialLayers && vendor.partialLayers.includes(layer.key);
+      if (isPartial) partials.push({ layer: layer.label, vendor: vendor.name });
+
+      if (!counted.has(vendor.name)) {
+        counted.add(vendor.name);
+        const mc = getMonthlyCost(vendor);
+        if (mc !== null) {
+          totalMonthly += mc;
+          lineItems.push({ vendor: vendor.name, mc, model: vendor.model, layers: vendor.layers });
+        }
+      }
+    });
+
+    const resultsEl = document.getElementById('results');
+    if (!hasAnySelection || revenue === 0) { resultsEl.classList.remove('visible'); return; }
+    resultsEl.classList.add('visible');
+
+    const stackPct = revenue > 0 ? (totalMonthly / revenue) * 100 : null;
+
+    // Metric cards
+    const metricGrid = document.getElementById('metric-grid');
+    metricGrid.innerHTML = `
+      <div class="metric-card">
+        <div class="metric-label">Total monthly cost</div>
+        <div class="metric-value">${f$(totalMonthly)}</div>
+        <div class="metric-sub">${f$(totalMonthly*12, 0)}/year</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">% of monthly revenue</div>
+        <div class="metric-value">${fPct(stackPct)}</div>
+        <div class="metric-sub">of ${f$(revenue, 0)}/mo</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Layers covered</div>
+        <div class="metric-value">${5 - gaps.length}<span style="font-size:14px;font-weight:400;"> / 5</span></div>
+        <div class="metric-sub">${gaps.length ? gaps.length+' gap'+(gaps.length>1?'s':'') : 'full coverage'}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Distinct tools</div>
+        <div class="metric-value">${counted.size}</div>
+        <div class="metric-sub">${lineItems.filter(l=>l.layers.length>1).length} multi-layer</div>
+      </div>`;
+
+    // Verdict
+    const verdictWrap = document.getElementById('verdict-wrap');
+    let vClass, vLabel, vText;
+    if (stackPct === null) { vClass=''; vLabel=''; vText=''; }
+    else if (stackPct < 1)  { vClass='trivial';     vLabel='Well under budget';            vText=`Your stack is ${fPct(stackPct)} of monthly revenue. Software cost is not your constraint — evaluate each tool on whether it solves a real problem.`; }
+    else if (stackPct < 2)  { vClass='reasonable';  vLabel='Reasonable stack spend';       vText=`${fPct(stackPct)} of monthly revenue is within the healthy range for this scale. Focus on whether each layer is actually being used.`; }
+    else if (stackPct < 3)  { vClass='significant'; vLabel='Getting heavy — audit each layer'; vText=`At ${fPct(stackPct)} of monthly revenue, your stack is approaching the 3% full-stack threshold. Make sure every tool is earning its place.`; }
+    else                    { vClass='unjustified';  vLabel='Over-indexed on software';     vText=`${fPct(stackPct)} of monthly revenue is above the 3% full-stack benchmark for discrete manufacturing. Consider whether simpler tools could cover some of these layers.`; }
+
+    verdictWrap.innerHTML = vClass ? `
+      <div class="verdict-block ${vClass}">
+        <div class="verdict-label">${vLabel}</div>
+        <div class="verdict-text">${vText}</div>
+      </div>` : '';
+
+    // Breakdown table
+    const breakdownWrap = document.getElementById('breakdown-wrap');
+    let bHTML = `
+      <table class="breakdown-table">
+        <thead><tr>
+          <th>Tool</th><th>Layers covered</th><th style="text-align:right;">Monthly cost</th><th style="text-align:right;">% of revenue</th>
+        </tr></thead>
+        <tbody>`;
+    lineItems.forEach(item => {
+      const layerLabels = item.layers.map(l => LAYERS.find(x=>x.key===l).label).join(', ');
+      const pct = revenue > 0 ? (item.mc / revenue) * 100 : null;
+      const flagPct = pct !== null && pct >= 2;
+      bHTML += `<tr>
+        <td>${esc(item.vendor)}</td>
+        <td style="font-size:12px;color:var(--text-muted);">${layerLabels}</td>
+        <td style="text-align:right;font-weight:700;">${f$(item.mc)}</td>
+        <td style="text-align:right;${flagPct?'color:#854F0B;font-weight:700;':''}">${fPct(pct)}</td>
+      </tr>`;
+    });
+    if (gaps.length) {
+      gaps.forEach(g => {
+        bHTML += `<tr class="gap-row"><td>${g}</td><td style="font-size:12px;">no tool selected</td><td style="text-align:right;">—</td><td style="text-align:right;">—</td></tr>`;
+      });
+    }
+    bHTML += `<tr class="total-row">
+      <td>Total</td><td></td>
+      <td style="text-align:right;">${f$(totalMonthly)}</td>
+      <td style="text-align:right;${stackPct>=3?'color:#854F0B;':''}">${fPct(stackPct)}</td>
+    </tr></tbody></table>`;
+    breakdownWrap.innerHTML = bHTML;
+
+    // Flags
+    const flagsSection = document.getElementById('flags-section');
+    const flags = [];
+
+    lineItems.forEach(item => {
+      const pct = revenue > 0 ? (item.mc / revenue) * 100 : null;
+      if (pct !== null && pct >= 2) {
+        flags.push({ type:'warn', text:`<strong>${esc(item.vendor)}</strong> is ${fPct(pct)} of monthly revenue on its own — above the 2% single-layer threshold.` });
+      }
+      if (item.model === 'freemium') {
+        flags.push({ type:'warn', text:`<strong>${esc(item.vendor)}</strong> is freemium. The cost shown is the paid tier. If you're on the free tier today, budget for the upgrade — once you depend on it, the switch stops being optional.` });
+      }
+      if (item.model === 'per-printer' || item.model === 'monthly-plus-per-printer') {
+        const v = VENDORS.find(x=>x.name===item.vendor);
+        if (v && printers > 0) {
+          const rate = v.model==='per-printer' ? v.basePrice : v.perPrinterPrice||0;
+          const proj = item.model==='per-printer' ? rate*(printers+5) : item.mc + rate*5;
+          flags.push({ type:'warn', text:`<strong>${esc(item.vendor)}</strong> uses per-printer pricing. Add 5 printers and your monthly cost rises to ${f$(proj)}.` });
+        }
+      }
+    });
+
+    partials.forEach(p => {
+      flags.push({ type:'gap', text:`<strong>${esc(p.vendor)}</strong> only partially covers <strong>${p.layer}</strong>. You may need a dedicated tool for full coverage of this layer.` });
+    });
+
+    gaps.forEach(g => {
+      flags.push({ type:'gap', text:`<strong>${g}</strong> has no tool selected. If this layer is relevant to your operation, leaving it uncovered may mean manual work or missed margin.` });
+    });
+
+    if (stackPct >= 3) {
+      flags.push({ type:'warn', text:`Your full stack is ${fPct(stackPct)} of monthly revenue — above the 3% benchmark for discrete manufacturing total IT spend. Consider whether any layer could be handled by a simpler or free tool.` });
+    }
+
+    flagsSection.innerHTML = flags.length
+      ? `<div class="flags-label">Watch out</div>` + flags.map(f=>`<div class="flag-item ${f.type==='gap'?'gap-flag':''}">${f.text}</div>`).join('')
+      : '';
+  }
+
+  // Init
+  renderLayerTable();
+  ['op-revenue','op-printers','op-months'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => { renderLayerTable(); calculate(); });
+  });
+  </script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

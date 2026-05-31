@@ -1,0 +1,10 @@
+name = "anthropic-proxy"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# KV namespace for rate limiting
+# After creating the namespace in Cloudflare dashboard,
+# replace KV_NAMESPACE_ID_HERE with the actual ID
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "88d688901f344f1a99f2886328609ea3"

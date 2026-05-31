@@ -1,0 +1,184 @@
+[
+  {
+    "name": "Bambu Farm Manager",
+    "url": "/landscape/printer-control#bambu-farm-manager",
+    "layers": ["printer", "fleet"],
+    "pricingModel": "free",
+    "basePrice": 0,
+    "pricingDisplay": "Free",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "OctoPrint",
+    "url": "/landscape/printer-control#octoprint",
+    "layers": ["printer"],
+    "pricingModel": "free",
+    "basePrice": 0,
+    "pricingDisplay": "Free / OSS",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "Klipper / Mainsail / Fluidd",
+    "url": "/landscape/printer-control#klipper",
+    "layers": ["printer"],
+    "pricingModel": "free",
+    "basePrice": 0,
+    "pricingDisplay": "Free / OSS",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "Obico",
+    "url": "/landscape/printer-control#obico",
+    "layers": ["printer"],
+    "pricingModel": "monthly-plus-per-printer",
+    "basePrice": 6.99,
+    "perPrinterPrice": 2,
+    "pricingDisplay": "$6.99/mo + $2/printer",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "PrusaLink / Prusa Connect",
+    "url": "/landscape/printer-control#prusalink",
+    "layers": ["printer"],
+    "pricingModel": "free",
+    "basePrice": 0,
+    "pricingDisplay": "Free",
+    "fit": "Sub-$50K",
+    "note": ""
+  },
+  {
+    "name": "SimplyPrint",
+    "url": "/landscape/fleet-management#simplyprint",
+    "layers": ["fleet", "jobs", "inventory"],
+    "pricingModel": "monthly",
+    "basePrice": 31.49,
+    "pricingDisplay": "$31.49/mo",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "Printago",
+    "url": "/landscape/fleet-management#printago",
+    "layers": ["fleet", "customer"],
+    "pricingModel": "per-printer",
+    "basePrice": 4,
+    "pricingDisplay": "$4/printer/mo",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "FlowQ",
+    "url": "/landscape/fleet-management#flowq",
+    "layers": ["fleet", "inventory"],
+    "pricingModel": "monthly",
+    "basePrice": 16.25,
+    "priceMin": 12.50,
+    "priceMax": 20,
+    "pricingDisplay": "$12.50–$20/mo",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "3DPrintOps",
+    "url": "/landscape/job-economics#3dprintops",
+    "layers": ["jobs", "customer"],
+    "pricingModel": "monthly",
+    "basePrice": 21.50,
+    "priceMin": 14,
+    "priceMax": 29,
+    "pricingDisplay": "$14–$29/mo",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "3DPBOSS",
+    "url": "/landscape/job-economics#3dpboss",
+    "layers": ["jobs", "inventory", "customer"],
+    "pricingModel": "one-time",
+    "basePrice": 124,
+    "priceMin": 49,
+    "priceMax": 199,
+    "pricingDisplay": "$49–$199 one-time",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "PrintFarmHQ",
+    "url": "/landscape/job-economics#printfarmhq",
+    "layers": ["jobs", "inventory"],
+    "pricingModel": "unknown",
+    "basePrice": null,
+    "pricingDisplay": "Beta — TBD",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": "Pricing not yet set"
+  },
+  {
+    "name": "Filametrics",
+    "url": "/landscape/inventory#filametrics",
+    "layers": ["inventory"],
+    "pricingModel": "freemium",
+    "basePrice": 0,
+    "freemiumPaidPrice": 30,
+    "pricingDisplay": "Free – $30/mo",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "Spoolman",
+    "url": "/landscape/inventory#spoolman",
+    "layers": ["inventory"],
+    "pricingModel": "free",
+    "basePrice": 0,
+    "pricingDisplay": "Free / OSS",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "Layers.app",
+    "url": "/landscape/customer-management#layers",
+    "layers": ["customer"],
+    "pricingModel": "monthly",
+    "basePrice": 99,
+    "priceMin": 49,
+    "priceMax": 149,
+    "pricingDisplay": "$49–$149/mo",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "Shopify",
+    "url": "/landscape/customer-management#shopify",
+    "layers": ["customer"],
+    "pricingModel": "monthly",
+    "basePrice": 39,
+    "pricingDisplay": "$39/mo+",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "Offset3D",
+    "url": "/landscape/job-economics#offset3d",
+    "layers": ["jobs", "inventory", "customer"],
+    "pricingModel": "one-time",
+    "basePrice": 50,
+    "pricingDisplay": "$50 one-time",
+    "fit": "Sub-$50K, $50K–$500K",
+    "note": ""
+  },
+  {
+    "name": "MRPeasy",
+    "url": "/landscape/job-economics#mrpeasy",
+    "layers": ["jobs", "inventory", "customer"],
+    "pricingModel": "monthly",
+    "basePrice": 74,
+    "priceMin": 49,
+    "priceMax": 99,
+    "pricingDisplay": "$49–$99/mo",
+    "fit": "$50K–$500K, $500K+",
+    "note": ""
+  }
+]

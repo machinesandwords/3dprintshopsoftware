@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>What Does This Stack Cost to Run? — 3D Print Shop Software</title>
+  <meta name="description" content="Build your software stack layer by layer and see your total monthly cost, annual spend, cost per job, and what it represents as a percentage of revenue.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/tools/what-does-this-stack-cost-to-run">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What Does This Stack Cost to Run?">
+  <meta property="og:description" content="Build your software stack layer by layer and see your total monthly cost, annual spend, cost per job, and what it represents as a percentage of revenue.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/tools/what-does-this-stack-cost-to-run">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    .tool-section { margin-bottom: 2rem; }
+    .tool-section-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1rem;
+      align-items: end;
+    }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-label { font-size: 12px; font-weight: 700; color: var(--text); }
+    .input-hint { font-size: 11px; color: var(--text-muted); margin-top: -2px; }
+    .input-prefix-wrap {
+      display: flex;
+      align-items: center;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .input-prefix {
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      border-right: 0.5px solid var(--border);
+      white-space: nowrap;
+    }
+    .input-prefix-wrap input { border: none; border-radius: 0; flex: 1; min-width: 0; }
+    select, input[type="number"], input[type="text"] {
+      padding: 8px 10px;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--bg);
+      width: 100%;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--text-muted); }
+    .tool-divider { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+    .layer-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+    .layer-row {
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg);
+    }
+    .layer-row.has-cost {
+      border-color: var(--border);
+      background: var(--bg-subtle);
+    }
+    .layer-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .layer-link {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: block;
+      margin-top: 2px;
+    }
+    .layer-link:hover { color: var(--text); }
+    .layer-cost-display {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: right;
+      min-width: 80px;
+      white-space: nowrap;
+    }
+    .layer-cost-display.active { color: var(--text); }
+    .layer-cost-display.free { color: #3B6D11; }
+    .custom-cost-row {
+      display: none;
+      grid-column: 2 / 4;
+      gap: 12px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .custom-cost-row.visible { display: flex; }
+    .custom-cost-row input { max-width: 140px; }
+    .custom-label { font-size: 12px; color: var(--text-muted); }
+    .calc-btn {
+      padding: 10px 20px;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--bg);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .calc-btn:hover { background: var(--bg-subtle); }
+    .results { display: none; margin-top: 2rem; }
+    .results.visible { display: block; }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .metric-card {
+      background: var(--bg-subtle);
+      border-radius: 4px;
+      padding: 1rem;
+    }
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .metric-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .breakdown-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .breakdown-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 6px 8px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .breakdown-table td {
+      font-size: 13px;
+      padding: 8px;
+      border-bottom: 0.5px solid var(--border);
+      color: var(--text);
+    }
+    .breakdown-table tr:last-child td { border-bottom: none; }
+    .breakdown-table td.cost-col { font-weight: 700; text-align: right; }
+    .breakdown-table td.free-col { color: #3B6D11; text-align: right; }
+    .breakdown-table td.none-col { color: var(--text-muted); text-align: right; }
+    .breakdown-table tfoot td {
+      font-weight: 700;
+      border-top: 0.5px solid var(--border);
+      padding-top: 10px;
+    }
+    .verdict-block {
+      border-left: 3px solid var(--border);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .verdict-block.trivial { border-color: #3B6D11; background: #EAF3DE; }
+    .verdict-block.reasonable { border-color: #185FA5; background: #E6F1FB; }
+    .verdict-block.significant { border-color: #854F0B; background: #FAEEDA; }
+    .verdict-block.unjustified { border-color: #A32D2D; background: #FCEBEB; }
+    .verdict-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .trivial .verdict-label { color: #27500A; }
+    .reasonable .verdict-label { color: #0C447C; }
+    .significant .verdict-label { color: #633806; }
+    .unjustified .verdict-label { color: #791F1F; }
+    .verdict-text { font-size: 13px; line-height: 1.6; }
+    .trivial .verdict-text { color: #27500A; }
+    .reasonable .verdict-text { color: #0C447C; }
+    .significant .verdict-text { color: #633806; }
+    .unjustified .verdict-text { color: #791F1F; }
+    .oss-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      padding: 10px 14px;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg-subtle);
+    }
+    @media (max-width: 640px) {
+      .input-row { grid-template-columns: 1fr 1fr; }
+      .layer-row { grid-template-columns: 1fr; }
+      .layer-cost-display { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="/tools">Tools</a>
+          <span class="breadcrumb-sep">›</span>
+          What does this stack cost to run?
+        </div>
+
+        <span class="page-label">Tools</span>
+        <h1>What does this stack cost to run?</h1>
+
+        <p class="lead">Select the tools you're running or considering across each layer of your stack. Get a single view of total monthly cost, annual spend, and what it all represents as a percentage of your revenue.</p>
+
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:1.5rem;">Setup complexity and maintenance overhead aren't included here — those vary too much by operator skill level to estimate honestly. This is the dollar picture only.</p>
+
+        <hr class="tool-divider">
+
+        <!-- Shop inputs -->
+        <div class="tool-section">
+          <div class="tool-section-label">Your shop</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label class="input-label" for="monthlyRevenue">Monthly revenue</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="monthlyRevenue" placeholder="15000" min="0" step="500">
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="jobsPerMonth">Jobs per month</label>
+              <input type="number" id="jobsPerMonth" placeholder="40" min="1" step="1">
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="printerCount">Number of printers</label>
+              <input type="number" id="printerCount" placeholder="10" min="1" step="1">
+            </div>
+          </div>
+        </div>
+
+        <!-- Stack builder -->
+        <div class="tool-section">
+          <div class="tool-section-label">Your stack</div>
+          <p class="oss-note">Free and open-source tools are included here at $0. Their real cost is setup time and maintenance — not dollars.</p>
+          <div class="layer-grid" id="layerGrid"></div>
+        </div>
+
+        <button class="calc-btn" id="calcBtn">Calculate stack cost</button>
+
+        <!-- Results -->
+        <div class="results" id="results">
+          <hr class="tool-divider">
+          <div class="tool-section-label">Stack cost summary</div>
+
+          <div class="metric-grid" id="metricGrid"></div>
+
+          <div class="tool-section-label" style="margin-top:1.5rem;">Cost by layer</div>
+          <table class="breakdown-table" id="breakdownTable">
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Tool</th>
+                <th style="text-align:right">Monthly cost</th>
+              </tr>
+            </thead>
+            <tbody id="breakdownBody"></tbody>
+            <tfoot id="breakdownFoot"></tfoot>
+          </table>
+
+          <div class="verdict-block" id="verdictBlock">
+            <div class="verdict-label" id="verdictLabel"></div>
+            <div class="verdict-text" id="verdictText"></div>
+          </div>
+
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+  <script>
+    const layers = [
+      {
+        id: 'printer-control',
+        name: 'Printer control',
+        href: '/landscape/printer-control',
+        tools: [
+          { name: 'None', cost: 0, type: 'none' },
+          { name: 'OctoPrint', cost: 0, type: 'free' },
+          { name: 'Klipper / Mainsail / Fluidd', cost: 0, type: 'free' },
+          { name: 'Bambu Farm Manager', cost: 0, type: 'free' },
+          { name: 'PrusaLink / Prusa Connect', cost: 0, type: 'free' },
+          { name: 'Obico (AI Premium)', cost: 6.99, type: 'monthly-base-per-printer', extraPerPrinter: 2 },
+          { name: 'Custom', cost: 0, type: 'custom' }
+        ]
+      },
+      {
+        id: 'fleet-management',
+        name: 'Fleet management',
+        href: '/landscape/fleet-management',
+        tools: [
+          { name: 'None', cost: 0, type: 'none' },
+          { name: 'Bambu Farm Manager', cost: 0, type: 'free' },
+          { name: 'SimplyPrint (Print Farm)', cost: 31.49, type: 'monthly' },
+          { name: 'Printago', cost: 4, type: 'per-printer' },
+          { name: 'FlowQ', cost: 0, type: 'custom' },
+          { name: 'Custom', cost: 0, type: 'custom' }
+        ]
+      },
+      {
+        id: 'job-economics',
+        name: 'Job economics',
+        href: '/landscape/job-economics',
+        tools: [
+          { name: 'None', cost: 0, type: 'none' },
+          { name: '3DPrintOps (Starter)', cost: 14, type: 'monthly' },
+          { name: '3DPrintOps (Pro)', cost: 29, type: 'monthly' },
+          { name: '3DPBOSS (Basic)', cost: 49, type: 'onetime' },
+          { name: '3DPBOSS (Full)', cost: 199, type: 'onetime' },
+          { name: 'SimplyPrint (partial)', cost: 0, type: 'free' },
+          { name: 'Custom', cost: 0, type: 'custom' }
+        ]
+      },
+      {
+        id: 'inventory',
+        name: 'Inventory & materials',
+        href: '/landscape/inventory',
+        tools: [
+          { name: 'None', cost: 0, type: 'none' },
+          { name: 'Spoolman', cost: 0, type: 'free' },
+          { name: 'Filametrics (Free)', cost: 0, type: 'free' },
+          { name: 'Filametrics (Maker)', cost: 12, type: 'monthly' },
+          { name: 'Filametrics (Emperor)', cost: 30, type: 'monthly' },
+          { name: '3DPBOSS (included)', cost: 0, type: 'free' },
+          { name: 'Custom', cost: 0, type: 'custom' }
+        ]
+      },
+      {
+        id: 'customer-management',
+        name: 'Customer management',
+        href: '/landscape/customer-management',
+        tools: [
+          { name: 'None', cost: 0, type: 'none' },
+          { name: '3DPrintOps (included)', cost: 0, type: 'free' },
+          { name: '3DPBOSS (included)', cost: 0, type: 'free' },
+          { name: 'Layers.app (Startup)', cost: 49, type: 'monthly' },
+          { name: 'Layers.app (Business)', cost: 149, type: 'monthly' },
+          { name: 'Shopify (Basic)', cost: 39, type: 'monthly' },
+          { name: 'Custom', cost: 0, type: 'custom' }
+        ]
+      }
+    ];
+
+    // Also include ERP as an override layer
+    const erpTools = [
+      { name: 'None', cost: 0, type: 'none' },
+      { name: 'Offset3D', cost: 50, type: 'onetime' },
+      { name: 'MRPeasy (Starter)', cost: 49, type: 'monthly' },
+      { name: 'MRPeasy (Professional)', cost: 99, type: 'monthly' },
+      { name: 'Custom', cost: 0, type: 'custom' }
+    ];
+
+    layers.push({
+      id: 'erp',
+      name: 'ERP / all-in-one',
+      href: '/landscape/job-economics',
+      tools: erpTools
+    });
+
+    const selections = {};
+
+    function getPrinterCount() {
+      return parseFloat(document.getElementById('printerCount').value) || 1;
+    }
+
+    function getToolMonthlyCost(tool) {
+      if (!tool) return 0;
+      switch (tool.type) {
+        case 'none': return 0;
+        case 'free': return 0;
+        case 'monthly': return tool.cost;
+        case 'per-printer': return tool.cost * getPrinterCount();
+        case 'monthly-base-per-printer': return tool.cost + (tool.extraPerPrinter * Math.max(0, getPrinterCount() - 1));
+        case 'onetime': return 0; // handled separately
+        case 'custom': return tool.cost || 0;
+        default: return 0;
+      }
+    }
+
+    function getToolOnetimeCost(tool) {
+      if (!tool) return 0;
+      return tool.type === 'onetime' ? tool.cost : 0;
+    }
+
+    function renderLayers() {
+      const grid = document.getElementById('layerGrid');
+      grid.innerHTML = '';
+
+      layers.forEach(layer => {
+        const sel = selections[layer.id];
+        const selectedTool = sel ? layer.tools.find(t => t.name === sel.name) : null;
+        const monthlyCost = selectedTool ? getToolMonthlyCost(selectedTool) : 0;
+        const onetimeCost = selectedTool ? getToolOnetimeCost(selectedTool) : 0;
+
+        let costDisplay = '—';
+        let costClass = '';
+        if (selectedTool) {
+          if (selectedTool.type === 'none') { costDisplay = 'none'; costClass = 'none-col'; }
+          else if (selectedTool.type === 'free') { costDisplay = 'free'; costClass = 'free'; }
+          else if (selectedTool.type === 'onetime') { costDisplay = `$${selectedTool.cost} once`; costClass = 'active'; }
+          else if (selectedTool.type === 'custom') { costDisplay = sel.customCost ? `$${sel.customCost}/mo` : 'custom'; costClass = 'active'; }
+          else { costDisplay = `$${monthlyCost.toFixed(2)}/mo`; costClass = 'active'; }
+        }
+
+        const row = document.createElement('div');
+        row.className = `layer-row${selectedTool && selectedTool.type !== 'none' ? ' has-cost' : ''}`;
+        row.innerHTML = `
+          <div>
+            <div class="layer-name">${layer.name}</div>
+            <a href="${layer.href}" class="layer-link">view landscape →</a>
+          </div>
+          <select class="layer-select" data-layer="${layer.id}">
+            ${layer.tools.map(t => `<option value="${t.name}" ${sel && sel.name === t.name ? 'selected' : ''}>${t.name}${t.type === 'free' ? ' (free)' : t.type === 'monthly' ? ` — $${t.cost}/mo` : t.type === 'per-printer' ? ` — $${t.cost}/printer/mo` : t.type === 'monthly-base-per-printer' ? ` — $${t.cost}/mo + $${t.extraPerPrinter}/printer` : t.type === 'onetime' ? ` — $${t.cost} one-time` : ''}</option>`).join('')}
+          </select>
+          <div class="layer-cost-display ${costClass}" id="cost-${layer.id}">${costDisplay}</div>
+        `;
+
+        // Custom cost input
+        const customRow = document.createElement('div');
+        customRow.className = `custom-cost-row${selectedTool && selectedTool.type === 'custom' ? ' visible' : ''}`;
+        customRow.id = `custom-row-${layer.id}`;
+        customRow.innerHTML = `
+          <span class="custom-label">Monthly cost ($)</span>
+          <input type="number" id="custom-cost-${layer.id}" placeholder="0" min="0" step="1" value="${sel && sel.customCost ? sel.customCost : ''}">
+          <span class="custom-label">Tool name</span>
+          <input type="text" id="custom-name-${layer.id}" placeholder="Tool name" value="${sel && sel.customName ? sel.customName : ''}">
+        `;
+
+        grid.appendChild(row);
+        grid.appendChild(customRow);
+      });
+
+      // Bind events
+      document.querySelectorAll('.layer-select').forEach(sel => {
+        sel.addEventListener('change', () => updateLayer(sel.dataset.layer));
+      });
+      layers.forEach(layer => {
+        const costInput = document.getElementById(`custom-cost-${layer.id}`);
+        const nameInput = document.getElementById(`custom-name-${layer.id}`);
+        if (costInput) costInput.addEventListener('input', () => updateLayer(layer.id));
+        if (nameInput) nameInput.addEventListener('input', () => updateLayer(layer.id));
+      });
+    }
+
+    function updateLayer(layerId) {
+      const layer = layers.find(l => l.id === layerId);
+      const selectEl = document.querySelector(`[data-layer="${layerId}"]`);
+      const selectedName = selectEl.value;
+      const tool = layer.tools.find(t => t.name === selectedName);
+      const customCostEl = document.getElementById(`custom-cost-${layerId}`);
+      const customNameEl = document.getElementById(`custom-name-${layerId}`);
+      const customRow = document.getElementById(`custom-row-${layerId}`);
+
+      const isCustom = tool && tool.type === 'custom';
+      customRow.classList.toggle('visible', isCustom);
+
+      const customCost = customCostEl ? parseFloat(customCostEl.value) || 0 : 0;
+      const customName = customNameEl ? customNameEl.value : '';
+
+      selections[layerId] = {
+        name: selectedName,
+        tool,
+        customCost: isCustom ? customCost : 0,
+        customName: isCustom ? customName : ''
+      };
+
+      // Update cost display
+      const costEl = document.getElementById(`cost-${layerId}`);
+      const printers = getPrinterCount();
+      let display = '—'; let cls = '';
+
+      if (tool) {
+        if (tool.type === 'none') { display = 'none'; cls = 'none-col'; }
+        else if (tool.type === 'free') { display = 'free'; cls = 'free'; }
+        else if (tool.type === 'onetime') { display = `$${tool.cost} once`; cls = 'active'; }
+        else if (tool.type === 'custom') { display = customCost ? `$${customCost}/mo` : 'custom'; cls = 'active'; }
+        else if (tool.type === 'per-printer') { display = `$${(tool.cost * printers).toFixed(2)}/mo`; cls = 'active'; }
+        else if (tool.type === 'monthly-base-per-printer') {
+          const total = tool.cost + (tool.extraPerPrinter * Math.max(0, printers - 1));
+          display = `$${total.toFixed(2)}/mo`; cls = 'active';
+        }
+        else { display = `$${tool.cost}/mo`; cls = 'active'; }
+      }
+
+      costEl.textContent = display;
+      costEl.className = `layer-cost-display ${cls}`;
+
+      const row = selectEl.closest('.layer-row');
+      row.classList.toggle('has-cost', !!(tool && tool.type !== 'none'));
+
+      // Reset results
+      document.getElementById('results').classList.remove('visible');
+    }
+
+    // Recalculate per-printer costs when printer count changes
+    document.getElementById('printerCount').addEventListener('input', () => {
+      Object.keys(selections).forEach(id => updateLayer(id));
+    });
+
+    document.getElementById('calcBtn').addEventListener('click', () => {
+      const revenue = parseFloat(document.getElementById('monthlyRevenue').value);
+      const jobs = parseFloat(document.getElementById('jobsPerMonth').value);
+
+      if (!revenue || !jobs) {
+        alert('Please enter your monthly revenue and jobs per month.');
+        return;
+      }
+
+      let totalMonthly = 0;
+      let totalOnetime = 0;
+      const breakdown = [];
+
+      layers.forEach(layer => {
+        const sel = selections[layer.id];
+        if (!sel || !sel.tool) {
+          breakdown.push({ layer: layer.name, toolName: '—', monthly: 0, type: 'none' });
+          return;
+        }
+        const tool = sel.tool;
+        let monthly = 0;
+        let onetime = 0;
+        let displayName = sel.name;
+
+        if (tool.type === 'custom') {
+          monthly = sel.customCost || 0;
+          displayName = sel.customName || 'Custom';
+        } else if (tool.type === 'onetime') {
+          onetime = tool.cost;
+        } else {
+          monthly = getToolMonthlyCost(tool);
+        }
+
+        totalMonthly += monthly;
+        totalOnetime += onetime;
+        breakdown.push({ layer: layer.name, toolName: displayName, monthly, onetime, type: tool.type });
+      });
+
+      // Metric cards
+      const pctRevenue = (totalMonthly / revenue) * 100;
+      const perJob = totalMonthly / jobs;
+      const annual = totalMonthly * 12;
+
+      document.getElementById('metricGrid').innerHTML = `
+        <div class="metric-card">
+          <div class="metric-label">Monthly cost</div>
+          <div class="metric-value">$${totalMonthly.toFixed(2)}</div>
+          <div class="metric-sub">recurring</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Annual cost</div>
+          <div class="metric-value">$${Math.round(annual).toLocaleString()}</div>
+          <div class="metric-sub">recurring only</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">% of revenue</div>
+          <div class="metric-value">${pctRevenue.toFixed(1)}%</div>
+          <div class="metric-sub">of $${revenue.toLocaleString()}/mo</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Cost per job</div>
+          <div class="metric-value">$${perJob.toFixed(2)}</div>
+          <div class="metric-sub">across ${jobs} jobs/mo</div>
+        </div>
+        ${totalOnetime > 0 ? `
+        <div class="metric-card">
+          <div class="metric-label">One-time costs</div>
+          <div class="metric-value">$${totalOnetime.toLocaleString()}</div>
+          <div class="metric-sub">not included in monthly</div>
+        </div>` : ''}
+      `;
+
+      // Breakdown table
+      const tbody = document.getElementById('breakdownBody');
+      tbody.innerHTML = '';
+      breakdown.forEach(row => {
+        const tr = document.createElement('tr');
+        let costCell = '';
+        if (row.type === 'none' || row.toolName === '—') costCell = `<td class="none-col">—</td>`;
+        else if (row.type === 'free') costCell = `<td class="free-col">free</td>`;
+        else if (row.type === 'onetime') costCell = `<td class="cost-col">$${row.onetime} once</td>`;
+        else costCell = `<td class="cost-col">$${row.monthly.toFixed(2)}/mo</td>`;
+        tr.innerHTML = `<td>${row.layer}</td><td>${row.toolName}</td>${costCell}`;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('breakdownFoot').innerHTML = `
+        <tr>
+          <td colspan="2">Total monthly</td>
+          <td style="text-align:right">$${totalMonthly.toFixed(2)}/mo</td>
+        </tr>`;
+
+      // Verdict
+      let verdictClass, label, text;
+      if (pctRevenue === 0) {
+        verdictClass = 'trivial';
+        label = 'Zero recurring software cost';
+        text = `This stack runs entirely on free and open-source tools. The dollar cost is zero. The real cost is setup time and ongoing maintenance — see the landscape pages for what each tool requires.`;
+      } else if (pctRevenue < 1) {
+        verdictClass = 'trivial';
+        label = 'Trivial cost at your scale';
+        text = `This stack costs ${pctRevenue.toFixed(1)}% of monthly revenue — $${totalMonthly.toFixed(2)}/month. At $${revenue.toLocaleString()}/month in revenue, software overhead is not a meaningful constraint. Evaluate tools on fit, not price.`;
+      } else if (pctRevenue < 3) {
+        verdictClass = 'reasonable';
+        label = 'Reasonable — within normal range';
+        text = `This stack costs ${pctRevenue.toFixed(1)}% of monthly revenue — $${totalMonthly.toFixed(2)}/month, or $${Math.round(annual).toLocaleString()}/year. Software overhead is within a sensible range for this revenue level. Evaluate each tool on whether it earns its cost.`;
+      } else if (pctRevenue < 6) {
+        verdictClass = 'significant';
+        label = 'Significant — worth auditing';
+        text = `This stack costs ${pctRevenue.toFixed(1)}% of monthly revenue — $${Math.round(annual).toLocaleString()}/year. That is a meaningful operating expense. Audit each paid layer: is it solving a real problem today, or one you're anticipating?`;
+      } else {
+        verdictClass = 'unjustified';
+        label = 'High — consider simplifying';
+        text = `This stack costs ${pctRevenue.toFixed(1)}% of monthly revenue — $${Math.round(annual).toLocaleString()}/year. At $${revenue.toLocaleString()}/month that is a heavy software burden. Consider whether every paid layer is earning its keep, or whether simpler alternatives cover the same ground.`;
+      }
+
+      const vb = document.getElementById('verdictBlock');
+      vb.className = `verdict-block ${verdictClass}`;
+      document.getElementById('verdictLabel').textContent = label;
+      document.getElementById('verdictText').textContent = text;
+
+      document.getElementById('results').classList.add('visible');
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    renderLayers();
+  </script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

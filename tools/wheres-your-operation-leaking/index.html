@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>Where's Your Operation Leaking? — 3D Print Shop Software</title>
+  <meta name="description" content="A diagnostic tool for commercial 3D print shop operators. Answer 10 questions, get an honest analysis of what's working and what isn't.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/tools/wheres-your-operation-leaking">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Where's Your Operation Leaking?">
+  <meta property="og:description" content="A diagnostic tool for commercial 3D print shop operators. Answer 10 questions, get an honest analysis of what's working and what isn't.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/tools/wheres-your-operation-leaking">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Where's Your Operation Leaking?",
+    "description": "A diagnostic tool for commercial 3D print shop operators.",
+    "url": "https://3dprintshopsoftware.com/tools/wheres-your-operation-leaking"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    .tool-intro {
+      margin-bottom: 2rem;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin: 1.5rem 0;
+    }
+    .friction-card {
+      border: 0.5px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      transition: border-color 0.15s, background 0.15s, opacity 0.15s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 130px;
+    }
+    .friction-card.unanswered {
+      opacity: 0.5;
+      background: var(--bg);
+    }
+    .friction-card.answered-yes {
+      border: 1.5px solid #3B6D11;
+      background: #EAF3DE;
+      opacity: 1;
+    }
+    .friction-card.answered-no {
+      border: 1.5px solid #854F0B;
+      background: #FAEEDA;
+      opacity: 1;
+    }
+    .card-q {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      flex: 1;
+      color: var(--text);
+    }
+    .answered-yes .card-q { color: #27500A; }
+    .answered-no .card-q { color: #633806; }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .yn-btn {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 0.5px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+    }
+    .yn-btn:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+    .yn-btn.active-yes {
+      background: #EAF3DE;
+      border: 1.5px solid #3B6D11;
+      color: #27500A;
+    }
+    .yn-btn.active-no {
+      background: #FAEEDA;
+      border: 1.5px solid #854F0B;
+      color: #633806;
+    }
+    .tool-counter {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .tool-counter strong {
+      color: var(--text);
+    }
+    .tool-action-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .tool-btn {
+      display: none;
+      padding: 10px 18px;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--bg);
+      cursor: pointer;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+    .tool-btn:hover:not(:disabled) { background: var(--bg-subtle); }
+    .tool-btn.visible { display: inline-flex; }
+    .tool-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .cooldown-note {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .analysis-block {
+      margin: 2rem 0;
+      display: none;
+    }
+    .analysis-block.visible { display: block; }
+    .analysis-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .analysis-body {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+    .analysis-body p { margin-bottom: 1rem; }
+    .priorities-list {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+    .priorities-list li {
+      margin-bottom: 0.5rem;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .loading-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .tool-divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="/tools">Tools</a>
+          <span class="breadcrumb-sep">›</span>
+          Where's your operation leaking?
+        </div>
+
+        <span class="page-label">Tools</span>
+        <h1>Where's your operation leaking?</h1>
+
+        <div class="tool-intro">
+          <p class="lead">Ten yes/no questions about how your shop actually runs. Answer as many as you like — answer at least three and get an honest diagnostic of what's working, what isn't, and where to focus first.</p>
+        </div>
+
+        <p class="tool-counter" id="counterText"><strong>0</strong> of 10 answered — answer at least 3 to generate your analysis</p>
+
+        <div class="cards-grid" id="cardsGrid"></div>
+
+        <div class="tool-action-row">
+          <button class="tool-btn" id="generateBtn">Generate analysis</button>
+          <button class="tool-btn" id="printBtn">Open printable report</button>
+          <span class="cooldown-note" id="cooldownText"></span>
+        </div>
+
+        <hr class="tool-divider" id="analysisDivider" style="display:none">
+
+        <div class="analysis-block" id="analysisBlock">
+          <div class="analysis-label">Your operational analysis</div>
+          <div class="analysis-body" id="analysisBody"></div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+  <script>
+    const PROXY_URL = 'https://anthropic-proxy.whereismy328.workers.dev';
+
+    const cards = [
+      {
+        id: 'job-costing',
+        q: 'Do you know what your last 5 jobs actually cost to run?',
+        diagnostic: 'Without that data, pricing decisions are based on incomplete information. Margin errors compound quietly—complex jobs get underpriced, simple ones overpriced—and the gap between perceived and actual profitability widens over time. Most operators discover the problem at the end of the month, not during the job.',
+        next: 'Track job costs by component: material, machine time, labor, overhead. A structured spreadsheet is the foundation.',
+        strength: 'Job costing visibility puts this shop ahead of most at this scale. The risk as volume grows is consistency—whether the model holds as job complexity increases.'
+      },
+      {
+        id: 'utilization',
+        q: 'Do you know what percentage of time your printers are actually running vs. sitting idle?',
+        diagnostic: 'Idle capacity is sunk cost. Low utilization signals either insufficient demand—not enough work to fill the machines—or over-investment in hardware relative to what the market is currently asking for. Either way, the carrying cost of underutilized equipment quietly compresses margins.',
+        next: 'Track utilization per machine. Machines running under 60% consistently either need more work directed at them or are candidates for liquidation.',
+        strength: 'Knowing utilization rates is a real operational advantage. Most shops at this scale are guessing. The next step is acting on what the numbers say.'
+      },
+      {
+        id: 'filament',
+        q: 'Do you know how much filament you used last month and what it cost?',
+        diagnostic: 'If not, material costs are invisible and margin calculations are guesswork. Most operators underestimate waste and overestimate margin because tracking breaks down at the material level. Shops that don\'t track filament accurately often appear more profitable on paper than in reality—and don\'t find out until cash flow tightens.',
+        next: 'Log filament by spool: date in, date out, weight used, waste. Start with highest-volume materials.',
+        strength: 'Material cost visibility is one of the cleaner signals of operational maturity. Knowing what filament actually costs per job is the foundation of accurate margin calculation.'
+      },
+      {
+        id: 'customer-data',
+        q: 'Is there a single place where customer preferences, order history, and job specs are stored?',
+        diagnostic: 'Scattered customer data means reconstructing context on every order—finding the last email thread, remembering special requirements, re-asking questions the customer already answered. That\'s invisible overhead that compounds with volume. At scale, it produces mistakes, repeated conversations, and the kind of operational drag that quietly burns out whoever is holding it all together.',
+        next: 'Consolidate customer and job data into one system. Start with order history and job specs—the two things that save the most time to have at hand.',
+        strength: 'A single source of customer truth is a genuine competitive advantage. It reduces errors, speeds up quoting, and builds the kind of institutional knowledge that makes scaling less chaotic.'
+      },
+      {
+        id: 'pricing',
+        q: 'Does quoting a job take less than 5 minutes?',
+        diagnostic: 'Time spent on manual quoting is time not spent running the business. Nobody started a print shop because they enjoy paperwork. A slow or error-prone cost model also undermines revenue forecasting—if the cost structure isn\'t clear, growth projections are guesswork.',
+        next: 'Build a costing model that accounts for material, machine time, labor, and overhead. A spreadsheet template is enough to start.',
+        strength: 'Fast, confident quoting is an underrated operational asset. It signals to customers that the shop knows its costs—and it frees up time for work that actually grows the business.'
+      },
+      {
+        id: 'maintenance',
+        q: 'Do you track maintenance schedules and anticipate parts failures before they happen?',
+        diagnostic: 'Unplanned downtime is expensive: lost capacity, reprints, customer delays, and rushed parts sourcing. Reactive maintenance always costs more than preventive maintenance. Shops that track machine history can spot failure patterns before they become production emergencies.',
+        next: 'Start a simple log: machine, date, maintenance type, parts replaced, cost. Patterns emerge faster than expected.',
+        strength: 'Preventive maintenance tracking is one of those disciplines that pays quietly and invisibly—until a machine goes down at a competitor\'s shop and not yours.'
+      },
+      {
+        id: 'communication',
+        q: 'Do you proactively update customers on order status before they ask?',
+        diagnostic: 'Most operators handle status requests reactively—answering when asked, fitting it in between jobs. The hidden cost isn\'t any single call; it\'s the cumulative interruption pattern. A simple proactive update process—even templated messages at key milestones—doesn\'t just reduce inbound calls. It signals that the operation is under control, which builds customer confidence.',
+        next: 'Audit how many inbound status inquiries you handle per week. If it\'s more than a few, a simple outbound update process shifts you from reactive to proactive.',
+        strength: 'Proactive communication is a trust signal that most small shops underinvest in. Customers who feel informed don\'t shop around.'
+      },
+      {
+        id: 'duplicate',
+        q: 'Is each piece of customer or material data entered only once across all your systems?',
+        diagnostic: 'Duplicate entry wastes time and introduces errors at every point of repetition. It\'s a symptom of system fragmentation—tools that don\'t integrate or data structures that weren\'t designed to work together. The downstream cost is reconciliation: hours spent cross-checking systems to find discrepancies that shouldn\'t exist. That labor doesn\'t show up as a line item but it accumulates fast, and it scales with volume.',
+        next: 'Map where data is re-entered and why. The fix is usually either consolidation (fewer systems) or a shared data layer (one source of truth that others reference).',
+        strength: 'Single-entry data discipline is rare at this scale. It means systems are either well-integrated or well-designed—either way, it\'s a foundation worth protecting as the operation grows.'
+      },
+      {
+        id: 'profitability',
+        q: 'Do you know which materials, job types, or customers generate the most profit?',
+        diagnostic: 'Without that visibility, growth decisions are based on revenue, not margin. Scaling the wrong work—high volume, low margin—compounds the problem. Knowing which jobs, materials, and customers are actually profitable informs which work to pursue, which to price differently, and where growth investment pays off.',
+        next: 'Track profitability by material, job type, and customer for 2–3 months. The patterns that emerge may contain surprising insights.',
+        strength: 'Profitability visibility by segment is sophisticated operational thinking. Most shops at this scale optimize for revenue. Optimizing for margin is what actually builds a durable business.'
+      },
+      {
+        id: 'audit',
+        q: 'If a customer disputed an order or cost, is there a clear record of what was quoted, approved, and delivered?',
+        diagnostic: 'Without documented records, disputes become a matter of competing recollections—stressful, time-consuming, and damaging to customer relationships regardless of outcome. An audit trail protects the business in disputes, but it also reduces the cognitive load of managing many jobs simultaneously. At scale, it\'s the difference between a manageable operation and a chaotic one.',
+        next: 'Create a simple order record: quote, approval, completion, delivery date. Archive it and make it accessible without digging.',
+        strength: 'A clean audit trail is both a legal protection and an operational discipline. It means the business has institutional memory that doesn\'t live only in the owner\'s head.'
+      }
+    ];
+
+    const answers = {};
+    let generatedAnalysis = '';
+    let generatedNextSteps = '';
+    let cooldownTimer = null;
+
+    function renderCards() {
+      const grid = document.getElementById('cardsGrid');
+      grid.innerHTML = '';
+      cards.forEach(card => {
+        const ans = answers[card.id];
+        const state = ans === undefined ? 'unanswered' : ans ? 'answered-yes' : 'answered-no';
+        const el = document.createElement('div');
+        el.className = `friction-card ${state}`;
+        el.innerHTML = `
+          <div class="card-q">${card.q}</div>
+          <div class="btn-row">
+            <button class="yn-btn${ans === true ? ' active-yes' : ''}" data-id="${card.id}" data-val="yes">Yes</button>
+            <button class="yn-btn${ans === false ? ' active-no' : ''}" data-id="${card.id}" data-val="no">No</button>
+          </div>`;
+        grid.appendChild(el);
+      });
+
+      document.querySelectorAll('.yn-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const val = btn.dataset.val === 'yes';
+          if (answers[id] === val) {
+            delete answers[id];
+          } else {
+            answers[id] = val;
+          }
+          renderCards();
+          updateCounter();
+          updateGenerateBtn();
+          resetAnalysis();
+        });
+      });
+    }
+
+    function resetAnalysis() {
+      document.getElementById('printBtn').classList.remove('visible');
+      document.getElementById('analysisBlock').classList.remove('visible');
+      document.getElementById('analysisDivider').style.display = 'none';
+      generatedAnalysis = '';
+      generatedNextSteps = '';
+    }
+
+    function updateCounter() {
+      const count = Object.keys(answers).length;
+      const remaining = Math.max(0, 3 - count);
+      const el = document.getElementById('counterText');
+      el.innerHTML = `<strong>${count}</strong> of 10 answered${remaining > 0 ? ` — answer ${remaining} more to generate your analysis` : ' — ready to generate'}`;
+    }
+
+    function updateGenerateBtn() {
+      document.getElementById('generateBtn').classList.toggle('visible', Object.keys(answers).length >= 3);
+    }
+
+    function startCooldown(seconds) {
+      const btn = document.getElementById('generateBtn');
+      const text = document.getElementById('cooldownText');
+      let remaining = seconds;
+      btn.disabled = true;
+      text.textContent = `Next analysis available in ${remaining}s`;
+      cooldownTimer = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(cooldownTimer);
+          btn.disabled = false;
+          text.textContent = '';
+          btn.textContent = 'Regenerate analysis';
+        } else {
+          text.textContent = `Next analysis available in ${remaining}s`;
+        }
+      }, 1000);
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('generateBtn');
+      const analysisBlock = document.getElementById('analysisBlock');
+      const analysisDivider = document.getElementById('analysisDivider');
+      const analysisBody = document.getElementById('analysisBody');
+
+      const yesCards = cards.filter(c => answers[c.id] === true);
+      const noCards = cards.filter(c => answers[c.id] === false);
+      const skippedCards = cards.filter(c => answers[c.id] === undefined);
+
+      btn.textContent = 'Generating...';
+      btn.disabled = true;
+      analysisBody.innerHTML = '<p class="loading-note">Analyzing your operation...</p>';
+      analysisBlock.classList.add('visible');
+      analysisDivider.style.display = 'block';
+      analysisBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      const strengthsList = yesCards.length > 0
+        ? `STRENGTHS (operator answered Yes):\n${yesCards.map(c => `- ${c.q}\n  Context: ${c.strength}`).join('\n\n')}`
+        : '';
+      const gapsList = noCards.length > 0
+        ? `GAPS (operator answered No):\n${noCards.map(c => `- ${c.q}\n  Context: ${c.diagnostic}`).join('\n\n')}`
+        : '';
+      const skippedList = skippedCards.length > 0
+        ? `NOT ANSWERED: ${skippedCards.map(c => c.q).join('; ')}`
+        : '';
+
+      const prompt = `You are a business strategist advising a commercial 3D print shop operator. Here is their self-assessment:\n\n${strengthsList}\n\n${gapsList}\n\n${skippedList}\n\nWrite a concise diagnostic analysis. Structure your response in exactly this format:\n\nANALYSIS\n[3-4 paragraphs. Acknowledge genuine strengths where they exist—be specific about why they matter. Be direct about gaps and what they collectively suggest about the operation. Identify patterns. Specific to a print shop operator's reality. No generic business advice. No product recommendations. No first person.]\n\nPRIORITIES\n1. [Most important action — one sentence, specific]\n2. [Second priority]\n3. [Third priority]\n4. [Fourth, if warranted]\n5. [Fifth, if warranted]\n\nTone: wise, experienced operator. Not preachy. Not salesy. Clear-eyed. Honest about both what's working and what isn't.`;
+
+      try {
+        const response = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] })
+        });
+
+        if (response.status === 429) {
+          analysisBody.innerHTML = '<p class="loading-note">You\'ve reached the analysis limit for this hour. Please try again later.</p>';
+          btn.textContent = 'Generate analysis';
+          btn.disabled = false;
+          return;
+        }
+
+        const data = await response.json();
+        const text = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+
+        const analysisMatch = text.match(/ANALYSIS\n([\s\S]*?)(?=\nPRIORITIES)/);
+        const prioritiesMatch = text.match(/PRIORITIES\n([\s\S]*?)$/);
+
+        generatedAnalysis = analysisMatch ? analysisMatch[1].trim() : text;
+        generatedNextSteps = prioritiesMatch ? prioritiesMatch[1].trim() : '';
+
+        const paragraphs = generatedAnalysis.split('\n\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
+        const priorityItems = generatedNextSteps.split('\n').filter(l => l.trim()).map(l => `<li>${l.replace(/^\d+\.\s*/, '')}</li>`).join('');
+
+        analysisBody.innerHTML = `
+          ${paragraphs}
+          <p><strong>Priorities</strong></p>
+          <ol class="priorities-list">${priorityItems}</ol>`;
+
+        document.getElementById('printBtn').classList.add('visible');
+        startCooldown(60);
+
+      } catch (e) {
+        analysisBody.innerHTML = '<p class="loading-note">Something went wrong. Please try again.</p>';
+        btn.textContent = 'Generate analysis';
+        btn.disabled = false;
+      }
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => {
+      if (!generatedAnalysis) return;
+      const yesCards = cards.filter(c => answers[c.id] === true);
+      const noCards = cards.filter(c => answers[c.id] === false);
+      const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      const strengthRows = yesCards.map(c => `
+        <div class="report-item yes-item">
+          <div class="item-q">${c.q}</div>
+          <div class="item-note">${c.strength}</div>
+        </div>`).join('');
+
+      const gapRows = noCards.map(c => `
+        <div class="report-item no-item">
+          <div class="item-q">${c.q}</div>
+          <div class="item-diagnostic">${c.diagnostic}</div>
+          <div class="item-next"><strong>Next step:</strong> ${c.next}</div>
+        </div>`).join('');
+
+      const priorityLines = generatedNextSteps.split('\n').filter(l => l.trim()).map(l => `<li>${l.replace(/^\d+\.\s*/, '')}</li>`).join('');
+      const analysisParagraphs = generatedAnalysis.split('\n\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
+
+      const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Operational Health Check — 3D Print Shop Software<\/title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Space Mono', monospace; font-size: 13px; line-height: 1.7; color: #1a1a1a; background: #fff; padding: 48px; max-width: 800px; }
+.close-btn { position: fixed; top: 24px; right: 24px; padding: 8px 16px; border: 0.5px solid #ccc; border-radius: 4px; background: #fff; font-family: 'Space Mono', monospace; font-size: 12px; cursor: pointer; color: #444; font-weight: 700; }
+.close-btn:hover { background: #f5f5f5; }
+.site-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #888; margin-bottom: 48px; }
+h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 40px; }
+.section-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 0.5px solid #ddd; }
+.analysis-section { margin-bottom: 40px; }
+.analysis-section p { margin-bottom: 14px; font-size: 13px; line-height: 1.8; }
+ol { padding-left: 20px; margin-bottom: 40px; }
+ol li { margin-bottom: 8px; font-size: 13px; line-height: 1.6; }
+.report-item { margin-bottom: 16px; padding: 12px 16px; border-radius: 4px; }
+.yes-item { background: #EAF3DE; border-left: 3px solid #3B6D11; }
+.no-item { background: #FAEEDA; border-left: 3px solid #854F0B; margin-bottom: 20px; }
+.item-q { font-weight: 700; margin-bottom: 6px; font-size: 13px; }
+.yes-item .item-q { color: #27500A; }
+.no-item .item-q { color: #633806; }
+.item-note { font-size: 12px; color: #3B6D11; line-height: 1.6; }
+.item-diagnostic { color: #633806; margin-bottom: 6px; font-size: 12px; line-height: 1.6; }
+.item-next { font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 6px; }
+.footer { margin-top: 48px; padding-top: 16px; border-top: 0.5px solid #ddd; font-size: 11px; color: #999; }
+@media print { .close-btn { display: none; } body { padding: 32px; } @page { margin: 1in; } }
+<\/style>
+<\/head>
+<body>
+<button class=\"close-btn\" onclick=\"window.close()\">Close<\/button>
+<div class="site-label">3dprintshopsoftware.com — operational health check<\/div>
+<h1>Where's your operation leaking?<\/h1>
+<div class="subtitle">Generated ${date} · ${yesCards.length} strength${yesCards.length !== 1 ? 's' : ''}, ${noCards.length} gap${noCards.length !== 1 ? 's' : ''} identified<\/div>
+<div class="section-label">Analysis<\/div>
+<div class="analysis-section">${analysisParagraphs}<\/div>
+<div class="section-label">Priorities<\/div>
+<ol>${priorityLines}<\/ol>
+${yesCards.length > 0 ? `<div class="section-label">What's working<\/div><div style="margin-bottom:40px">${strengthRows}<\/div>` : ''}
+${noCards.length > 0 ? `<div class="section-label">Areas to address<\/div><div style="margin-bottom:40px">${gapRows}<\/div>` : ''}
+<div class="footer">3dprintshopsoftware.com · an independent guide for print farm operators<\/div>
+<\/body>
+<\/html>`;
+
+      window.open(URL.createObjectURL(new Blob([html], { type: 'text/html' })), '_blank');
+    });
+
+    renderCards();
+  </script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

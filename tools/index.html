@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tools | 3D Print Shop Software</title>
+  <meta name="description" content="Free calculators and diagnostic tools for 3D print shop operators. Job pricing, cost analysis, ROI, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .tool-list { list-style: none; padding: 0; margin-bottom: 32px; }
+    .tool-list li { border-bottom: var(--hairline); }
+    .tool-list li:last-child { border-bottom: none; }
+    .tool-list a {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .tool-list a:hover .tool-list-name { color: var(--accent); }
+    .tool-list-body { flex: 1; }
+    .tool-list-name {
+      font-size: var(--small);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .tool-list-desc {
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.5;
+    }
+    .tool-list-arrow { color: var(--border); font-size: 11px; padding-top: 2px; flex-shrink: 0; }
+    .tool-list a:hover .tool-list-arrow { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Tools</span>
+        </nav>
+
+        <span class="page-label">Free Tools</span>
+        <h1>Tools</h1>
+
+        <p class="lead">Calculators and diagnostics built around the decisions operators actually face. No signup required.</p>
+
+        <ul class="tool-list">
+          <li>
+            <a href="/tools/job-pricing-tool">
+              <div class="tool-list-body">
+                <div class="tool-list-name">What should I charge for this job?</div>
+                <div class="tool-list-desc">Enter material cost, machine time, labor, and overhead. Get a floor price and a suggested margin-aware quote.</div>
+              </div>
+              <span class="tool-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/tools/wheres-your-operation-leaking">
+              <div class="tool-list-body">
+                <div class="tool-list-name">Where's your operation leaking?</div>
+                <div class="tool-list-desc">Diagnostic tool that surfaces the most likely sources of margin loss based on how your shop is currently set up.</div>
+              </div>
+              <span class="tool-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/tools/does-this-tool-pencil-out">
+              <div class="tool-list-body">
+                <div class="tool-list-name">Does this tool pencil out?</div>
+                <div class="tool-list-desc">Single-tool ROI calculator. Enter what a tool costs and what problem it solves. See how long before it pays for itself.</div>
+              </div>
+              <span class="tool-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/tools/tool-stack-builder">
+              <div class="tool-list-body">
+                <div class="tool-list-name">What does this stack cost to run?</div>
+                <div class="tool-list-desc">Build your current or planned software stack from verified vendors. See normalized monthly cost across all layers.</div>
+              </div>
+              <span class="tool-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/tools/normalize-your-software-costs">
+              <div class="tool-list-body">
+                <div class="tool-list-name">Normalize your software costs</div>
+                <div class="tool-list-desc">Convert any vendor's pricing model -- per-printer, one-time, tiered -- into a comparable monthly figure so you can evaluate apples to apples.</div>
+              </div>
+              <span class="tool-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New tools publish as new decision points come up. The newsletter covers additions.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" />
+            <button type="button">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

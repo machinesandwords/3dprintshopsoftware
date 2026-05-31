@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>Does This Tool Pencil Out? — 3D Print Shop Software</title>
+  <meta name="description" content="A plain-math ROI calculator for 3D print shop operators. Enter your revenue and job volume, pick a tool, and see whether the cost is trivial, reasonable, or hard to justify.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/tools/does-this-tool-pencil-out">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Does This Tool Pencil Out?">
+  <meta property="og:description" content="A plain-math ROI calculator for 3D print shop operators.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/tools/does-this-tool-pencil-out">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    .tool-section { margin-bottom: 2rem; }
+    .tool-section-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+    .input-row.single { grid-template-columns: 1fr; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .input-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: -4px;
+    }
+    .input-prefix-wrap {
+      display: flex;
+      align-items: center;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .input-prefix {
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      border-right: 0.5px solid var(--border);
+      white-space: nowrap;
+    }
+    .input-prefix-wrap input {
+      border: none;
+      border-radius: 0;
+      flex: 1;
+      min-width: 0;
+    }
+    select, input[type="number"], input[type="text"] {
+      padding: 8px 10px;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--bg);
+      width: 100%;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--text-muted); }
+    .tool-divider { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+    .calc-btn {
+      padding: 10px 20px;
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--bg);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .calc-btn:hover { background: var(--bg-subtle); }
+    .results { display: none; margin-top: 2rem; }
+    .results.visible { display: block; }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .metric-card {
+      background: var(--bg-subtle);
+      border-radius: 4px;
+      padding: 1rem;
+    }
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .metric-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+    }
+    .metric-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .verdict-block {
+      border-left: 3px solid var(--border);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .verdict-block.trivial { border-color: #3B6D11; background: #EAF3DE; }
+    .verdict-block.reasonable { border-color: #185FA5; background: #E6F1FB; }
+    .verdict-block.significant { border-color: #854F0B; background: #FAEEDA; }
+    .verdict-block.unjustified { border-color: #A32D2D; background: #FCEBEB; }
+    .verdict-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .trivial .verdict-label { color: #27500A; }
+    .reasonable .verdict-label { color: #0C447C; }
+    .significant .verdict-label { color: #633806; }
+    .unjustified .verdict-label { color: #791F1F; }
+    .verdict-text { font-size: 13px; line-height: 1.6; }
+    .trivial .verdict-text { color: #27500A; }
+    .reasonable .verdict-text { color: #0C447C; }
+    .significant .verdict-text { color: #633806; }
+    .unjustified .verdict-text { color: #791F1F; }
+    .year-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .year-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 6px 8px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .year-table td {
+      font-size: 13px;
+      padding: 8px;
+      border-bottom: 0.5px solid var(--border);
+      color: var(--text);
+    }
+    .year-table tr:last-child td { border-bottom: none; }
+    .year-table td.highlight { font-weight: 700; }
+    .alternatives { display: none; margin-top: 2rem; }
+    .alternatives.visible { display: block; }
+    .alt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 1rem;
+    }
+    .alt-card {
+      border: 0.5px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem;
+    }
+    .alt-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .alt-input-group { margin-bottom: 0.75rem; }
+    .alt-result {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 0.5px solid var(--border);
+      display: none;
+    }
+    .alt-result.visible { display: block; }
+    .alt-metric { margin-bottom: 6px; }
+    .alt-metric-label { font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+    .alt-metric-value { font-size: 18px; font-weight: 700; color: var(--text); }
+    .comparison-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    .custom-tool-row { display: none; }
+    .custom-tool-row.visible { display: grid; }
+    @media (max-width: 600px) {
+      .input-row { grid-template-columns: 1fr; }
+      .alt-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="/tools">Tools</a>
+          <span class="breadcrumb-sep">›</span>
+          Does this tool pencil out?
+        </div>
+
+        <span class="page-label">Tools</span>
+        <h1>Does this tool pencil out?</h1>
+
+        <p class="lead">Enter your shop's numbers, pick a tool, and get a plain-math answer. No spin — if the cost is hard to justify at your scale, this will say so.</p>
+
+        <hr class="tool-divider">
+
+        <!-- Step 1: Shop numbers -->
+        <div class="tool-section">
+          <div class="tool-section-label">Your shop</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label class="input-label" for="monthlyRevenue">Monthly revenue</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="monthlyRevenue" placeholder="15000" min="0" step="500">
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="jobsPerMonth">Jobs per month</label>
+              <input type="number" id="jobsPerMonth" placeholder="40" min="1" step="1">
+            </div>
+          </div>
+          <div class="input-row" id="printerCountRow" style="display:none;">
+            <div class="input-group">
+              <label class="input-label" for="printerCount">Number of printers</label>
+              <p style="font-size:11px;color:var(--text-muted);margin:0 0 4px;">Required for per-printer pricing</p>
+              <input type="number" id="printerCount" placeholder="10" min="1" step="1">
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Tool selection -->
+        <div class="tool-section">
+          <div class="tool-section-label">Tool to evaluate</div>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:0.75rem; line-height:1.5;">Free and open-source tools aren't listed here because price isn't their tradeoff. See <a href="/tools/what-does-this-stack-cost-to-run">What does this stack actually cost to run?</a> for those.</p>
+          <div class="input-row">
+            <div class="input-group">
+              <label class="input-label" for="toolSelect">Select a tool</label>
+              <select id="toolSelect">
+                <option value="">— choose a tool —</option>
+                <optgroup label="Job economics">
+                  <option value="3dprintops_14" data-cost="14" data-type="monthly" data-name="3DPrintOps (Starter)">3DPrintOps — $14/mo</option>
+                  <option value="3dprintops_29" data-cost="29" data-type="monthly" data-name="3DPrintOps (Pro)">3DPrintOps — $29/mo</option>
+                  <option value="3dpboss_49" data-cost="49" data-type="onetime" data-name="3DPBOSS (Basic)">3DPBOSS — $49 one-time</option>
+                  <option value="3dpboss_199" data-cost="199" data-type="onetime" data-name="3DPBOSS (Full)">3DPBOSS — $199 one-time</option>
+                </optgroup>
+                <optgroup label="Fleet management">
+                  <option value="simplyprint_31" data-cost="31.49" data-type="monthly" data-name="SimplyPrint (Print Farm)">SimplyPrint — $31.49/mo</option>
+                  <option value="printago_4pp" data-cost="4" data-type="per-printer" data-name="Printago">Printago — $4/printer/mo</option>
+                  <option value="obico_699" data-cost="6.99" data-type="monthly" data-name="Obico (AI Premium)">Obico — $6.99/mo base + $2/printer</option>
+                </optgroup>
+                <optgroup label="Inventory &amp; materials">
+                  <option value="filametrics_12" data-cost="12" data-type="monthly" data-name="Filametrics (Maker)">Filametrics Maker — $12/mo</option>
+                  <option value="filametrics_30" data-cost="30" data-type="monthly" data-name="Filametrics (Emperor)">Filametrics Emperor — $30/mo</option>
+                </optgroup>
+                <optgroup label="Customer management">
+                  <option value="layers_49" data-cost="49" data-type="monthly" data-name="Layers.app (Startup)">Layers.app — $49/mo</option>
+                  <option value="layers_149" data-cost="149" data-type="monthly" data-name="Layers.app (Business)">Layers.app — $149/mo</option>
+                </optgroup>
+                <optgroup label="ERP / all-in-one">
+                  <option value="mrpeasy_49" data-cost="49" data-type="monthly" data-name="MRPeasy (Starter)">MRPeasy — $49/mo</option>
+                  <option value="mrpeasy_99" data-cost="99" data-type="monthly" data-name="MRPeasy (Professional)">MRPeasy — $99/mo</option>
+                  <option value="offset3d_50" data-cost="50" data-type="onetime" data-name="Offset3D">Offset3D — $50 one-time</option>
+                </optgroup>
+                <option value="custom" data-cost="0" data-type="monthly" data-name="Custom tool">Custom tool...</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Custom tool inputs -->
+          <div class="input-row custom-tool-row" id="customToolRow">
+            <div class="input-group">
+              <label class="input-label" for="customName">Tool name</label>
+              <input type="text" id="customName" placeholder="e.g. PrintFarmHQ">
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="customCost">Cost</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="customCost" placeholder="49" min="0" step="1">
+              </div>
+            </div>
+          </div>
+          <div class="input-row custom-tool-row" id="customTypeRow" style="grid-template-columns: 1fr;">
+            <div class="input-group">
+              <label class="input-label" for="customType">Pricing model</label>
+              <select id="customType">
+                <option value="monthly">Monthly subscription</option>
+                <option value="onetime">One-time purchase</option>
+                <option value="annual">Annual subscription</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="calc-btn" id="calcBtn">Calculate</button>
+
+        <!-- Results -->
+        <div class="results" id="results">
+          <hr class="tool-divider">
+          <div class="tool-section-label" id="resultsTitle">Results</div>
+
+          <div class="metric-grid" id="metricGrid"></div>
+
+          <div class="verdict-block" id="verdictBlock">
+            <div class="verdict-label" id="verdictLabel"></div>
+            <div class="verdict-text" id="verdictText"></div>
+          </div>
+
+          <div class="tool-section-label">Total cost over time</div>
+          <table class="year-table" id="yearTable">
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Total cost</th>
+                <th>Cost per job</th>
+                <th>As % of revenue</th>
+              </tr>
+            </thead>
+            <tbody id="yearTableBody"></tbody>
+          </table>
+
+          <!-- Alternatives -->
+          <div class="alternatives" id="alternatives">
+            <hr class="tool-divider">
+            <div class="tool-section-label">Where else could this money go?</div>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:1rem; line-height:1.6;">At your scale, there may be better uses for this capital. Enter your numbers to compare.</p>
+
+            <div class="alt-grid">
+
+              <!-- Hardware -->
+              <div class="alt-card">
+                <div class="alt-card-label">Adding a printer</div>
+                <div class="alt-input-group">
+                  <div class="input-group">
+                    <label class="input-label" for="printerCost">Expected printer cost</label>
+                    <div class="input-prefix-wrap">
+                      <span class="input-prefix">$</span>
+                      <input type="number" id="printerCost" placeholder="600" min="0" step="50">
+                    </div>
+                  </div>
+                </div>
+                <div class="alt-input-group">
+                  <div class="input-group">
+                    <label class="input-label" for="revenuePerPrinter">Revenue per printer per month</label>
+                    <div class="input-prefix-wrap">
+                      <span class="input-prefix">$</span>
+                      <input type="number" id="revenuePerPrinter" placeholder="800" min="0" step="50">
+                    </div>
+                  </div>
+                </div>
+                <div class="alt-result" id="hardwareResult">
+                  <div class="alt-metric">
+                    <div class="alt-metric-label">Months to payoff</div>
+                    <div class="alt-metric-value" id="hardwarePayback">—</div>
+                  </div>
+                  <div class="alt-metric">
+                    <div class="alt-metric-label">Monthly return after payoff</div>
+                    <div class="alt-metric-value" id="hardwareMonthlyReturn">—</div>
+                  </div>
+                  <div class="comparison-note" id="hardwareNote"></div>
+                </div>
+              </div>
+
+              <!-- Labor -->
+              <div class="alt-card">
+                <div class="alt-card-label">Part-time help</div>
+                <div class="alt-input-group">
+                  <div class="input-group">
+                    <label class="input-label" for="laborRate">Local hourly rate for shop help</label>
+                    <div class="input-prefix-wrap">
+                      <span class="input-prefix">$</span>
+                      <input type="number" id="laborRate" placeholder="15" min="0" step="1">
+                    </div>
+                  </div>
+                </div>
+                <div class="alt-result" id="laborResult">
+                  <div class="alt-metric">
+                    <div class="alt-metric-label">Hours of help the same money buys</div>
+                    <div class="alt-metric-value" id="laborHoursMonth">—</div>
+                  </div>
+                  <div class="comparison-note" id="laborNote"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+  <script>
+    const toolSelect = document.getElementById('toolSelect');
+    const customToolRow = document.getElementById('customToolRow');
+    const customTypeRow = document.getElementById('customTypeRow');
+
+    toolSelect.addEventListener('change', () => {
+      const isCustom = toolSelect.value === 'custom';
+      customToolRow.classList.toggle('visible', isCustom);
+      customTypeRow.classList.toggle('visible', isCustom);
+    });
+
+    // Live alternative calculations
+    ['printerCost','revenuePerPrinter'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calcHardware);
+    });
+    document.getElementById('laborRate').addEventListener('input', calcLabor);
+
+    function calcHardware() {
+      const printerCost = parseFloat(document.getElementById('printerCost').value);
+      const rev = parseFloat(document.getElementById('revenuePerPrinter').value);
+      const result = document.getElementById('hardwareResult');
+      if (!printerCost || !rev) { result.classList.remove('visible'); return; }
+
+      const tool = getSelectedTool();
+      const toolMonthlyCost = getCurrentToolMonthlyCost();
+
+      let paybackMonths;
+      let note = '';
+      let monthlyReturn;
+
+      if (toolMonthlyCost > 0) {
+        // Subscription: monthly savings from not buying tool accelerates payback
+        const monthlyReturn_raw = rev + toolMonthlyCost;
+        paybackMonths = Math.ceil(printerCost / monthlyReturn_raw);
+        monthlyReturn = Math.round(monthlyReturn_raw);
+        note = `Printer revenue ($${Math.round(rev)}/mo) + software savings ($${Math.round(toolMonthlyCost)}/mo) = $${monthlyReturn}/mo working toward payoff. Without the software saving, payback would take ${Math.ceil(printerCost / rev)} months.`;
+      } else if (tool && tool.type === 'onetime' && tool.cost > 0) {
+        // One-time: software cost offsets printer purchase price
+        const effectiveCost = printerCost - tool.cost;
+        paybackMonths = effectiveCost > 0 ? Math.ceil(effectiveCost / rev) : 0;
+        monthlyReturn = Math.round(rev);
+        note = `Printer cost ($${printerCost}) minus software cost redirected ($${tool.cost}) = effective printer cost of $${Math.max(0, effectiveCost).toLocaleString()}. Payback at $${Math.round(rev)}/mo.`;
+      } else {
+        paybackMonths = Math.ceil(printerCost / rev);
+        monthlyReturn = Math.round(rev);
+        note = '';
+      }
+
+      document.getElementById('hardwarePayback').textContent = paybackMonths + (paybackMonths === 1 ? ' month' : ' months');
+      document.getElementById('hardwareMonthlyReturn').textContent = '$' + monthlyReturn.toLocaleString() + '/mo';
+      document.getElementById('hardwareNote').textContent = note;
+      result.classList.add('visible');
+    }
+
+    function calcLabor() {
+      const rate = parseFloat(document.getElementById('laborRate').value);
+      const result = document.getElementById('laborResult');
+      if (!rate) { result.classList.remove('visible'); return; }
+
+      const toolMonthlyCost = getCurrentToolMonthlyCost();
+      const toolSelected = getSelectedTool();
+
+      let hoursText = '';
+      let note = '';
+
+      if (toolMonthlyCost > 0) {
+        const hours = (toolMonthlyCost / rate).toFixed(1);
+        hoursText = hours + ' hrs/mo';
+        note = `The same $${Math.round(toolMonthlyCost)}/month buys ${hours} hours of help at $${rate}/hr — time that goes directly toward post-processing, packing, or bed prep.`;
+      } else if (toolSelected && toolSelected.cost > 0) {
+        const hours = (toolSelected.cost / rate).toFixed(1);
+        hoursText = hours + ' hrs';
+        note = `The same $${toolSelected.cost} one-time cost covers ${hours} hours of help at $${rate}/hr.`;
+      }
+
+      document.getElementById('laborHoursMonth').textContent = hoursText || '—';
+      document.getElementById('laborNote').textContent = note;
+      result.classList.add('visible');
+    }
+
+    function getSelectedTool() {
+      const sel = toolSelect.value;
+      if (!sel) return null;
+      if (sel === 'custom') {
+        const name = document.getElementById('customName').value || 'Custom tool';
+        const cost = parseFloat(document.getElementById('customCost').value) || 0;
+        const type = document.getElementById('customType').value;
+        return { name, cost, type };
+      }
+      const opt = toolSelect.options[toolSelect.selectedIndex];
+      return {
+        name: opt.dataset.name,
+        cost: parseFloat(opt.dataset.cost),
+        type: opt.dataset.type
+      };
+    }
+
+    function getCurrentToolMonthlyCost() {
+      const tool = getSelectedTool();
+      if (!tool) return 0;
+      if (tool.type === 'monthly') return tool.cost;
+      if (tool.type === 'annual') return tool.cost / 12;
+      if (tool.type === 'per-printer') {
+        const printers = parseFloat(document.getElementById('printerCount').value) || 1;
+        return tool.cost * printers;
+      }
+      return 0;
+    }
+
+    // Show printer count input for per-printer tools
+    toolSelect.addEventListener('change', () => {
+      const tool = getSelectedTool();
+      const row = document.getElementById('printerCountRow');
+      row.style.display = (tool && tool.type === 'per-printer') ? 'grid' : 'none';
+    });
+
+    document.getElementById('calcBtn').addEventListener('click', () => {
+      const revenue = parseFloat(document.getElementById('monthlyRevenue').value);
+      const jobs = parseFloat(document.getElementById('jobsPerMonth').value);
+      const tool = getSelectedTool();
+
+      if (!revenue || !jobs || !tool || !tool.cost) {
+        alert('Please fill in all fields before calculating.');
+        return;
+      }
+
+      const results = document.getElementById('results');
+      const alternatives = document.getElementById('alternatives');
+
+      // Calculate monthly equivalent cost
+      let monthlyCost = 0;
+      let oneTimeCost = 0;
+      if (tool.type === 'monthly') monthlyCost = tool.cost;
+      else if (tool.type === 'annual') monthlyCost = tool.cost / 12;
+      else if (tool.type === 'per-printer') {
+        const printers = parseFloat(document.getElementById('printerCount').value) || 1;
+        monthlyCost = tool.cost * printers;
+      }
+      else oneTimeCost = tool.cost;
+
+      const isSubscription = tool.type === 'monthly' || tool.type === 'annual' || tool.type === 'per-printer';
+
+      // Core metrics
+      const pctOfRevenue = isSubscription
+        ? ((monthlyCost / revenue) * 100)
+        : ((oneTimeCost / revenue) * 100);
+
+      const perJobCost = isSubscription
+        ? (monthlyCost / jobs)
+        : (oneTimeCost / jobs);
+
+      // Build metric cards
+      const metricGrid = document.getElementById('metricGrid');
+      if (isSubscription) {
+        metricGrid.innerHTML = `
+          <div class="metric-card">
+            <div class="metric-label">Monthly cost</div>
+            <div class="metric-value">$${monthlyCost.toFixed(2)}</div>
+            <div class="metric-sub">${tool.type === 'annual' ? 'billed annually' : 'billed monthly'}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">% of monthly revenue</div>
+            <div class="metric-value">${pctOfRevenue.toFixed(1)}%</div>
+            <div class="metric-sub">of $${revenue.toLocaleString()}/mo</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Cost per job</div>
+            <div class="metric-value">$${perJobCost.toFixed(2)}</div>
+            <div class="metric-sub">across ${jobs} jobs/mo</div>
+          </div>`;
+      } else {
+        metricGrid.innerHTML = `
+          <div class="metric-card">
+            <div class="metric-label">One-time cost</div>
+            <div class="metric-value">$${oneTimeCost}</div>
+            <div class="metric-sub">no recurring cost</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">% of one month's revenue</div>
+            <div class="metric-value">${pctOfRevenue.toFixed(1)}%</div>
+            <div class="metric-sub">of $${revenue.toLocaleString()}/mo</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Cost per job (month 1)</div>
+            <div class="metric-value">$${perJobCost.toFixed(2)}</div>
+            <div class="metric-sub">approaches $0 over time</div>
+          </div>`;
+      }
+
+      // Year table
+      const tbody = document.getElementById('yearTableBody');
+      tbody.innerHTML = '';
+      const periods = isSubscription
+        ? [
+            { label: '1 month', months: 1 },
+            { label: '6 months', months: 6 },
+            { label: '1 year', months: 12 },
+            { label: '2 years', months: 24 },
+            { label: '3 years', months: 36 }
+          ]
+        : [
+            { label: 'At purchase', months: 1 },
+            { label: 'After 6 months', months: 6 },
+            { label: 'After 1 year', months: 12 },
+            { label: 'After 2 years', months: 24 },
+            { label: 'After 3 years', months: 36 }
+          ];
+
+      periods.forEach(p => {
+        const totalCost = isSubscription ? monthlyCost * p.months : oneTimeCost;
+        const totalJobs = jobs * p.months;
+        const cpj = totalCost / totalJobs;
+        const pct = (totalCost / (revenue * p.months)) * 100;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.label}</td>
+          <td class="highlight">$${Math.round(totalCost).toLocaleString()}</td>
+          <td>$${cpj.toFixed(2)}</td>
+          <td>${pct.toFixed(1)}%</td>`;
+        tbody.appendChild(tr);
+      });
+
+      // Verdict
+      const verdictBlock = document.getElementById('verdictBlock');
+      const verdictLabel = document.getElementById('verdictLabel');
+      const verdictText = document.getElementById('verdictText');
+
+      let verdictClass, label, text;
+
+      if (isSubscription) {
+        const annualPct = (monthlyCost * 12 / (revenue * 12)) * 100;
+        if (annualPct < 1) {
+          verdictClass = 'trivial';
+          label = 'Trivial cost at your scale';
+          text = `${tool.name} costs ${pctOfRevenue.toFixed(1)}% of monthly revenue. At your volume, this is noise — the decision should be driven entirely by whether the tool solves a real problem, not by cost.`;
+        } else if (annualPct < 3) {
+          verdictClass = 'reasonable';
+          label = 'Reasonable — worth evaluating on merit';
+          text = `${tool.name} costs ${pctOfRevenue.toFixed(1)}% of monthly revenue. The price is not the obstacle. Evaluate it on whether it actually solves a problem you have today, not one you anticipate.`;
+        } else if (annualPct < 6) {
+          verdictClass = 'significant';
+          label = 'Significant — make sure it earns its keep';
+          text = `${tool.name} costs ${pctOfRevenue.toFixed(1)}% of monthly revenue — that adds up to $${Math.round(monthlyCost * 12).toLocaleString()} per year. It needs to demonstrably save time or protect margin to justify that. Trial carefully before committing.`;
+        } else {
+          verdictClass = 'unjustified';
+          label = 'Hard to justify at your current scale';
+          text = `${tool.name} costs ${pctOfRevenue.toFixed(1)}% of monthly revenue — $${Math.round(monthlyCost * 12).toLocaleString()} per year. At $${revenue.toLocaleString()}/month that is a material operating expense. Consider whether your volume supports this, or whether the same capital is better deployed elsewhere.`;
+        }
+      } else {
+        if (pctOfRevenue < 10) {
+          verdictClass = 'trivial';
+          label = 'Low-risk one-time purchase';
+          text = `${tool.name} costs $${oneTimeCost} — ${pctOfRevenue.toFixed(1)}% of one month's revenue with no ongoing cost. The financial risk is minimal. Evaluate on fit, not price.`;
+        } else if (pctOfRevenue < 25) {
+          verdictClass = 'reasonable';
+          label = 'Reasonable one-time investment';
+          text = `${tool.name} costs $${oneTimeCost} — ${pctOfRevenue.toFixed(1)}% of one month's revenue. No recurring cost means this pays for itself quickly if it saves any meaningful time. Worth a careful evaluation.`;
+        } else if (pctOfRevenue < 50) {
+          verdictClass = 'significant';
+          label = 'Meaningful purchase — evaluate carefully';
+          text = `${tool.name} costs $${oneTimeCost} — ${pctOfRevenue.toFixed(1)}% of one month's revenue. It is a one-time cost, which limits the downside, but it warrants careful evaluation before committing.`;
+        } else {
+          verdictClass = 'unjustified';
+          label = 'Hard to justify at your current scale';
+          text = `${tool.name} costs $${oneTimeCost} — ${pctOfRevenue.toFixed(1)}% of one month's revenue. At $${revenue.toLocaleString()}/month that is a significant one-time outlay. Consider whether the same capital deployed elsewhere generates more return.`;
+        }
+      }
+
+      verdictBlock.className = `verdict-block ${verdictClass}`;
+      verdictLabel.textContent = label;
+      verdictText.textContent = text;
+
+      // Show alternatives if significant or unjustified
+      const showAlts = verdictClass === 'significant' || verdictClass === 'unjustified';
+      alternatives.classList.toggle('visible', showAlts);
+
+      // Recalculate alternatives if already filled in
+      if (showAlts) {
+        calcHardware();
+        calcLabor();
+      }
+
+      results.classList.add('visible');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

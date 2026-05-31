@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>Vendor Index — 3D Print Shop Software</title>
+  <meta name="description" content="Every verified vendor in the 3D print shop software landscape. Filter by layer, see which tools cover which features, and link directly to detailed profiles.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/landscape/vendors">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Vendor Index — 3D Print Shop Software Landscape">
+  <meta property="og:description" content="Every verified vendor in the 3D print shop software landscape, filterable by layer.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/landscape/vendors">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 1.5rem 0;
+    }
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1.5px solid transparent;
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+    }
+    .filter-btn:hover { color: var(--text); }
+    .filter-btn.active-all { background: var(--bg-subtle); border-color: var(--border); color: var(--text); }
+    .filter-btn.active-printer  { background: #E1F5EE; border-color: #0F6E56; color: #085041; }
+    .filter-btn.active-fleet    { background: #E6F1FB; border-color: #185FA5; color: #0C447C; }
+    .filter-btn.active-jobs     { background: #FAEEDA; border-color: #854F0B; color: #633806; }
+    .filter-btn.active-inventory{ background: #EAF3DE; border-color: #3B6D11; color: #27500A; }
+    .filter-btn.active-customer { background: #FAECE7; border-color: #993C1D; color: #711B13; }
+
+    .vendor-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .vendor-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 6px 8px;
+      border-bottom: 0.5px solid var(--border);
+      white-space: nowrap;
+    }
+    .vendor-table td {
+      padding: 10px 8px;
+      border-bottom: 0.5px solid var(--border);
+      vertical-align: middle;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .vendor-table tr:last-child td { border-bottom: none; }
+    .vendor-table tr.hidden { display: none; }
+    .vendor-name {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .vendor-name a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    .vendor-name a:hover { text-decoration: underline; }
+    .multi-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      margin-left: 6px;
+      vertical-align: middle;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+    .layer-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    /* Layer pill styles */
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .pill-printer  { background: #E1F5EE; color: #085041; }
+    .pill-fleet    { background: #E6F1FB; color: #0C447C; }
+    .pill-jobs     { background: #FAEEDA; color: #633806; }
+    .pill-inventory{ background: #EAF3DE; color: #27500A; }
+    .pill-customer { background: #FAECE7; color: #711B13; }
+
+    /* Partial pill — outlined, muted */
+    .pill-printer-partial  { background: transparent; color: #0F6E56; border: 1px solid #0F6E56; }
+    .pill-fleet-partial    { background: transparent; color: #185FA5; border: 1px solid #185FA5; }
+    .pill-jobs-partial     { background: transparent; color: #854F0B; border: 1px solid #854F0B; }
+    .pill-inventory-partial{ background: transparent; color: #3B6D11; border: 1px solid #3B6D11; }
+    .pill-customer-partial { background: transparent; color: #993C1D; border: 1px solid #993C1D; }
+
+    .pricing-tag {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .pricing-tag.free { color: #27500A; font-weight: 700; }
+    .pricing-tag.onetime { color: var(--text); }
+    .status-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+    .status-beta { background: #FAEEDA; color: #633806; }
+    .status-discontinued { background: #FCEBEB; color: #791F1F; }
+    .count-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .count-note span { font-weight: 700; color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="/landscape">Landscape</a>
+          <span class="breadcrumb-sep">›</span>
+          Vendor index
+        </div>
+
+        <span class="page-label">Landscape</span>
+        <h1>Vendor index</h1>
+
+        <p class="lead">Every verified vendor in the landscape. Verified means features and pricing have been confirmed via public sources as of mid-2026. Filter by layer to see tools relevant to a specific part of your stack.</p>
+
+        <div class="filter-row" id="filterRow">
+          <button class="filter-btn active-all" data-filter="all">All vendors</button>
+          <button class="filter-btn" data-filter="printer">Printer control</button>
+          <button class="filter-btn" data-filter="fleet">Fleet management</button>
+          <button class="filter-btn" data-filter="jobs">Job economics</button>
+          <button class="filter-btn" data-filter="inventory">Inventory &amp; materials</button>
+          <button class="filter-btn" data-filter="customer">Customer management</button>
+        </div>
+
+        <p class="count-note"><span id="visibleCount">17</span> vendors shown</p>
+
+        <table class="vendor-table" id="vendorTable">
+          <thead>
+            <tr>
+              <th>Vendor</th>
+              <th>Layers covered</th>
+              <th>Pricing</th>
+              <th>Shop size fit</th>
+            </tr>
+          </thead>
+          <tbody id="vendorBody"></tbody>
+        </table>
+
+        <div class="callout" style="margin-top:2rem;">
+          <span class="callout-label">Coverage note</span>
+          <p>Outlined pills indicate partial coverage — the tool touches that layer but doesn't fully address it. Full pills indicate core feature coverage. No single verified product covers all five layers for the $50K–$500K shop tier.</p>
+        </div>
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New tools, pricing changes, and objective takes — when there's something worth saying.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+  <script>
+    const vendors = [
+      {
+        name: 'Bambu Farm Manager',
+        url: '/landscape/printer-control#bambu-farm-manager',
+        layers: ['printer', 'fleet'],
+        pills: [
+          { layer: 'printer', label: 'Printer control', partial: false },
+          { layer: 'fleet',   label: 'Fleet management', partial: false }
+        ],
+        pricing: 'Free',
+        pricingClass: 'free',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: ''
+      },
+      {
+        name: 'OctoPrint',
+        url: '/landscape/printer-control#octoprint',
+        layers: ['printer'],
+        pills: [
+          { layer: 'printer', label: 'Printer control', partial: false }
+        ],
+        pricing: 'Free / OSS',
+        pricingClass: 'free',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: ''
+      },
+      {
+        name: 'Klipper / Mainsail / Fluidd',
+        url: '/landscape/printer-control#klipper',
+        layers: ['printer'],
+        pills: [
+          { layer: 'printer', label: 'Printer control', partial: false }
+        ],
+        pricing: 'Free / OSS',
+        pricingClass: 'free',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: ''
+      },
+      {
+        name: 'Obico',
+        url: '/landscape/printer-control#obico',
+        layers: ['printer'],
+        pills: [
+          { layer: 'printer', label: 'Printer control', partial: false }
+        ],
+        pricing: '$6.99/mo + $2/printer',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: ''
+      },
+      {
+        name: 'PrusaLink / Prusa Connect',
+        url: '/landscape/printer-control#prusalink',
+        layers: ['printer'],
+        pills: [
+          { layer: 'printer', label: 'Printer control', partial: false }
+        ],
+        pricing: 'Free',
+        pricingClass: 'free',
+        fit: 'Sub-$50K',
+        note: ''
+      },
+      {
+        name: 'SimplyPrint',
+        url: '/landscape/fleet-management#simplyprint',
+        layers: ['fleet', 'jobs', 'inventory'],
+        pills: [
+          { layer: 'fleet',     label: 'Fleet management',    partial: false },
+          { layer: 'jobs',      label: 'Job economics',       partial: true  },
+          { layer: 'inventory', label: 'Inventory &amp; materials', partial: false }
+        ],
+        pricing: '$31.49/mo',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: ''
+      },
+      {
+        name: 'Printago',
+        url: '/landscape/fleet-management#printago',
+        layers: ['fleet', 'customer'],
+        pills: [
+          { layer: 'fleet',    label: 'Fleet management',    partial: false },
+          { layer: 'customer', label: 'Customer management', partial: false }
+        ],
+        pricing: '$4/printer/mo',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: 'Filametrics integration in development (beta late 2026)'
+      },
+      {
+        name: 'FlowQ',
+        url: '/landscape/fleet-management#flowq',
+        layers: ['fleet', 'inventory'],
+        pills: [
+          { layer: 'fleet',     label: 'Fleet management',         partial: false },
+          { layer: 'inventory', label: 'Inventory &amp; materials', partial: true  }
+        ],
+        pricing: '$12.50–$20/mo',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: ''
+      },
+      {
+        name: '3DPrintOps',
+        url: '/landscape/job-economics#3dprintops',
+        layers: ['jobs', 'customer'],
+        pills: [
+          { layer: 'jobs',     label: 'Job economics',       partial: false },
+          { layer: 'customer', label: 'Customer management', partial: false }
+        ],
+        pricing: '$14–$29/mo',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: ''
+      },
+      {
+        name: '3DPBOSS',
+        url: '/landscape/job-economics#3dpboss',
+        layers: ['jobs', 'inventory', 'customer'],
+        pills: [
+          { layer: 'jobs',      label: 'Job economics',            partial: false },
+          { layer: 'inventory', label: 'Inventory &amp; materials', partial: false },
+          { layer: 'customer',  label: 'Customer management',      partial: false }
+        ],
+        pricing: '$49–$199 one-time',
+        pricingClass: 'onetime',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: 'No fleet management or live printer integration'
+      },
+      {
+        name: 'PrintFarmHQ',
+        url: '/landscape/job-economics#printfarmhq',
+        layers: ['jobs', 'inventory'],
+        pills: [
+          { layer: 'jobs',      label: 'Job economics',            partial: false },
+          { layer: 'inventory', label: 'Inventory &amp; materials', partial: false }
+        ],
+        pricing: 'Beta — TBD',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        status: 'beta',
+        note: ''
+      },
+      {
+        name: 'Filametrics',
+        url: '/landscape/inventory#filametrics',
+        layers: ['inventory'],
+        pills: [
+          { layer: 'inventory', label: 'Inventory &amp; materials', partial: false }
+        ],
+        pricing: 'Free – $30/mo',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: 'Printago integration in development (beta late 2026)'
+      },
+      {
+        name: 'Spoolman',
+        url: '/landscape/inventory#spoolman',
+        layers: ['inventory'],
+        pills: [
+          { layer: 'inventory', label: 'Inventory &amp; materials', partial: false }
+        ],
+        pricing: 'Free / OSS',
+        pricingClass: 'free',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: 'Self-hosted'
+      },
+      {
+        name: 'Layers.app',
+        url: '/landscape/customer-management#layers',
+        layers: ['customer'],
+        pills: [
+          { layer: 'customer', label: 'Customer management', partial: false }
+        ],
+        pricing: '$49–$149/mo',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: ''
+      },
+      {
+        name: 'Shopify',
+        url: '/landscape/customer-management#shopify',
+        layers: ['customer'],
+        pills: [
+          { layer: 'customer', label: 'Customer management', partial: false }
+        ],
+        pricing: '$39/mo+',
+        pricingClass: '',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: 'General e-commerce; not 3D-print-specific'
+      },
+      {
+        name: 'Offset3D',
+        url: '/landscape/job-economics#offset3d',
+        layers: ['jobs', 'inventory', 'customer'],
+        pills: [
+          { layer: 'jobs',      label: 'Job economics',            partial: false },
+          { layer: 'inventory', label: 'Inventory &amp; materials', partial: false },
+          { layer: 'customer',  label: 'Customer management',      partial: false }
+        ],
+        pricing: '$50 one-time',
+        pricingClass: 'onetime',
+        fit: 'Sub-$50K, $50K–$500K',
+        note: 'Excel-native; single-user; no live printer integration'
+      },
+      {
+        name: 'MRPeasy',
+        url: '/landscape/job-economics#mrpeasy',
+        layers: ['jobs', 'inventory', 'customer'],
+        pills: [
+          { layer: 'jobs',      label: 'Job economics',            partial: false },
+          { layer: 'inventory', label: 'Inventory &amp; materials', partial: false },
+          { layer: 'customer',  label: 'Customer management',      partial: false }
+        ],
+        pricing: '$49–$99/mo',
+        pricingClass: '',
+        fit: '$50K–$500K, $500K+',
+        note: 'General manufacturing ERP; not 3D-print-specific'
+      }
+    ];
+
+    let activeFilter = 'all';
+
+    function renderTable(filter) {
+      const tbody = document.getElementById('vendorBody');
+      tbody.innerHTML = '';
+      let visible = 0;
+
+      vendors.forEach(v => {
+        const matches = filter === 'all' || v.layers.includes(filter);
+        const layerCount = v.layers.length;
+        const isMulti = layerCount > 1;
+
+        const pillsHTML = v.pills.map(p =>
+          `<span class="pill pill-${p.layer}${p.partial ? '-partial' : ''}">${p.label}</span>`
+        ).join('');
+
+        const statusHTML = v.status === 'beta'
+          ? ' <span class="status-badge status-beta">beta</span>'
+          : '';
+
+        const multiHTML = isMulti
+          ? `<span class="multi-badge">${layerCount} layers</span>`
+          : '';
+
+        const noteHTML = v.note
+          ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${v.note}</div>`
+          : '';
+
+        const tr = document.createElement('tr');
+        tr.className = matches ? '' : 'hidden';
+        tr.dataset.layers = v.layers.join(',');
+        tr.innerHTML = `
+          <td class="vendor-name">
+            <a href="${v.url}">${v.name}</a>${multiHTML}${statusHTML}
+            ${noteHTML}
+          </td>
+          <td><div class="layer-pills">${pillsHTML}</div></td>
+          <td><span class="pricing-tag ${v.pricingClass}">${v.pricing}</span></td>
+          <td style="font-size:12px;color:var(--text-muted);white-space:nowrap;">${v.fit}</td>
+        `;
+        tbody.appendChild(tr);
+        if (matches) visible++;
+      });
+
+      document.getElementById('visibleCount').textContent = visible;
+    }
+
+    document.getElementById('filterRow').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      const filter = btn.dataset.filter;
+      activeFilter = filter;
+
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.className = 'filter-btn';
+        if (b.dataset.filter === filter) {
+          b.classList.add(`active-${filter}`);
+        }
+      });
+
+      renderTable(filter);
+    });
+
+    renderTable('all');
+  </script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

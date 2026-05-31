@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guides | 3D Print Shop Software</title>
+  <meta name="description" content="Practical guides for 3D print shop operators. Job costing, hiring, software decisions, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .guide-list { list-style: none; padding: 0; margin-bottom: 32px; }
+    .guide-list li { border-bottom: var(--hairline); }
+    .guide-list li:last-child { border-bottom: none; }
+    .guide-list a {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .guide-list a:hover .guide-list-name { color: var(--accent); }
+    .guide-list-body { flex: 1; }
+    .guide-list-name {
+      font-size: var(--small);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .guide-list-desc {
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.5;
+    }
+    .guide-list-arrow { color: var(--border); font-size: 11px; padding-top: 2px; flex-shrink: 0; }
+    .guide-list a:hover .guide-list-arrow { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Guides</span>
+        </nav>
+
+        <span class="page-label">Guides</span>
+        <h1>Guides</h1>
+
+        <p class="lead">Frameworks for the decisions that don't have obvious answers. Numbers in examples are hypothetical and kept that way deliberately -- the math is the point, not the figures.</p>
+
+        <ul class="guide-list">
+          <li>
+            <a href="/guides/calculate-true-cost-of-sku">
+              <div class="guide-list-body">
+                <div class="guide-list-name">How to calculate your true cost per SKU</div>
+                <div class="guide-list-desc">Most shops undercount. This guide walks through every cost input that belongs in a per-unit calculation, including the ones that don't show up in material cost.</div>
+              </div>
+              <span class="guide-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/guides/comparing-software-costs">
+              <div class="guide-list-body">
+                <div class="guide-list-name">How to compare software costs when every vendor prices differently</div>
+                <div class="guide-list-desc">Per-printer, flat monthly, one-time, freemium -- a framework for converting any pricing model into a number you can actually compare.</div>
+              </div>
+              <span class="guide-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/guides/hiring-first-employee">
+              <div class="guide-list-body">
+                <div class="guide-list-name">How to hire your first employee for a 3D print shop</div>
+                <div class="guide-list-desc">When the hire makes financial sense, what role to fill first, and what the real cost of an employee looks like beyond the hourly rate.</div>
+              </div>
+              <span class="guide-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/guides/hire-vs-equipment">
+              <div class="guide-list-body">
+                <div class="guide-list-name">Should you hire or buy another printer?</div>
+                <div class="guide-list-desc">Two ways to add capacity with very different risk profiles, payback periods, and operational implications. A framework for making the call.</div>
+              </div>
+              <span class="guide-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New guides publish as new decision points come up. The newsletter covers additions.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" />
+            <button type="button">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

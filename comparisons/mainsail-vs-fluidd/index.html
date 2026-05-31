@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+
+  <!-- SEO -->
+  <title>Mainsail vs. Fluidd: Klipper Frontend Comparison | 3D Print Shop Software</title>
+  <meta name="description" content="Mainsail vs. Fluidd: choosing a Klipper frontend for your 3D print shop. UI differences, mobile experience, config editor, and community compared." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://3dprintshopsoftware.com/comparisons/mainsail-vs-fluidd/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Mainsail vs. Fluidd: Klipper Frontend Comparison" />
+  <meta property="og:description" content="Mainsail vs. Fluidd: choosing a Klipper frontend for your 3D print shop. UI differences, mobile experience, config editor, and community compared." />
+  <meta property="og:url" content="https://3dprintshopsoftware.com/comparisons/mainsail-vs-fluidd/" />
+  <meta property="og:site_name" content="3D Print Shop Software" />
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Mainsail vs. Fluidd: Klipper Frontend Comparison",
+    "description": "Mainsail vs. Fluidd: choosing a Klipper frontend for your 3D print shop.",
+    "url": "https://3dprintshopsoftware.com/comparisons/mainsail-vs-fluidd/",
+    "publisher": { "@type": "Organization", "name": "3D Print Shop Software", "url": "https://3dprintshopsoftware.com" },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://3dprintshopsoftware.com" },
+        { "@type": "ListItem", "position": 2, "name": "Comparisons", "item": "https://3dprintshopsoftware.com/comparisons/" },
+        { "@type": "ListItem", "position": 3, "name": "Mainsail vs. Fluidd", "item": "https://3dprintshopsoftware.com/comparisons/mainsail-vs-fluidd/" }
+      ]
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <span class="topbar-brand">3D Print Shop <span>Software</span></span>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent coverage for commercial operators</span>
+    <div class="topbar-right"><a href="/newsletter">Get the newsletter</a></div>
+  </header>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <nav class="sidebar" aria-label="Site navigation"><div id="sidebar-nav"></div></nav>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/compare/">Comparisons</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Mainsail vs. Fluidd</span>
+        </nav>
+
+        <span class="page-label">Printer Control &mdash; Head-to-Head</span>
+        <h1>Mainsail vs. Fluidd</h1>
+
+        <p class="lead">Both are web-based frontends for Klipper. Neither works without Klipper and Moonraker already running. The functional differences are narrow enough that most operators will be happy with either. The decision comes down to UI preference and a small set of workflow features.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 200px;">Criteria</th>
+                <th>Mainsail</th>
+                <th>Fluidd</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td><strong>Layer coverage</strong></td>
+                <td>Printer control (Klipper frontend)</td>
+                <td>Printer control (Klipper frontend)</td>
+              </tr>
+
+              <tr>
+                <td><strong>Pricing model</strong></td>
+                <td>Free / OSS</td>
+                <td>Free / OSS</td>
+              </tr>
+
+              <tr>
+                <td><strong>Price</strong></td>
+                <td>$0</td>
+                <td>$0</td>
+              </tr>
+
+              <tr>
+                <td><strong>Shop size fit</strong></td>
+                <td>Sub-$50K, $50K&ndash;$500K</td>
+                <td>Sub-$50K, $50K&ndash;$500K</td>
+              </tr>
+
+              <tr>
+                <td><strong>Implementation</strong></td>
+                <td>Installed via MainsailOS image or manually alongside Klipper and Moonraker. Straightforward if Klipper is already running</td>
+                <td>Installed via FluiddPI image or manually alongside Klipper and Moonraker. Equivalent complexity to Mainsail</td>
+              </tr>
+
+              <tr>
+                <td><strong>Self-hosted</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+
+              <tr>
+                <td><strong>Open source</strong></td>
+                <td>Yes (GPLv3)</td>
+                <td>Yes (Apache 2.0)</td>
+              </tr>
+
+              <tr>
+                <td><strong>UI philosophy</strong></td>
+                <td>Denser layout; more information visible at once. Favors operators who want full machine state on a single screen</td>
+                <td>Cleaner, more minimal layout. Slightly more approachable for operators newer to Klipper</td>
+              </tr>
+
+              <tr>
+                <td><strong>Mobile experience</strong></td>
+                <td>Functional on mobile but optimized for desktop. Monitoring works; fine-grained control is awkward on small screens</td>
+                <td>Better mobile layout than Mainsail. More usable for checking print status or making minor adjustments from a phone</td>
+              </tr>
+
+              <tr>
+                <td><strong>Configuration editor</strong></td>
+                <td>Built-in config file editor with syntax highlighting. Well-regarded by operators who tune Klipper configs frequently</td>
+                <td>Built-in config file editor. Functional but considered slightly less polished than Mainsail's implementation</td>
+              </tr>
+
+              <tr>
+                <td><strong>Multi-printer support</strong></td>
+                <td>Supported via separate instances or third-party dashboards. Not a native single-pane view</td>
+                <td>Same limitation. Neither frontend offers native multi-printer fleet management</td>
+              </tr>
+
+              <tr>
+                <td><strong>Community and documentation</strong></td>
+                <td>Larger community; more tutorials, forum threads, and plugin references available</td>
+                <td>Smaller but active community. Documentation is solid; less supplementary material than Mainsail</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <p style="font-size: 12px; color: var(--faint); margin-top: -20px; margin-bottom: 40px;">Both projects are actively maintained. For current status see the <a href="/landscape/printer-control">Printer Control index</a>.</p>
+
+        <div class="callout">
+          <span class="callout-label">The real decision</span>
+          <p>If you edit Klipper configs regularly, Mainsail's editor and denser UI will serve you better. If you're monitoring from a phone or putting a less technical operator in front of the interface, Fluidd's layout causes less friction. Neither choice locks you in -- switching frontends is a reinstall, not a reconfiguration of Klipper itself.</p>
+        </div>
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>Software pricing and features move fast. The newsletter covers changes to the landscape as they happen.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" />
+            <button type="button">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+<script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

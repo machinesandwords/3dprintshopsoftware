@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>Vendor Matrix by Feature — 3D Print Shop Software</title>
+  <meta name="description" content="A feature-by-feature matrix of 3D print farm software vendors. Printer control, fleet management, job economics, inventory, and customer management.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    /* Wider content area for the matrix table */
+    .content { max-width: 1000px; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .sub50    { background: #dbeafe; color: #1e40af; }
+    .mid500   { background: #fef3c7; color: #92400e; }
+    .above500 { background: #fee2e2; color: #991b1b; }
+    .price-free { background: #d1fae5; color: #065f46; }
+    .price-low  { background: #dbeafe; color: #1e40af; }
+    .price-mid  { background: #fef3c7; color: #92400e; }
+    .price-high { background: #fee2e2; color: #991b1b; }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      font-size: 12px;
+      align-items: center;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+    .legend-break { flex-basis: 100%; height: 0; }
+
+    /* Matrix table overrides */
+    .section-header td {
+      background: var(--bg);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--mid);
+      border-top: 1px solid var(--charcoal);
+      padding-top: 0.75rem;
+    }
+    .vendor-name { font-weight: 700; }
+    .note { color: var(--mid); font-size: 12px; font-style: italic; margin-top: 0.2rem; }
+    .check   { color: #059669; font-weight: 700; }
+    .partial { color: #d97706; font-weight: 700; }
+    .no      { color: var(--faint); }
+    .size-cell { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.35rem; }
+
+    /* Decision framework */
+    .tier-block {
+      border: var(--hairline);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .tier-title {
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .tier-body { font-size: 13px; line-height: 1.75; color: var(--charcoal); }
+    .tier-body strong { font-weight: 700; }
+
+    /* Caveat notice */
+    .caveat {
+      color: #b45309;
+      font-size: 12px;
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      padding: 0.5rem 0.75rem;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Landscape</span>
+        </div>
+
+        <span class="page-label">Landscape</span>
+        <h1>3D Print Farm Software: Vendor Matrix by Feature</h1>
+        <p>Commercial operators. Verified vendors only. Sources confirmed May 2026.</p>
+        <p class="caveat">&#9888; This is an early-stage market. No single product covers all five feature areas for commercial FDM shops. The gaps are real.</p>
+
+        <div class="legend">
+          <strong>Shop size:</strong>
+          <div class="legend-item"><span class="badge sub50">Sub-$50K</span></div>
+          <div class="legend-item"><span class="badge mid500">$50K–$500K</span></div>
+          <div class="legend-item"><span class="badge above500">$500K+</span></div>
+          <div class="legend-break"></div>
+          <strong>Pricing:</strong>
+          <div class="legend-item"><span class="badge price-free">Free / OSS</span></div>
+          <div class="legend-item"><span class="badge price-low">Under $50/mo</span></div>
+          <div class="legend-item"><span class="badge price-mid">$50–$200/mo</span></div>
+          <div class="legend-item"><span class="badge price-high">Quote / custom</span></div>
+          <div class="legend-break"></div>
+          <div class="legend-item"><span class="check">&#10003;</span> Core feature</div>
+          <div class="legend-item"><span class="partial">&#9680;</span> Partial / limited</div>
+          <div class="legend-item"><span class="no">&#8212;</span> Not supported</div>
+        </div>
+
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:15%">Feature</th>
+              <th style="width:28%">Vendor / Product</th>
+              <th style="width:16%">Pricing</th>
+              <th style="width:41%">Notes &amp; fit</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- PRINTER CONTROL -->
+            <tr class="section-header"><td colspan="4">Printer control</td></tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Bambu Farm Manager</span></td>
+              <td><span class="badge price-free">Free</span></td>
+              <td>Local-network fleet control for Bambu P1/A1/X1 hardware. Real-time monitoring, batch commands, smart queue, staggered starts. Windows only. Bambu printers only. No job costing.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">OctoPrint</span></td>
+              <td><span class="badge price-free">Free / OSS</span></td>
+              <td>Self-hosted, Raspberry Pi per printer. Broad hardware compatibility. Large plugin ecosystem. No native business ops features.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Printago</span></td>
+              <td><span class="badge price-free">Free (1 slot); from $3.67/slot/mo</span></td>
+              <td>Cloud-based. Bambu, Klipper, Prusa support. Unlimited printers; pricing by concurrent production slots. Shopify + Etsy order integration. Maintenance tracking in beta.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">FlowQ (Infinity Flow 3D)</span></td>
+              <td><span class="badge price-free">Free tier; from $15/mo</span></td>
+              <td>Cloud-based. FlowQ Hub connects up to 5 printers. 60+ printer models. Zapier/Make integrations. Real-time filament tracking requires S1+ hardware.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Klipper + Mainsail / Fluidd</span></td>
+              <td><span class="badge price-free">Free / OSS</span></td>
+              <td>Replaces printer firmware on compatible hardware. Higher print speeds and better motion control than Marlin. Integrates with Obico, SimplyPrint, FlowQ, Spoolman. Requires technical setup.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <!-- FLEET MANAGEMENT -->
+            <tr class="section-header"><td colspan="4">Fleet management</td></tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Printago</span></td>
+              <td><span class="badge price-free">Free (1 slot); from $3.67/slot/mo</span></td>
+              <td>Centralized dashboard, auto job routing by material/color, live status, multi-brand fleet. Maintenance tracker (beta) for scheduled upkeep by print hours or job count.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">FlowQ</span></td>
+              <td><span class="badge price-free">Free tier; from $15/mo</span></td>
+              <td>Auto job routing, continuous print queue, auto-restart after completion. Live camera monitoring. Good for high-throughput farms with auto-ejection hardware.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="partial">&#9680;</span> <span class="vendor-name">Bambu Farm Manager</span></td>
+              <td><span class="badge price-free">Free</span></td>
+              <td>Queue and batch control within Bambu ecosystem only. No maintenance tracking, no cross-brand support.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">SimplyPrint</span></td>
+              <td><span class="badge price-mid">Free tier; Print Farm $31.49/mo</span></td>
+              <td>Cloud SaaS, multi-brand. Print Farm plan unlocks automation, multi-user access, and advanced cost calculations (material, run time, electricity, labor). Education/enterprise primary market.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <!-- JOB ECONOMICS -->
+            <tr class="section-header"><td colspan="4">Job economics (costing, margins, COGS)</td></tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">3DPrintOps</span></td>
+              <td><span class="badge price-low">From $14/mo</span></td>
+              <td>Purpose-built for commercial 3D print shops. Quoting with real-time margin %, job tracking quote-to-invoice, customer database. Also a US shop directory (2,000+ listings). Explicitly targets operators who are "wasting hours in spreadsheets."
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">PrintFarmHQ</span></td>
+              <td><span class="badge price-free">Beta (pricing TBD)</span></td>
+              <td>Auto-calculates COGS: material + printer depreciation + labor + software. Per-product and per-job margin. Filament inventory. Maintenance alerts. Currently in open beta; no published pricing.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Spreadsheet ERP</span></td>
+              <td><span class="badge price-free">&lt;$75 one-time</span></td>
+              <td>Excel-native job costing, BOM auto-generation, machine depreciation, filament tracking, margin per job/customer. No recurring cost. Single-user. No live printer integration.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="partial">&#9680;</span> <span class="vendor-name">Printago</span></td>
+              <td><span class="badge price-free">Free (1 slot); from $3.67/slot/mo</span></td>
+              <td>Tracks production metrics and material usage. "Know your real costs" is stated positioning. Full COGS breakdown depth not yet confirmed in public docs.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">3DPBOSS</span></td>
+              <td><span class="badge price-free">$49 / $199 one-time</span></td>
+              <td>Built by a 3D printing operator (10 years). CRM, production scheduling, P&amp;L reporting, margin analytics. Mini ($49) covers core ops; Full ($199) adds spare parts, maintenance, team management. No fleet control.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <!-- INVENTORY & MATERIALS -->
+            <tr class="section-header"><td colspan="4">Inventory &amp; materials</td></tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Filametrics</span></td>
+              <td><span class="badge price-free">Free (limits); paid TBD</span></td>
+              <td>Commercial farm focus. Projected stock forecasting against open orders. AI slicer reader for usage import. Exclusive Printago integration (public beta 2026) will connect live filament data to job routing.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">SimplyPrint (Print Farm)</span></td>
+              <td><span class="badge price-mid">$31.49/mo</span></td>
+              <td>Live automatic spool weight updates during printing. Pre-print alert if filament insufficient. Cost per gram feeds directly into job cost calculations. Filament only — no spare parts.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">3DPBOSS (Full tier)</span></td>
+              <td><span class="badge price-free">$199 one-time</span></td>
+              <td>Only verified tool covering spare parts alongside filament. Maintenance task integration deducts parts from stock automatically. Reorder thresholds and procurement tracking included. No live printer integration.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">PrintFarmHQ</span></td>
+              <td><span class="badge price-free">Beta (pricing TBD)</span></td>
+              <td>Real-time filament stock, costs, usage. Low-inventory alerts. STL/3MF file catalog attached to products. Maintenance scheduling.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Spreadsheet ERP</span></td>
+              <td><span class="badge price-free">&lt;$75 one-time</span></td>
+              <td>Filament inventory, machine maintenance logs, BOM tracking. Manual entry only; no live sensor integration.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Spoolman</span></td>
+              <td><span class="badge price-free">Free / OSS</span></td>
+              <td>Self-hosted (GitHub). Tracks spool weight, usage, filament type/brand. OctoPrint and Moonraker plugin integrations. Not SaaS &mdash; requires self-hosting. Dedicated spool tracking only.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="partial">&#9680;</span> <span class="vendor-name">FlowQ</span></td>
+              <td><span class="badge price-free">Free tier; from $15/mo</span></td>
+              <td>Real-time filament tracking available via S1+ hardware integration only. Limited without compatible hardware.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <!-- CUSTOMER MANAGEMENT -->
+            <tr class="section-header"><td colspan="4">Customer management</td></tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">3DPrintOps</span></td>
+              <td><span class="badge price-low">From $14/mo</span></td>
+              <td>Searchable customer database with quote history, job count, contacts. Built-in quoting linked to customer records. Designed specifically for 3D print shop operators.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="check">&#10003;</span> <span class="vendor-name">Printago</span></td>
+              <td><span class="badge price-free">Free (1 slot); from $3.67/slot/mo</span></td>
+              <td>Native Shopify and Etsy integrations pull orders into print queue automatically. SKU-to-model mapping. No standalone CRM; customer data lives in the e-commerce layer.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="partial">&#9680;</span> <span class="vendor-name">Spreadsheet ERP</span></td>
+              <td><span class="badge price-free">&lt;$75 one-time</span></td>
+              <td>Customer contact log, order history, margin per customer. No storefront, no payment processing.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><span class="partial">&#9680;</span> <span class="vendor-name">Layers.app</span></td>
+              <td><span class="badge price-low">Freemium</span></td>
+              <td>Customer-facing storefront: order intake, 3D file upload, auto-quoting by size/material. Handles inbound orders but not internal ops or job costing.
+                <div class="size-cell"><span class="badge sub50">Sub-$50K</span><span class="badge mid500">$50K–$500K</span></div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+        </div>
+
+        <h2>Decision framework: what you actually need by shop size</h2>
+
+        <div class="tier-block">
+          <div class="tier-title"><span class="badge sub50">Sub-$50K</span> Solopreneur / side hustle &mdash; 1&ndash;3 printers</div>
+          <div class="tier-body">
+            <strong>Printer control:</strong> Bambu Farm Manager (free, Bambu-only) or OctoPrint (free, any hardware).<br>
+            <strong>Job economics:</strong> Spreadsheet ERP (&lt;$75 one-time) covers job costing, filament tracking, and margin without subscription overhead. At $30K/year revenue, a $50/mo SaaS tool is 2% of top-line before you sell a single print.<br>
+            <strong>Customer management:</strong> 3DPrintOps at $14/mo is the lowest-cost verified option with native quoting and customer records. Layers.app handles inbound orders if the shop sells direct.<br>
+            <strong>Avoid:</strong> Fleet management SaaS at this stage &mdash; 1&ndash;3 printers don&rsquo;t need centralized queue automation.
+          </div>
+        </div>
+
+        <div class="tier-block">
+          <div class="tier-title"><span class="badge mid500">$50K&ndash;$500K</span> Scaling ops / real team &mdash; 3&ndash;10 printers, 1&ndash;4 staff</div>
+          <div class="tier-body">
+            <strong>Fleet:</strong> Printago (free tier to start, scales by production slot) or FlowQ (from $15/mo). Both are verified and commercially oriented.<br>
+            <strong>Job economics:</strong> 3DPrintOps ($14/mo) is currently the clearest B2B option for quoting + margin. PrintFarmHQ (beta) is a strong candidate once it prices. Spreadsheet ERP remains viable for single-operator shops that want to own their data stack.<br>
+            <strong>The stack reality:</strong> Most shops at this tier will run 2&ndash;3 tools. No single verified product covers fleet + economics + customer management in one. That&rsquo;s the market gap.<br>
+            <strong>Monthly SaaS tolerance:</strong> $50&ndash;$150/mo is defensible if it eliminates manual reconciliation or improves quoting accuracy. Above that, the ROI case should be explicit.
+          </div>
+        </div>
+
+        <div class="tier-block">
+          <div class="tier-title"><span class="badge above500">$500K+</span> Multi-location / enterprise &mdash; 10+ printers, multiple teams</div>
+          <div class="tier-body">
+            <strong>Fleet / access control:</strong> 3DPrinterOS (education/enterprise focus, quote-based) or Printago at scale. Concurrent multi-user access and role permissions matter here.<br>
+            <strong>Financials:</strong> Complexity likely exceeds any of the above tools. General-purpose accounting (QuickBooks, Xero) + custom reporting is the realistic path until a purpose-built option matures.<br>
+            <strong>Spreadsheet ERP:</strong> Out of scope. Single-user, no concurrent access, no multi-location consolidation.
+          </div>
+        </div>
+
+        <div class="tier-block" style="border-color:#fcd34d; background:#fffbeb;">
+          <div class="tier-title">The verified market gap</div>
+          <div class="tier-body">
+            As of mid-2026, no single SaaS product covers all five feature areas for commercial FDM print farms at the $50K&ndash;$500K tier. Fleet management tools (Printago, FlowQ) don&rsquo;t do full job costing. Job costing tools (3DPrintOps, PrintFarmHQ-beta) don&rsquo;t do fleet control. The closest exception is 3DPBOSS ($199 one-time), which covers job economics, CRM, inventory, and spare parts — but has no fleet management or live printer integration. Shops in this range are stacking tools or staying on spreadsheets. The spreadsheet ERP fills the economics + inventory layer at low cost for shops that aren&rsquo;t ready or willing to subscribe to a stack.
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">Sources</span>
+          <p>Vendors verified via public sources May 2026.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+  <title>What Should I Charge for This Job? — 3D Print Shop Software</title>
+  <meta name="description" content="Calculate a defensible floor price and recommended price for any 3D print job. Based on actual material, electricity, labor, and failure rate costs — not approximations.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/tools/job-pricing">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What Should I Charge for This Job? — 3D Print Shop Software">
+  <meta property="og:description" content="Calculate a defensible floor price and recommended price for any 3D print job.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/tools/job-pricing">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    /* ── CSS variables fallback (matches styles.css) ── */
+    :root {
+      --bg:           #f4f4f3;
+      --bg-subtle:    #f4f4f3;
+      --surface:      #ffffff;
+      --border:       #d8d8d6;
+      --charcoal:     #2a2a28;
+      --mid:          #6b6b68;
+      --faint:        #9b9b98;
+      --accent:       #087DA6;
+      --accent-dim:   #065f80;
+      --accent-pale:  #e8f4f8;
+      --text:         #2a2a28;
+      --text-muted:   #6b6b68;
+      --h1: 20px; --h2: 16px; --h3: 14px; --body: 14px; --small: 12px;
+      --sidebar-width: 240px;
+    }
+
+    /* ── Tool layout ── */
+    .tool-section { margin-bottom: 2rem; }
+    .tool-section-label {
+      font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.75rem;
+    }
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
+    .input-row.three { grid-template-columns: 1fr 1fr 1fr; }
+    .input-row.single { grid-template-columns: 1fr; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-label { font-size: 12px; font-weight: 700; color: var(--text); }
+    .input-hint  { font-size: 11px; color: var(--text-muted); margin-top: -2px; }
+    .input-hint a { color: var(--accent); }
+
+    .input-prefix-wrap {
+      display: flex; align-items: center;
+      border: 0.5px solid var(--border); border-radius: 4px; overflow: hidden;
+    }
+    .input-prefix {
+      padding: 8px 10px; font-size: 13px; font-family: 'Space Mono', monospace;
+      color: var(--text-muted); background: var(--bg-subtle);
+      border-right: 0.5px solid var(--border); white-space: nowrap;
+    }
+    .input-prefix-wrap input { border: none; border-radius: 0; flex: 1; min-width: 0; }
+
+    select, input[type="number"] {
+      padding: 8px 10px; border: 0.5px solid var(--border); border-radius: 4px;
+      font-family: 'Space Mono', monospace; font-size: 13px;
+      color: var(--text); background: var(--bg); width: 100%;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--text-muted); }
+
+    .tool-divider { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+
+    /* ── Manual override row ── */
+    .override-row {
+      display: flex; align-items: center; gap: 8px; margin-top: 6px;
+    }
+    .override-row input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px; flex-shrink: 0; }
+    .override-row label { font-size: 11px; color: var(--text-muted); }
+    .override-fields { display: flex; gap: 8px; margin-top: 6px; }
+    .override-fields .input-prefix-wrap { flex: 1; }
+    .override-fields input { flex: 1; }
+
+    /* ── Results ── */
+    .results { display: none; margin-top: 2rem; }
+    .results.visible { display: block; }
+
+    .metric-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+      gap: 10px; margin-bottom: 1.5rem; align-items: start;
+    }
+    .metric-card { background: var(--bg-subtle); border-radius: 4px; padding: 1rem; }
+    .metric-label {
+      font-size: 11px; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 4px; min-height: 2.8em;
+    }
+    .metric-value { font-size: 22px; font-weight: 700; color: var(--text); font-family: 'Space Mono', monospace; }
+    .metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── Price output block ── */
+    .price-output {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      border: 0.5px solid var(--border); background: var(--border);
+      border-radius: 4px; overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .price-cell { background: var(--surface); padding: 20px 24px; }
+    .price-cell-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .price-cell-value {
+      font-size: 32px; font-weight: 700; font-family: 'Space Mono', monospace;
+      color: var(--text); letter-spacing: -0.02em;
+    }
+    .price-cell-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .price-cell.recommended .price-cell-value { color: var(--accent); }
+    .price-cell.recommended { border-left: 3px solid var(--accent); }
+
+    /* ── Cost breakdown table ── */
+    .breakdown-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .breakdown-table th {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-muted); text-align: left; padding: 6px 8px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .breakdown-table td {
+      font-size: 13px; padding: 8px; border-bottom: 0.5px solid var(--border); color: var(--text);
+    }
+    .breakdown-table tr:last-child td { border-bottom: none; }
+    .breakdown-table .total-row td { font-weight: 700; border-top: 1px solid var(--text); }
+    .breakdown-table .pct-bar-cell { width: 120px; }
+    .pct-bar-wrap { position: relative; height: 6px; background: var(--border); border-radius: 2px; margin-top: 4px; }
+    .pct-bar { height: 6px; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; }
+    .pct-bar.dominant { background: var(--charcoal); }
+
+    /* ── Verdict block ── */
+    .verdict-block {
+      border-left: 3px solid var(--border); padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem; border-radius: 0 4px 4px 0;
+    }
+    .verdict-block.trivial     { border-color: #3B6D11; background: #EAF3DE; }
+    .verdict-block.reasonable  { border-color: #185FA5; background: #E6F1FB; }
+    .verdict-block.significant { border-color: #854F0B; background: #FAEEDA; }
+    .verdict-block.unjustified { border-color: #A32D2D; background: #FCEBEB; }
+    .verdict-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .trivial     .verdict-label { color: #27500A; }
+    .reasonable  .verdict-label { color: #0C447C; }
+    .significant .verdict-label { color: #633806; }
+    .unjustified .verdict-label { color: #791F1F; }
+    .verdict-text { font-size: 13px; line-height: 1.6; }
+    .trivial     .verdict-text  { color: #27500A; }
+    .reasonable  .verdict-text  { color: #0C447C; }
+    .significant .verdict-text  { color: #633806; }
+    .unjustified .verdict-text  { color: #791F1F; }
+
+    /* ── Flags ── */
+    .flags-section { margin-top: 1.5rem; }
+    .flags-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .flag-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 14px; border: 0.5px solid #854F0B; border-radius: 4px;
+      background: #FAEEDA; margin-bottom: 8px; font-size: 12px; color: #633806; line-height: 1.6;
+    }
+    .flag-item::before { content: '⚑'; color: #854F0B; font-size: 12px; flex-shrink: 0; padding-top: 1px; }
+    .flag-info {
+      border-color: var(--border); background: var(--bg-subtle); color: var(--text-muted);
+    }
+    .flag-info::before { color: var(--text-muted); content: '↳'; }
+
+    /* ── CTA block ── */
+    .cta-block {
+      margin-top: 2rem; padding: 16px 20px;
+      background: var(--accent-pale); border: 0.5px solid var(--accent);
+      border-radius: 4px; font-size: 12px; color: var(--text-muted); line-height: 1.7;
+    }
+    .cta-block strong { color: var(--text); }
+    .cta-block a { color: var(--accent); font-weight: 700; }
+
+    /* ── Guide link ── */
+    .guide-link-block {
+      margin-top: 2rem; padding: 12px 16px; background: var(--bg-subtle);
+      border: 0.5px solid var(--border); border-radius: 4px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .guide-link-block a { color: var(--accent); font-weight: 700; }
+
+    @media (max-width: 768px) {
+      .input-row, .input-row.three { grid-template-columns: 1fr; }
+      .price-output { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools">tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>job pricing</span>
+        </nav>
+
+        <span class="page-label">Tool</span>
+        <h1>What Should I Charge for This Job?</h1>
+
+        <p class="lead">Fill in your real numbers. The calculator tells you your true hard costs and lets you model different profit margins.</p>
+
+        <hr class="tool-divider">
+
+        <!-- ── Section 1: Operation-level ── -->
+        <div class="tool-section">
+          <div class="tool-section-label">Your operation — entered once</div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label class="input-label" for="printer-select">Printer model</label>
+              <select id="printer-select">
+                <option value="">— select printer —</option>
+                <option value="0.35">Bambu Lab X1-Carbon (0.35 kWh)</option>
+                <option value="0.30">Bambu Lab P1S / P1P (0.30 kWh)</option>
+                <option value="0.12">Prusa MK4 / MK3S+ (0.12 kWh)</option>
+                <option value="0.45">Prusa XL (0.45 kWh)</option>
+                <option value="0.12">Creality Ender 3 V2/S1 (0.12 kWh)</option>
+                <option value="0.35">Creality K1 / K1 Max (0.35 kWh)</option>
+                <option value="0.50">UltiMaker S5 / S7 (0.50 kWh)</option>
+                <option value="0.08">Formlabs Form 3+ — Resin (0.08 kWh)</option>
+                <option value="0.15">Anycubic Kobra 2 (0.15 kWh)</option>
+                <option value="0.20">Elegoo Neptune 4 Pro (0.20 kWh)</option>
+                <option value="0.40">Qidi Tech X-Max 3 (0.40 kWh)</option>
+                <option value="0.55">Voron 2.4 350mm (0.55 kWh)</option>
+                <option value="manual">Other — enter manually</option>
+              </select>
+            </div>
+            <div class="input-group" id="kwh-manual-group" style="display:none;">
+              <label class="input-label" for="kwh-manual">Avg draw (kWh)</label>
+              <input type="number" id="kwh-manual" min="0.01" step="0.01" placeholder="0.25">
+              <div class="input-hint">Average watt-draw ÷ 1000. Your slicer or kill-a-watt meter gives the cleanest number.</div>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label class="input-label" for="elec-rate">Electricity rate ($/kWh)</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="elec-rate" min="0.01" step="0.01" placeholder="0.14" inputmode="decimal">
+              </div>
+              <div class="input-hint">
+                Not sure? <a href="https://www.eia.gov/electricity/state/" target="_blank" rel="noopener">Look up your state rate →</a>
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="labor-rate">Hourly labor rate ($)</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="labor-rate" min="0" step="0.25" placeholder="25" inputmode="decimal">
+              </div>
+              <div class="input-hint">Your fully-loaded hourly cost — what your time is worth.</div>
+            </div>
+          </div>
+          <div class="input-row single">
+            <div class="input-group">
+              <label class="input-label" for="labor-minutes">Labor time for this job (minutes)</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">min</span>
+                <input type="number" id="labor-minutes" min="0" step="1" placeholder="20" inputmode="numeric">
+              </div>
+              <div class="input-hint">Time you actually spend: file prep, bed leveling, removing the print, QC, packaging. Not machine run time.</div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="tool-divider">
+
+        <!-- ── Section 2: Job-level ── -->
+        <div class="tool-section">
+          <div class="tool-section-label">This job</div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label class="input-label" for="filament-select">Filament / material type</label>
+              <select id="filament-select">
+                <option value="">— select material —</option>
+                <optgroup label="Standard FFF">
+                  <option value="0.02">PLA (2% failure)</option>
+                  <option value="0.02">PLA+ (2% failure)</option>
+                  <option value="0.04">Silk PLA (4% failure)</option>
+                  <option value="0.05">PETG (5% failure)</option>
+                  <option value="0.05">Glow in the Dark (5% failure)</option>
+                  <option value="0.07">CPE (7% failure)</option>
+                  <option value="0.08">ASA (8% failure)</option>
+                  <option value="0.08">TPU (8% failure)</option>
+                  <option value="0.08">Wood filled (8% failure)</option>
+                  <option value="0.10">HIPS (10% failure)</option>
+                  <option value="0.10">PVA (10% failure)</option>
+                  <option value="0.12">ABS (12% failure)</option>
+                  <option value="0.12">Carbon Filled (12% failure)</option>
+                  <option value="0.12">Glass Fiber filled (12% failure)</option>
+                  <option value="0.15">PC — Polycarbonate (15% failure)</option>
+                  <option value="0.15">Metal filled (15% failure)</option>
+                  <option value="0.18">PP — Polypropylene (18% failure)</option>
+                  <option value="0.20">Nylon (20% failure)</option>
+                </optgroup>
+                <optgroup label="Resin (MSLA / SLA)">
+                  <option value="0.04">Dental / Engineering Resin (4% failure)</option>
+                  <option value="0.05">Water Washable Resin (5% failure)</option>
+                  <option value="0.06">ABS-like Resin (6% failure)</option>
+                  <option value="0.06">Tough Resin (6% failure)</option>
+                  <option value="0.08">Flexible Resin (8% failure)</option>
+                  <option value="0.10">Castable Resin (10% failure)</option>
+                  <option value="0.50">Standard Resin (50% failure)</option>
+                </optgroup>
+                <option value="manual">Other — enter manually</option>
+              </select>
+              <div id="failure-manual-wrap" style="display:none; margin-top:6px;">
+                <div class="input-prefix-wrap">
+                  <span class="input-prefix">%</span>
+                  <input type="number" id="failure-manual" min="0" max="100" step="1" placeholder="10" inputmode="decimal">
+                </div>
+                <div class="input-hint">Enter as a whole number (e.g. 10 for 10%). Industry data is limited — use your own shop history when available.</div>
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="spool-weight">Spool size</label>
+              <select id="spool-weight">
+                <option value="250">250g</option>
+                <option value="500">500g</option>
+                <option value="1000" selected>1000g (1 kg)</option>
+                <option value="custom">Custom weight</option>
+              </select>
+              <div id="spool-custom-wrap" style="display:none; margin-top:6px;">
+                <div class="input-prefix-wrap">
+                  <span class="input-prefix">g</span>
+                  <input type="number" id="spool-weight-custom" min="1" placeholder="750" inputmode="numeric">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-row three">
+            <div class="input-group">
+              <label class="input-label" for="spool-cost">Spool cost</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="spool-cost" min="0.01" step="0.01" placeholder="22.00" inputmode="decimal">
+              </div>
+              <div class="input-hint">What you paid, including shipping if applicable.</div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="grams-used">Grams used</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">g</span>
+                <input type="number" id="grams-used" min="0.1" step="0.1" placeholder="45" inputmode="decimal">
+              </div>
+              <div class="input-hint">Your slicer's material estimate. Round up 5–10% for purge and support waste.</div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="print-time">Print time</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">hrs</span>
+                <input type="number" id="print-time" min="0.1" step="0.1" placeholder="3.5" inputmode="decimal">
+              </div>
+              <div class="input-hint">From your slicer estimate. Actual machine time, not wall-clock time.</div>
+            </div>
+          </div>
+
+          <div class="input-row single">
+            <div class="input-group">
+              <label class="input-label" for="target-margin">Target margin</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">%</span>
+                <input type="number" id="target-margin" min="1" max="95" step="1" value="40" inputmode="numeric">
+              </div>
+              <div class="input-hint">Gross margin above total cost. 30–50% is typical for job shops at this scale. Recommended price = floor ÷ (1 − margin%).</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Results ── -->
+        <div class="results" id="results">
+          <hr class="tool-divider">
+
+          <div class="tool-section-label">Your job cost</div>
+
+          <!-- Price output -->
+          <div class="price-output" id="price-output"></div>
+
+          <!-- Metric cards -->
+          <div class="metric-grid" id="metric-grid"></div>
+
+          <!-- Cost breakdown -->
+          <div id="breakdown-wrap"></div>
+
+          <!-- Verdict -->
+          <div id="verdict-wrap"></div>
+
+          <!-- Flags -->
+          <div class="flags-section" id="flags-section"></div>
+
+          <!-- CTA -->
+          <div class="cta-block">
+            <strong>This gives you a floor price for a single job.</strong> To track material costs, job history, and margin across your entire operation — that's what <a href="/landscape/job-economics#offset3d">Offset3D is built for</a>.
+          </div>
+        </div>
+
+        <hr class="tool-divider">
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New tools, pricing changes, and honest takes — when there's something worth saying.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+
+        <footer class="page-footer">
+          <p>Failure rate defaults are based on aggregated community reports and manufacturer guidance. Your shop's actual rates may vary — especially for engineering materials. Override any default with your own data.</p>
+          <p>Electricity data sourced from the <a href="https://www.eia.gov/electricity/state/" target="_blank" rel="noopener">U.S. Energy Information Administration</a>. Printer kWh draws are measured averages at standard FFF temperatures (210°C/60°C).</p>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+<script src="/nav.js"></script>
+
+  <script>
+  (function () {
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function f$(n, dec=2) {
+      if (n === null || isNaN(n)) return '—';
+      return '$' + n.toFixed(dec).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    function fPct(n, dec=1) {
+      if (n === null || isNaN(n)) return '—';
+      return n.toFixed(dec) + '%';
+    }
+    function val(id) { return parseFloat(document.getElementById(id).value) || 0; }
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // ── Printer kWh select ───────────────────────────────────────────────────
+    const printerSel = document.getElementById('printer-select');
+    const kwhManualGroup = document.getElementById('kwh-manual-group');
+    printerSel.addEventListener('change', function () {
+      kwhManualGroup.style.display = this.value === 'manual' ? 'flex' : 'none';
+      kwhManualGroup.style.flexDirection = 'column';
+      kwhManualGroup.style.gap = '6px';
+      calculate();
+    });
+    document.getElementById('kwh-manual').addEventListener('input', calculate);
+
+    // ── Filament / failure rate ──────────────────────────────────────────────
+    const filSel = document.getElementById('filament-select');
+    const failManualWrap = document.getElementById('failure-manual-wrap');
+    filSel.addEventListener('change', function () {
+      failManualWrap.style.display = this.value === 'manual' ? 'block' : 'none';
+      calculate();
+    });
+    document.getElementById('failure-manual').addEventListener('input', calculate);
+
+    // ── Spool weight ─────────────────────────────────────────────────────────
+    const spoolWeightSel = document.getElementById('spool-weight');
+    const spoolCustomWrap = document.getElementById('spool-custom-wrap');
+    spoolWeightSel.addEventListener('change', function () {
+      spoolCustomWrap.style.display = this.value === 'custom' ? 'block' : 'none';
+      calculate();
+    });
+    document.getElementById('spool-weight-custom').addEventListener('input', calculate);
+
+    // ── Wire up all inputs ───────────────────────────────────────────────────
+    ['elec-rate','labor-rate','labor-minutes','spool-cost','grams-used','print-time','target-margin'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calculate);
+    });
+
+    // ── Get kWh draw ─────────────────────────────────────────────────────────
+    function getKwh() {
+      const v = printerSel.value;
+      if (!v) return null;
+      if (v === 'manual') return parseFloat(document.getElementById('kwh-manual').value) || null;
+      return parseFloat(v);
+    }
+
+    // ── Get failure rate ─────────────────────────────────────────────────────
+    function getFailureRate() {
+      const v = filSel.value;
+      if (!v) return null;
+      if (v === 'manual') {
+        const raw = parseFloat(document.getElementById('failure-manual').value);
+        return isNaN(raw) ? null : raw / 100;
+      }
+      return parseFloat(v);
+    }
+
+    // ── Get spool grams ──────────────────────────────────────────────────────
+    function getSpoolGrams() {
+      const v = spoolWeightSel.value;
+      if (v === 'custom') return parseFloat(document.getElementById('spool-weight-custom').value) || null;
+      return parseFloat(v);
+    }
+
+    // ── Calculate ────────────────────────────────────────────────────────────
+    function calculate() {
+      const kwh         = getKwh();
+      const elecRate    = val('elec-rate');
+      const laborRate   = val('labor-rate');
+      const failureRate = getFailureRate();
+      const spoolGrams  = getSpoolGrams();
+      const spoolCost   = val('spool-cost');
+      const gramsUsed   = val('grams-used');
+      const printTime   = val('print-time');
+      const targetMarginPct = val('target-margin');
+
+      const resultsEl = document.getElementById('results');
+
+      // Need at minimum: spool cost, grams used, print time
+      if (!spoolCost || !gramsUsed || !printTime || !spoolGrams) {
+        resultsEl.classList.remove('visible');
+        return;
+      }
+
+      const laborMinutes = val('labor-minutes');
+
+      // ── Core costs ────────────────────────────────────────────────────────
+      // Material cost: cost per gram × grams used
+      const costPerGram   = spoolCost / spoolGrams;
+      const materialCost  = costPerGram * gramsUsed;
+
+      // Electricity cost: kWh draw × print hours × rate
+      const electricityCost = (kwh && elecRate) ? kwh * printTime * elecRate : 0;
+
+      // Labor cost: actual handling minutes × hourly rate
+      const laborCost = (laborRate && laborMinutes) ? (laborMinutes / 60) * laborRate : 0;
+
+      // Failure buffer: material cost × failure rate / (1 - failure rate)
+      // This is the expected cost per successful print accounting for reprints
+      let failureBuffer = 0;
+      const fr = failureRate !== null ? failureRate : 0;
+      if (fr > 0 && fr < 1) {
+        // Expected attempts for 1 success = 1/(1-fr); extra cost = (fr/(1-fr)) × total_variable_costs
+        const variableCostPerAttempt = materialCost + electricityCost + laborCost;
+        failureBuffer = (fr / (1 - fr)) * variableCostPerAttempt;
+      }
+
+      const totalCost    = materialCost + electricityCost + laborCost + failureBuffer;
+      const targetMargin = targetMarginPct / 100;
+      const floorPrice   = totalCost;
+      const recPrice     = targetMargin < 1 ? totalCost / (1 - targetMargin) : 0;
+      const costPerMachineHour = (kwh && elecRate) ? kwh * elecRate : null;
+
+      resultsEl.classList.add('visible');
+
+      // ── Price output ──────────────────────────────────────────────────────
+      document.getElementById('price-output').innerHTML = `
+        <div class="price-cell">
+          <div class="price-cell-label">Floor price (break-even)</div>
+          <div class="price-cell-value">${f$(floorPrice)}</div>
+          <div class="price-cell-sub">Minimum charge to cover all costs</div>
+        </div>
+        <div class="price-cell recommended">
+          <div class="price-cell-label">Recommended at ${targetMarginPct}% margin</div>
+          <div class="price-cell-value">${f$(recPrice)}</div>
+          <div class="price-cell-sub">Gross margin: ${f$(recPrice - floorPrice)} above cost</div>
+        </div>`;
+
+      // ── Metric cards ──────────────────────────────────────────────────────
+      // Cost per gram: skip thousands-separator regex, just use toFixed(4)
+      const costPerGramDisplay = '$' + costPerGram.toFixed(4);
+      const kwDisplay = kwh ? kwh.toFixed(2) + ' kWh' : '—';
+
+      document.getElementById('metric-grid').innerHTML = `
+        <div class="metric-card">
+          <div class="metric-label">Cost per machine hour</div>
+          <div class="metric-value">${costPerMachineHour !== null ? '$' + costPerMachineHour.toFixed(4) : '—'}</div>
+          <div class="metric-sub">${costPerMachineHour !== null ? kwh.toFixed(2) + ' kWh × $' + elecRate + '/kWh' : 'enter printer + electricity'}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Material cost per gram</div>
+          <div class="metric-value">${costPerGramDisplay}</div>
+          <div class="metric-sub">${gramsUsed}g used of ${spoolGrams}g spool</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Electricity — this job</div>
+          <div class="metric-value">${(kwh && elecRate) ? f$(electricityCost) : '—'}</div>
+          <div class="metric-sub">${(kwh && elecRate) ? printTime.toFixed(1) + ' hrs × ' + kwh.toFixed(2) + ' kWh × $' + elecRate : 'not entered'}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Failure buffer rate</div>
+          <div class="metric-value">${failureRate !== null ? fPct(failureRate * 100, 0) : '—'}</div>
+          <div class="metric-sub">${f$(failureBuffer)} reserved</div>
+        </div>`;
+
+      // ── Breakdown table ───────────────────────────────────────────────────
+      const lineItems = [
+        { label: 'Material',          cost: materialCost,   pct: totalCost > 0 ? materialCost/totalCost*100 : 0 },
+        { label: 'Electricity',       cost: electricityCost,pct: totalCost > 0 ? electricityCost/totalCost*100 : 0 },
+        { label: 'Labor',             cost: laborCost,      pct: totalCost > 0 ? laborCost/totalCost*100 : 0 },
+        { label: 'Failure buffer',    cost: failureBuffer,  pct: totalCost > 0 ? failureBuffer/totalCost*100 : 0 },
+      ];
+      const maxPct = Math.max(...lineItems.map(l=>l.pct));
+      let bHTML = `
+        <table class="breakdown-table">
+          <thead><tr>
+            <th>Cost component</th>
+            <th style="text-align:right;">Amount</th>
+            <th style="text-align:right;">% of total</th>
+            <th class="pct-bar-cell"></th>
+          </tr></thead>
+          <tbody>`;
+      lineItems.forEach(item => {
+        const barWidth = maxPct > 0 ? (item.pct / maxPct * 100) : 0;
+        const isDominant = item.pct === maxPct && item.pct > 0;
+        const dimmed = item.cost === 0 ? 'color:var(--text-muted);' : '';
+        bHTML += `<tr>
+          <td style="${dimmed}">${item.label}${item.cost === 0 ? ' <span style="font-size:11px;color:var(--faint);">(not entered)</span>' : ''}</td>
+          <td style="text-align:right;font-weight:700;${dimmed}">${f$(item.cost)}</td>
+          <td style="text-align:right;${dimmed}">${fPct(item.pct)}</td>
+          <td class="pct-bar-cell">
+            <div class="pct-bar-wrap">
+              <div class="pct-bar${isDominant?' dominant':''}" style="width:${barWidth.toFixed(1)}%"></div>
+            </div>
+          </td>
+        </tr>`;
+      });
+      bHTML += `<tr class="total-row">
+          <td>Total cost</td>
+          <td style="text-align:right;">${f$(totalCost)}</td>
+          <td style="text-align:right;">100%</td>
+          <td></td>
+        </tr>
+        </tbody></table>`;
+      document.getElementById('breakdown-wrap').innerHTML = bHTML;
+
+      // ── Verdict: margin health ────────────────────────────────────────────
+      const impliedMarginPct = recPrice > 0 ? ((recPrice - totalCost) / recPrice * 100) : 0;
+      let vClass, vLabel, vText;
+
+      if (targetMarginPct < 20) {
+        vClass = 'unjustified';
+        vLabel = 'Margin too thin — risk of working at a loss';
+        vText = `A ${targetMarginPct}% target margin leaves almost no buffer for scope creep, post-processing time, or a bad run. Most job shops running profitably at this scale target at least 30%. You may be underpricing.`;
+      } else if (targetMarginPct < 35) {
+        vClass = 'significant';
+        vLabel = 'Lean margin — viable, but little cushion';
+        vText = `${targetMarginPct}% gross margin covers costs, but leaves limited room for hidden time (setup, QC, packaging), failed attempts beyond the buffer, or material price increases. Consider whether this job's complexity justifies a higher floor.`;
+      } else if (targetMarginPct <= 60) {
+        vClass = 'reasonable';
+        vLabel = 'Reasonable margin for job shop work';
+        vText = `${targetMarginPct}% is within the healthy range for FFF job shops at this scale. Your recommended price of ${f$(recPrice)} reflects real costs and a sustainable buffer.`;
+      } else {
+        vClass = 'trivial';
+        vLabel = 'High margin — confirm the market will bear it';
+        vText = `${targetMarginPct}% is achievable for specialty, engineering, or rush work. For commodity prints, a price of ${f$(recPrice)} may face pushback. Verify this aligns with your positioning.`;
+      }
+
+      document.getElementById('verdict-wrap').innerHTML = `
+        <div class="verdict-block ${vClass}">
+          <div class="verdict-label">${vLabel}</div>
+          <div class="verdict-text">${vText}</div>
+        </div>`;
+
+      // ── Flags ─────────────────────────────────────────────────────────────
+      const flags = [];
+
+      if (materialCost / totalCost > 0.70) {
+        flags.push({ type: 'warn', text: `Material is <strong>${fPct(materialCost/totalCost*100)}</strong> of your total cost on this job. That's high — even a small spool price increase will move your floor price significantly. Consider buying in bulk or sourcing a lower-cost equivalent.` });
+      }
+
+      if (failureRate !== null && failureRate >= 0.15) {
+        flags.push({ type: 'warn', text: `The <strong>${fPct(failureRate*100, 0)}</strong> failure rate for this material adds <strong>${f$(failureBuffer)}</strong> to your floor price. If you're quoting against shops using lower-risk materials, this is a competitive disadvantage — factor it into your positioning.` });
+      }
+
+      if (!laborRate || !laborMinutes) {
+        flags.push({ type: 'info', text: `Labor cost is ${!laborRate ? 'not included — enter your hourly rate' : 'missing a time estimate — enter minutes spent on this job'}. If your time has any cost, this floor price is understated.` });
+      }
+
+      if (!kwh || elecRate === 0) {
+        flags.push({ type: 'info', text: `Electricity cost is not included in this calculation. For most FFF jobs it's small ($0.02–$0.15), but it's real — especially on long prints with high-draw printers.` });
+      }
+
+      if (failureRate === null) {
+        flags.push({ type: 'info', text: `No material selected — failure buffer is $0.00. The buffer protects you from the expected cost of failed prints. Select a material to include it.` });
+      }
+
+      if (gramsUsed / spoolGrams > 0.8) {
+        flags.push({ type: 'warn', text: `This job uses <strong>${fPct(gramsUsed/spoolGrams*100, 0)}</strong> of the spool. Factor in remnant value — a near-empty spool is hard to sell and easy to waste on a future partial job. You may want to absorb the full spool cost.` });
+      }
+
+      const flagsSection = document.getElementById('flags-section');
+      flagsSection.innerHTML = flags.length
+        ? `<div class="flags-label">Worth noting</div>` + flags.map(f =>
+            `<div class="flag-item${f.type==='info'?' flag-info':''}">${f.text}</div>`
+          ).join('')
+        : '';
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    calculate();
+
+  }());
+  </script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+  <title>Normalize Your Software Costs — 3D Print Shop Software</title>
+  <meta name="description" content="Compare up to three tools side by side using the same four normalization metrics: monthly cost, cost per job, % of revenue, and cost per printer.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/tools/normalize-costs">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Normalize Your Software Costs — 3D Print Shop Software">
+  <meta property="og:description" content="Compare up to three tools side by side using the same four normalization metrics.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/tools/normalize-costs">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    .tool-section { margin-bottom: 2rem; }
+    .tool-section-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+    .input-row.single  { grid-template-columns: 1fr; }
+    .input-row.triple  { grid-template-columns: 1fr 1fr 1fr; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-label { font-size: 12px; font-weight: 700; color: var(--text); }
+    .input-hint  { font-size: 11px; color: var(--text-muted); margin-top: -2px; }
+    .input-prefix-wrap {
+      display: flex; align-items: center;
+      border: 0.5px solid var(--border); border-radius: 4px; overflow: hidden;
+    }
+    .input-prefix {
+      padding: 8px 10px; font-size: 13px;
+      font-family: 'Space Mono', monospace; color: var(--text-muted);
+      background: var(--bg-subtle); border-right: 0.5px solid var(--border); white-space: nowrap;
+    }
+    .input-prefix-wrap input { border: none; border-radius: 0; flex: 1; min-width: 0; }
+    select, input[type="number"], input[type="text"] {
+      padding: 8px 10px; border: 0.5px solid var(--border); border-radius: 4px;
+      font-family: 'Space Mono', monospace; font-size: 13px;
+      color: var(--text); background: var(--bg); width: 100%;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--text-muted); }
+    .tool-divider { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+
+    /* Tool columns */
+    .tools-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 1rem; }
+    .tool-col { border: 0.5px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .tool-col-head {
+      background: var(--bg-subtle); border-bottom: 0.5px solid var(--border);
+      padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .tool-col-num { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+    .tool-col-num span { color: var(--accent); }
+    .tool-col-opt { font-size: 11px; color: var(--text-muted); font-style: italic; }
+    .tool-col-body { padding: 12px; }
+    .tool-field { margin-bottom: 10px; }
+    .tool-field:last-child { margin-bottom: 0; }
+    .tool-field label { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .tool-field .input-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+    .cond { display: none; }
+    .cond.show { display: block; }
+    .range-note { font-size: 11px; color: var(--text-muted); margin-top: 3px; font-style: italic; }
+
+    /* Results */
+    .results { display: none; margin-top: 2rem; }
+    .results.visible { display: block; }
+
+    .comparison-callout {
+      border-left: 3px solid var(--accent); padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem; border-radius: 0 4px 4px 0; background: var(--bg-subtle);
+    }
+    .comparison-callout-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--accent); margin-bottom: 6px;
+    }
+    .comparison-callout-text { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+    .verdict-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 12px; margin-bottom: 1.5rem; }
+    .verdict-card { border-radius: 4px; padding: 1.25rem; border-left: 3px solid var(--border); }
+    .verdict-card.trivial     { border-color: #3B6D11; background: #EAF3DE; }
+    .verdict-card.reasonable  { border-color: #185FA5; background: #E6F1FB; }
+    .verdict-card.significant { border-color: #854F0B; background: #FAEEDA; }
+    .verdict-card.unjustified { border-color: #A32D2D; background: #FCEBEB; }
+    .verdict-card.free-card   { border-color: var(--border); background: var(--bg-subtle); }
+
+    .vc-tool-name { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .vc-metric {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 4px 0; border-bottom: 0.5px solid rgba(0,0,0,0.08); gap: 8px;
+    }
+    .vc-metric:last-child { border-bottom: none; }
+    .vc-metric-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); white-space: nowrap; }
+    .vc-metric-value { font-size: 13px; font-weight: 700; font-family: 'Space Mono', monospace; text-align: right; }
+    .trivial     .vc-metric-value { color: #27500A; }
+    .reasonable  .vc-metric-value { color: #0C447C; }
+    .significant .vc-metric-value { color: #633806; }
+    .unjustified .vc-metric-value { color: #791F1F; }
+    .free-card   .vc-metric-value { color: var(--text-muted); }
+
+    .vc-verdict-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; margin-top: 10px; }
+    .trivial     .vc-verdict-label { color: #27500A; }
+    .reasonable  .vc-verdict-label { color: #0C447C; }
+    .significant .vc-verdict-label { color: #633806; }
+    .unjustified .vc-verdict-label { color: #791F1F; }
+    .free-card   .vc-verdict-label { color: var(--text-muted); }
+
+    .vc-verdict-text { font-size: 12px; line-height: 1.6; }
+    .trivial     .vc-verdict-text { color: #27500A; }
+    .reasonable  .vc-verdict-text { color: #0C447C; }
+    .significant .vc-verdict-text { color: #633806; }
+    .unjustified .vc-verdict-text { color: #791F1F; }
+    .free-card   .vc-verdict-text { color: var(--text-muted); }
+
+    .flags-section { margin-top: 1.5rem; }
+    .flags-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .flag-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 14px; border: 0.5px solid #854F0B; border-radius: 4px;
+      background: #FAEEDA; margin-bottom: 8px; font-size: 12px; color: #633806; line-height: 1.6;
+    }
+    .flag-item::before { content: '⚑'; color: #854F0B; font-size: 12px; flex-shrink: 0; padding-top: 1px; }
+
+    .guide-link-block {
+      margin-top: 2rem; padding: 12px 16px; background: var(--bg-subtle);
+      border: 0.5px solid var(--border); border-radius: 4px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .guide-link-block a { color: var(--accent); font-weight: 700; }
+
+    @media (max-width: 768px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .input-row.triple { grid-template-columns: 1fr; }
+      .verdict-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools">tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>normalize your software costs</span>
+        </nav>
+
+        <span class="page-label">Tool</span>
+        <h1>Normalize Your Software Costs</h1>
+
+        <p class="lead">Every vendor prices differently. This tool converts up to three tools to the same four metrics — monthly cost, cost per job, percentage of revenue, and cost per printer — so you can compare them on equal footing.</p>
+
+        <hr class="tool-divider">
+
+        <!-- Operation -->
+        <div class="tool-section">
+          <div class="tool-section-label">Your operation</div>
+          <div class="input-row triple">
+            <div class="input-group">
+              <label class="input-label" for="op-jobs">Monthly orders</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">#</span>
+                <input type="number" id="op-jobs" min="1" placeholder="40" inputmode="numeric">
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="op-revenue">Monthly revenue</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="op-revenue" min="1" placeholder="2500" inputmode="numeric">
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="op-printers">Printers in fleet</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">#</span>
+                <input type="number" id="op-printers" min="1" placeholder="3" inputmode="numeric">
+              </div>
+            </div>
+          </div>
+          <div class="input-row single">
+            <div class="input-group">
+              <label class="input-label" for="op-months">Expected tool lifespan (months)</label>
+              <input type="number" id="op-months" min="1" value="24" inputmode="numeric">
+              <div class="input-hint">Used to amortize one-time purchases. 18–36 months is typical.</div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="tool-divider">
+
+        <!-- Tools -->
+        <div class="tool-section">
+          <div class="tool-section-label">Tools to compare</div>
+          <div class="tools-grid" id="tools-grid"></div>
+        </div>
+
+        <!-- Results -->
+        <div class="results" id="results">
+          <hr class="tool-divider">
+          <div class="tool-section-label">Results</div>
+          <div id="comparison-callout-wrap"></div>
+          <div class="verdict-grid" id="verdict-grid"></div>
+          <div class="flags-section" id="flags-section"></div>
+        </div>
+
+        <div class="guide-link-block">
+          Not sure what these metrics mean? Read the guide: <a href="/guides/comparing-software-costs">How to compare software costs when every vendor prices differently</a>.
+        </div>
+
+        <hr class="tool-divider">
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New tools, pricing changes, and honest takes — when there's something worth saying.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+  <script>
+  const VENDORS = [
+    { name:'Bambu Farm Manager',          layers:['printer','fleet'],             model:'free',                    basePrice:0,      pricingDisplay:'Free' },
+    { name:'OctoPrint',                   layers:['printer'],                     model:'free',                    basePrice:0,      pricingDisplay:'Free / OSS' },
+    { name:'Klipper / Mainsail / Fluidd', layers:['printer'],                     model:'free',                    basePrice:0,      pricingDisplay:'Free / OSS' },
+    { name:'Obico',                       layers:['printer'],                     model:'monthly-plus-per-printer',basePrice:6.99,   perPrinterPrice:2,  pricingDisplay:'$6.99/mo + $2/printer' },
+    { name:'PrusaLink / Prusa Connect',   layers:['printer'],                     model:'free',                    basePrice:0,      pricingDisplay:'Free' },
+    { name:'SimplyPrint',                 layers:['fleet','jobs','inventory'],     model:'monthly',                 basePrice:31.49,  pricingDisplay:'$31.49/mo' },
+    { name:'Printago',                    layers:['fleet','customer'],            model:'per-printer',             basePrice:4,      pricingDisplay:'$4/printer/mo' },
+    { name:'FlowQ',                       layers:['fleet','inventory'],           model:'monthly',                 basePrice:16.25,  priceMin:12.50, priceMax:20,  pricingDisplay:'$12.50–$20/mo' },
+    { name:'3DPrintOps',                  layers:['jobs','customer'],             model:'monthly',                 basePrice:21.50,  priceMin:14,    priceMax:29,  pricingDisplay:'$14–$29/mo' },
+    { name:'3DPBOSS',                     layers:['jobs','inventory','customer'], model:'one-time',                basePrice:124,    priceMin:49,    priceMax:199, pricingDisplay:'$49–$199 one-time' },
+    { name:'Filametrics',                 layers:['inventory'],                   model:'freemium',                basePrice:0,      freemiumPaidPrice:30, pricingDisplay:'Free – $30/mo' },
+    { name:'Spoolman',                    layers:['inventory'],                   model:'free',                    basePrice:0,      pricingDisplay:'Free / OSS' },
+    { name:'Layers.app',                  layers:['customer'],                    model:'monthly',                 basePrice:99,     priceMin:49,    priceMax:149, pricingDisplay:'$49–$149/mo' },
+    { name:'Shopify',                     layers:['customer'],                    model:'monthly',                 basePrice:39,     pricingDisplay:'$39/mo+' },
+    { name:'Offset3D',                    layers:['jobs','inventory','customer'], model:'one-time',                basePrice:50,     pricingDisplay:'$50 one-time' },
+    { name:'MRPeasy',                     layers:['jobs','inventory','customer'], model:'monthly',                 basePrice:74,     priceMin:49,    priceMax:99,  pricingDisplay:'$49–$99/mo' },
+  ];
+
+  const LAYER_LABELS = { printer:'Printer Control', fleet:'Fleet Management', jobs:'Job Economics', inventory:'Inventory & Materials', customer:'Customer Management' };
+  const LAYER_ORDER  = ['printer','fleet','jobs','inventory','customer'];
+
+  function buildSelect(i) {
+    let html = `<select id="t${i}-vendor" onchange="handleVendorChange(${i})"><option value="">— select a vendor —</option>`;
+    LAYER_ORDER.forEach(layer => {
+      const inLayer = VENDORS.filter(v => v.layers.includes(layer));
+      if (!inLayer.length) return;
+      html += `<optgroup label="${LAYER_LABELS[layer]}">`;
+      inLayer.forEach(v => {
+        html += `<option value="${layer}__${v.name}">${v.name} — ${v.pricingDisplay}</option>`;
+      });
+      html += `</optgroup>`;
+    });
+    html += `<optgroup label="──────────────────"><option value="manual">Enter manually</option></optgroup>`;
+    html += `</select>`;
+    return html;
+  }
+
+  function renderToolCols() {
+    const grid = document.getElementById('tools-grid');
+    grid.innerHTML = '';
+    for (let i = 1; i <= 3; i++) {
+      const opt = i > 1 ? `<span class="tool-col-opt">optional</span>` : '';
+      grid.innerHTML += `
+        <div class="tool-col">
+          <div class="tool-col-head">
+            <div class="tool-col-num">Tool <span>0${i}</span></div>${opt}
+          </div>
+          <div class="tool-col-body">
+            <div class="tool-field">
+              <label for="t${i}-vendor">Vendor</label>
+              ${buildSelect(i)}
+            </div>
+            <div class="tool-field cond" id="t${i}-manual-name-wrap">
+              <label for="t${i}-manual-name">Tool name</label>
+              <input type="text" id="t${i}-manual-name" placeholder="Tool name" oninput="calculate()">
+            </div>
+            <div class="tool-field cond" id="t${i}-model-wrap">
+              <label for="t${i}-model">Pricing model</label>
+              <select id="t${i}-model" onchange="handleModelChange(${i})">
+                <option value="">— select —</option>
+                <option value="monthly">Flat monthly</option>
+                <option value="annual">Annual subscription</option>
+                <option value="per-printer">Per printer / month</option>
+                <option value="monthly-plus-per-printer">Monthly base + per printer</option>
+                <option value="one-time">One-time purchase</option>
+                <option value="free">Free / open source</option>
+                <option value="freemium">Freemium</option>
+              </select>
+            </div>
+            <div class="tool-field cond" id="t${i}-monthly-wrap">
+              <label for="t${i}-monthly">Monthly price ($)</label>
+              <input type="number" id="t${i}-monthly" min="0" step="0.01" placeholder="0.00" inputmode="decimal" oninput="calculate()">
+            </div>
+            <div class="tool-field cond" id="t${i}-annual-wrap">
+              <label for="t${i}-annual">Annual price ($)</label>
+              <input type="number" id="t${i}-annual" min="0" step="0.01" placeholder="0.00" inputmode="decimal" oninput="calculate()">
+            </div>
+            <div class="tool-field cond" id="t${i}-perprinter-wrap">
+              <label for="t${i}-perprinter">Per printer / month ($)</label>
+              <input type="number" id="t${i}-perprinter" min="0" step="0.01" placeholder="0.00" inputmode="decimal" oninput="calculate()">
+            </div>
+            <div class="tool-field cond" id="t${i}-base-wrap">
+              <label for="t${i}-base">Monthly base price ($)</label>
+              <input type="number" id="t${i}-base" min="0" step="0.01" placeholder="0.00" inputmode="decimal" oninput="calculate()">
+            </div>
+            <div class="tool-field cond" id="t${i}-onetime-wrap">
+              <label for="t${i}-onetime">One-time price ($)</label>
+              <input type="number" id="t${i}-onetime" min="0" step="0.01" placeholder="0.00" inputmode="decimal" oninput="calculate()">
+              <div class="input-hint">Amortized over your lifespan setting.</div>
+            </div>
+            <div class="tool-field cond" id="t${i}-freemium-wrap">
+              <label for="t${i}-freemium">Paid tier / month ($)</label>
+              <input type="number" id="t${i}-freemium" min="0" step="0.01" placeholder="0.00" inputmode="decimal" oninput="calculate()">
+            </div>
+            <div class="range-note cond" id="t${i}-range-note"></div>
+          </div>
+        </div>`;
+    }
+  }
+
+  function showEl(id) { const e=document.getElementById(id); if(e) e.classList.add('show'); }
+  function hideEl(id) { const e=document.getElementById(id); if(e) e.classList.remove('show'); }
+
+  function setFieldsForModel(i, model) {
+    ['monthly','annual','perprinter','base','onetime','freemium'].forEach(f => hideEl(`t${i}-${f}-wrap`));
+    if (model==='monthly')                   showEl(`t${i}-monthly-wrap`);
+    if (model==='annual')                    showEl(`t${i}-annual-wrap`);
+    if (model==='per-printer')               showEl(`t${i}-perprinter-wrap`);
+    if (model==='monthly-plus-per-printer') { showEl(`t${i}-base-wrap`); showEl(`t${i}-perprinter-wrap`); }
+    if (model==='one-time')                  showEl(`t${i}-onetime-wrap`);
+    if (model==='freemium')                  showEl(`t${i}-freemium-wrap`);
+  }
+
+  function setVal(i, key, val) {
+    const e = document.getElementById(`t${i}-${key}`);
+    if (e && val !== null && val !== undefined) e.value = val;
+  }
+
+  function handleVendorChange(i) {
+    const val = document.getElementById(`t${i}-vendor`).value;
+    const rNote = document.getElementById(`t${i}-range-note`);
+    hideEl(`t${i}-model-wrap`); hideEl(`t${i}-manual-name-wrap`);
+    rNote.classList.remove('show'); rNote.textContent = '';
+    ['monthly','annual','perprinter','base','onetime','freemium'].forEach(f => {
+      const e = document.getElementById(`t${i}-${f}`); if(e) e.value='';
+      hideEl(`t${i}-${f}-wrap`);
+    });
+    if (!val) { calculate(); return; }
+    if (val === 'manual') { showEl(`t${i}-manual-name-wrap`); showEl(`t${i}-model-wrap`); calculate(); return; }
+
+    const vname = val.split('__').slice(1).join('__');
+    const v = VENDORS.find(x => x.name === vname);
+    if (!v) { calculate(); return; }
+
+    const m = v.model;
+    if (m === 'free') { /* no fields */ }
+    else if (m === 'freemium')                   { showEl(`t${i}-freemium-wrap`); setVal(i,'freemium',v.freemiumPaidPrice); }
+    else if (m === 'monthly')                    { showEl(`t${i}-monthly-wrap`);  setVal(i,'monthly', v.basePrice);
+      if (v.priceMin !== undefined) { rNote.textContent=`Range pricing: ${v.pricingDisplay}. Midpoint pre-filled — adjust to your plan.`; rNote.classList.add('show'); } }
+    else if (m === 'annual')                     { showEl(`t${i}-annual-wrap`);   setVal(i,'annual',  v.basePrice*12); }
+    else if (m === 'per-printer')                { showEl(`t${i}-perprinter-wrap`); setVal(i,'perprinter', v.basePrice); }
+    else if (m === 'monthly-plus-per-printer')   { showEl(`t${i}-base-wrap`); showEl(`t${i}-perprinter-wrap`); setVal(i,'base',v.basePrice); setVal(i,'perprinter',v.perPrinterPrice||0); }
+    else if (m === 'one-time')                   { showEl(`t${i}-onetime-wrap`); setVal(i,'onetime', v.basePrice);
+      if (v.priceMin !== undefined) { rNote.textContent=`Range pricing: ${v.pricingDisplay}. Midpoint pre-filled — adjust to your purchase price.`; rNote.classList.add('show'); } }
+    calculate();
+  }
+
+  function handleModelChange(i) {
+    const m = document.getElementById(`t${i}-model`).value;
+    setFieldsForModel(i, m);
+    calculate();
+  }
+
+  function getToolData(i) {
+    const val = document.getElementById(`t${i}-vendor`).value;
+    if (!val) return null;
+    const printers = parseFloat(document.getElementById('op-printers').value) || 0;
+    const months   = parseFloat(document.getElementById('op-months').value)   || 24;
+
+    let name, model, isFree=false, isFreemium=false, monthlyCost=null, freemiumPaidCost=null, perPrinterRate=null;
+
+    if (val === 'manual') {
+      name  = (document.getElementById(`t${i}-manual-name`).value.trim()) || `Tool 0${i}`;
+      model = document.getElementById(`t${i}-model`).value;
+      if (!model) return null;
+    } else {
+      const vname = val.split('__').slice(1).join('__');
+      const v = VENDORS.find(x => x.name === vname);
+      if (!v) return null;
+      name = v.name; model = v.model;
+    }
+
+    const n = (id) => parseFloat(document.getElementById(id)?.value);
+
+    if      (model==='free')   { isFree=true; monthlyCost=0; }
+    else if (model==='freemium') {
+      isFree=true; isFreemium=true; monthlyCost=0;
+      const fp=n(`t${i}-freemium`); if(!isNaN(fp)) freemiumPaidCost=fp;
+    }
+    else if (model==='monthly')   { const v=n(`t${i}-monthly`); if(!isNaN(v)) monthlyCost=v; }
+    else if (model==='annual')    { const v=n(`t${i}-annual`);  if(!isNaN(v)) monthlyCost=v/12; }
+    else if (model==='per-printer') {
+      const v=n(`t${i}-perprinter`); perPrinterRate=isNaN(v)?null:v;
+      if(!isNaN(v) && printers>0) monthlyCost=v*printers;
+    }
+    else if (model==='monthly-plus-per-printer') {
+      const base=n(`t${i}-base`)||0; const pp=n(`t${i}-perprinter`)||0;
+      perPrinterRate=pp;
+      if(printers>0) monthlyCost=base+pp*printers;
+    }
+    else if (model==='one-time') { const v=n(`t${i}-onetime`); if(!isNaN(v)&&months>0) monthlyCost=v/months; }
+
+    if (monthlyCost===null && !isFree) return null;
+    return { name, model, monthlyCost, isFree, isFreemium, freemiumPaidCost, perPrinterRate };
+  }
+
+  function f$(n,dec=2) {
+    if (n===null||n===undefined||isNaN(n)) return '—';
+    if (n===0) return '$0';
+    return '$'+n.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+  }
+  function fPct(n) { if(n===null||isNaN(n)) return '—'; if(n===0) return '0%'; return n.toFixed(2)+'%'; }
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function getVerdict(pct, isTrulyFree) {
+    if (isTrulyFree) return { cls:'free-card', label:'Free tool', text:'No recurring cost. Evaluate on features and maintenance overhead, not price.' };
+    if (pct===null)  return { cls:'reasonable', label:'', text:'' };
+    if (pct < 1)  return { cls:'trivial',     label:'Trivial at your scale',             text:'Cost is effectively noise. The decision should be driven entirely by whether this tool solves a real problem.' };
+    if (pct < 2)  return { cls:'reasonable',  label:'Reasonable — evaluate on merit',    text:'The price is not the obstacle. Focus on whether this tool solves a problem you have today, not one you anticipate.' };
+    if (pct < 3)  return { cls:'significant', label:'Significant — make it earn its keep',text:'This is real money at your scale. It needs to demonstrably save time or protect margin to justify the cost.' };
+    return              { cls:'unjustified',  label:'Hard to justify at your scale',      text:'Above 3% of revenue for a single tool is a material operating expense. Consider whether your volume genuinely supports this.' };
+  }
+
+  function calculate() {
+    const jobs     = parseFloat(document.getElementById('op-jobs').value)     || 0;
+    const revenue  = parseFloat(document.getElementById('op-revenue').value)  || 0;
+    const printers = parseFloat(document.getElementById('op-printers').value) || 0;
+
+    const tools = [];
+    for (let i=1; i<=3; i++) {
+      const d = getToolData(i);
+      if (!d) continue;
+      const mc  = d.monthlyCost;
+      const cpj = (jobs>0 && mc!==null) ? mc/jobs : null;
+      const pct = (revenue>0 && mc!==null) ? (mc/revenue)*100 : null;
+      let fpMetrics = null;
+      if (d.isFreemium && d.freemiumPaidCost!==null) {
+        fpMetrics = {
+          mc:  d.freemiumPaidCost,
+          cpj: jobs>0    ? d.freemiumPaidCost/jobs    : null,
+          pct: revenue>0 ? (d.freemiumPaidCost/revenue)*100 : null,
+        };
+      }
+      tools.push({ ...d, mc, cpj, pct, fpMetrics });
+    }
+
+    const resultsEl = document.getElementById('results');
+    if (!tools.length || revenue===0 || jobs===0) { resultsEl.classList.remove('visible'); return; }
+    resultsEl.classList.add('visible');
+
+    // Comparison callout
+    const paidTools = tools.filter(t => !t.isFree);
+    const calloutWrap = document.getElementById('comparison-callout-wrap');
+    if (paidTools.length >= 2) {
+      const sorted = [...paidTools].sort((a,b)=>a.mc-b.mc);
+      const lo = sorted[0], hi = sorted[sorted.length-1];
+      const ratio = hi.mc / lo.mc;
+      let txt = '';
+      if (ratio >= 1.2) {
+        const diff = hi.mc - lo.mc;
+        txt = `${esc(hi.name)} costs ${ratio.toFixed(1)}× more per month than ${esc(lo.name)} — a difference of ${f$(diff)}/mo (${f$(diff*12,0)}/yr). `;
+        if ((hi.model==='per-printer'||hi.model==='monthly-plus-per-printer') && hi.perPrinterRate && printers>0) {
+          const proj = hi.model==='per-printer' ? hi.perPrinterRate*(printers+5) : (hi.mc - hi.perPrinterRate*printers) + hi.perPrinterRate*(printers+5);
+          txt += `${esc(hi.name)} uses per-printer pricing — at ${printers+5} printers that rises to ${f$(proj)}/mo.`;
+        } else {
+          txt += `At your current volume, ${esc(lo.name)} wins on cost. The question is whether ${esc(hi.name)} delivers enough additional value to justify the gap.`;
+        }
+      } else {
+        const diff = Math.abs(paidTools[0].mc - paidTools[1].mc);
+        txt = `${esc(paidTools.map(t=>t.name).join(' and '))} are within ${fPct((ratio-1)*100)} of each other — a difference of ${f$(diff)}/mo. At your scale, evaluate on features rather than price.`;
+      }
+      calloutWrap.innerHTML = `<div class="comparison-callout"><div class="comparison-callout-label">Side-by-side</div><div class="comparison-callout-text">${txt}</div></div>`;
+    } else { calloutWrap.innerHTML = ''; }
+
+    // Verdict cards
+    const verdictGrid = document.getElementById('verdict-grid');
+    verdictGrid.innerHTML = '';
+    tools.forEach(t => {
+      const effectivePct = (t.isFreemium && t.fpMetrics) ? t.fpMetrics.pct : t.pct;
+      const v = getVerdict(effectivePct, t.isFree && !t.isFreemium);
+      let metricsHTML = '';
+
+      if (t.isFree && !t.isFreemium) {
+        metricsHTML = `
+          <div class="vc-metric"><span class="vc-metric-label">Monthly cost</span><span class="vc-metric-value">$0</span></div>
+          <div class="vc-metric"><span class="vc-metric-label">Cost per job</span><span class="vc-metric-value">$0</span></div>
+          <div class="vc-metric"><span class="vc-metric-label">% of revenue</span><span class="vc-metric-value">0%</span></div>`;
+      } else if (t.isFreemium) {
+        metricsHTML = `<div class="vc-metric"><span class="vc-metric-label">Free tier</span><span class="vc-metric-value">$0/mo</span></div>`;
+        if (t.fpMetrics) {
+          metricsHTML += `
+            <div class="vc-metric"><span class="vc-metric-label">Paid tier / mo</span><span class="vc-metric-value">${f$(t.fpMetrics.mc)}</span></div>
+            <div class="vc-metric"><span class="vc-metric-label">Cost per job (paid)</span><span class="vc-metric-value">${f$(t.fpMetrics.cpj)}</span></div>
+            <div class="vc-metric"><span class="vc-metric-label">% of revenue (paid)</span><span class="vc-metric-value">${fPct(t.fpMetrics.pct)}</span></div>`;
+        } else {
+          metricsHTML += `<div class="vc-metric"><span class="vc-metric-label">Paid tier</span><span class="vc-metric-value">enter price above</span></div>`;
+        }
+      } else {
+        metricsHTML = `
+          <div class="vc-metric"><span class="vc-metric-label">Monthly cost</span><span class="vc-metric-value">${f$(t.mc)}</span></div>
+          <div class="vc-metric"><span class="vc-metric-label">Cost per job</span><span class="vc-metric-value">${f$(t.cpj)}</span></div>
+          <div class="vc-metric"><span class="vc-metric-label">% of revenue</span><span class="vc-metric-value">${fPct(t.pct)}</span></div>`;
+        if ((t.model==='per-printer'||t.model==='monthly-plus-per-printer') && t.perPrinterRate && printers>0) {
+          metricsHTML += `<div class="vc-metric"><span class="vc-metric-label">Rate per printer</span><span class="vc-metric-value">${f$(t.perPrinterRate)}/printer</span></div>`;
+        }
+      }
+
+      verdictGrid.innerHTML += `
+        <div class="verdict-card ${v.cls}">
+          <div class="vc-tool-name">${esc(t.name)}</div>
+          <div class="vc-metrics">${metricsHTML}</div>
+          ${v.label ? `<div class="vc-verdict-label">${v.label}</div>` : ''}
+          ${v.text  ? `<div class="vc-verdict-text">${v.text}</div>`   : ''}
+        </div>`;
+    });
+
+    // Flags
+    const flagsSection = document.getElementById('flags-section');
+    const flags = [];
+    tools.forEach(t => {
+      if (t.isFreemium && t.fpMetrics) {
+        flags.push(`<strong>${esc(t.name)}</strong> is freemium. The paid tier is ${f$(t.fpMetrics.mc)}/mo (${fPct(t.fpMetrics.pct)} of your revenue). Once you depend on it, the upgrade stops being optional — budget for the paid tier from day one.`);
+      }
+      if (!t.isFree && t.pct!==null && t.pct>=2) {
+        flags.push(`<strong>${esc(t.name)}</strong> is consuming ${fPct(t.pct)} of your monthly revenue — above the 2% single-layer threshold. Make sure it's earning its keep.`);
+      }
+      if ((t.model==='per-printer'||t.model==='monthly-plus-per-printer') && t.perPrinterRate && printers>0) {
+        const proj = t.model==='per-printer'
+          ? t.perPrinterRate*(printers+5)
+          : (t.mc - t.perPrinterRate*printers) + t.perPrinterRate*(printers+5);
+        flags.push(`<strong>${esc(t.name)}</strong> uses per-printer pricing. Add 5 printers and your monthly cost rises to ${f$(proj)}.`);
+      }
+    });
+    const paidMC = paidTools.map(t => t.isFreemium && t.fpMetrics ? t.fpMetrics.mc : t.mc).filter(n=>n!==null);
+    if (paidMC.length>1 && revenue>0) {
+      const total = paidMC.reduce((a,b)=>a+b,0);
+      const pct   = (total/revenue)*100;
+      if (pct>=3) {
+        flags.push(`These ${paidMC.length} tools combined are ${fPct(pct)} of your monthly revenue (${f$(total)}/mo) — above the 3% full-stack threshold. This is one layer of your stack, not your entire software spend.`);
+      }
+    }
+    flagsSection.innerHTML = flags.length
+      ? `<div class="flags-label">Watch out</div>` + flags.map(f=>`<div class="flag-item">${f}</div>`).join('')
+      : '';
+  }
+
+  renderToolCols();
+  ['op-jobs','op-revenue','op-printers','op-months'].forEach(id => {
+    document.getElementById(id).addEventListener('input', calculate);
+  });
+  </script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

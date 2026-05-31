@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>Inventory & Materials Software for 3D Print Shops — 3D Print Shop Software</title>
+  <meta name="description" content="How commercial 3D print shops track filament inventory, materials cost, and stock levels. Verified tools from self-hosted to SaaS, with honest assessments.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://3dprintshopsoftware.com/landscape/inventory">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Inventory & Materials Software for 3D Print Shops">
+  <meta property="og:description" content="Verified tools for tracking filament inventory and materials cost in commercial 3D print shops.">
+  <meta property="og:url" content="https://3dprintshopsoftware.com/landscape/inventory">
+  <meta property="og:site_name" content="3D Print Shop Software">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "name": "Inventory & Materials Software for 3D Print Shops",
+    "description": "Verified tools for tracking filament inventory and materials in commercial 3D print shops.",
+    "url": "https://3dprintshopsoftware.com/landscape/inventory"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">3D Print Shop <span>Software</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for print farm operators</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="/landscape">Landscape</a>
+          <span class="breadcrumb-sep">›</span>
+          Inventory &amp; materials
+        </div>
+
+        <span class="page-label">Landscape — Layer 4 of 5</span>
+        <h1>Inventory &amp; Materials</h1>
+
+        <p class="lead">
+          Running out of a color mid-order, or discovering a spool is lighter than expected halfway through a long print, are avoidable problems. Inventory tracking prevents both — but the tools available range from genuinely integrated to hobbyist-focused apps that stop well short of what a commercial operator needs.
+        </p>
+
+        <div class="section-intro">
+          <p>This layer is more fragmented than any other in the print shop stack. Most tools were built for makers tracking personal collections, not commercial operators managing material cost and reorder cycles. The distinction is noted throughout. Verified tools only, mid-2026.</p>
+        </div>
+
+        <h2>What inventory tracking means for a commercial shop</h2>
+
+        <p>A hobbyist only needs to know how much filament is left on a spool. A commercial operator needs to know a lot more:</p>
+
+        <ul>
+          <li><strong>Stock levels by material, color, and brand</strong> — enough to fulfill current and upcoming orders</li>
+          <li><strong>Cost per gram</strong> — the actual purchase price feeding into job costing</li>
+          <li><strong>Usage per job</strong> — ideally pulled automatically from slicer data or printer telemetry</li>
+          <li><strong>Low-stock alerts</strong> — triggered before a shortage, not after</li>
+          <li><strong>Reorder planning</strong> — projected consumption against current orders</li>
+          <li><strong>Spare parts and maintenance consumables</strong> — nozzles, beds, lubricants</li>
+        </ul>
+
+        <p>Most tools in this category handle the first four requirements. Reorder planning and spare parts tracking are rarer — and the integration between inventory data and job costing or fleet management is the gap that the market is actively trying to close.</p>
+
+        <h2>Tools at a glance</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tool</th>
+                <th>Type</th>
+                <th>Pricing</th>
+                <th>Auto usage tracking</th>
+                <th>Cost per gram</th>
+                <th>Reorder planning</th>
+                <th>Spare parts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Filametrics</strong></td>
+                <td>Cloud SaaS</td>
+                <td>Free (limits); paid TBD</td>
+                <td class="compare-win">Partial (AI slicer reader)</td>
+                <td class="compare-win">Yes</td>
+                <td class="compare-win">Yes</td>
+                <td class="compare-loss">No</td>
+              </tr>
+              <tr>
+                <td><strong>SimplyPrint (Print Farm)</strong></td>
+                <td>Cloud SaaS</td>
+                <td>$31.49/mo</td>
+                <td class="compare-win">Yes (live)</td>
+                <td class="compare-win">Yes</td>
+                <td class="compare-loss">No</td>
+                <td class="compare-loss">No</td>
+              </tr>
+              <tr>
+                <td><strong>3DPBOSS (Full)</strong></td>
+                <td>Cloud SaaS</td>
+                <td>$199 one-time</td>
+                <td class="compare-loss">No</td>
+                <td class="compare-win">Yes</td>
+                <td class="compare-win">Yes</td>
+                <td class="compare-win">Yes</td>
+              </tr>
+              <tr>
+                <td><strong>Spreadsheet ERP</strong></td>
+                <td>Excel</td>
+                <td>&lt;$75 one-time</td>
+                <td class="compare-loss">No</td>
+                <td class="compare-win">Yes</td>
+                <td class="compare-loss">Manual</td>
+                <td class="compare-win">Yes</td>
+              </tr>
+              <tr>
+                <td><strong>Spoolman</strong></td>
+                <td>Self-hosted / OSS</td>
+                <td>Free</td>
+                <td class="compare-win">Yes (OctoPrint/Klipper)</td>
+                <td class="compare-win">Yes</td>
+                <td class="compare-loss">No</td>
+                <td class="compare-loss">No</td>
+              </tr>
+              <tr>
+                <td><strong>PrintFarmHQ</strong></td>
+                <td>Cloud SaaS</td>
+                <td>Beta (TBD)</td>
+                <td class="compare-loss">Not confirmed</td>
+                <td class="compare-win">Yes</td>
+                <td class="compare-loss">Not confirmed</td>
+                <td class="compare-loss">Not confirmed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Tool profiles</h2>
+
+        <h3>Filametrics</h3>
+        <div class="tags">
+          <span class="tag tag-positive">Free (up to 10 active projects)</span>
+          <span class="tag">Paid tier pricing TBD</span>
+          <span class="tag">Commercial farm focus</span>
+          <span class="tag tag-caution">Printago integration: public beta 2026</span>
+        </div>
+        <p>The most commercially-oriented dedicated inventory tool in this category. Started as filament inventory tracking, and has expanded into project management, Gantt charts, automatic cost estimates from filament usage, and projected stock forecasting against current orders. The v1.3 release in 2025 added 15+ major features including project templates, duplicate projects, and real-time cost calculations.</p>
+        <p>The AI Slicer Reader imports a screenshot of your slicer summary to automatically extract usage data — an imperfect but practical workaround for the lack of direct printer integration. Low-stock alerts flag shortages before they affect orders. The Kanban-based order timeline shows projected filament consumption across all current jobs so you can plan reorders in advance rather than reactively.</p>
+        <p>The significant development: in November 2025, Filametrics announced an exclusive integration partnership with Printago. The combined platform — fleet management routing jobs automatically based on real-time filament availability — entered private beta with select partners in Q1 2026, with public release expected later in 2026. If it ships as described, it closes the gap between inventory and fleet management that every other tool in this guide leaves open.</p>
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Only inventory tool built explicitly for commercial print farms</li>
+              <li>Projected stock forecasting against open orders</li>
+              <li>Printago integration will link inventory to fleet automation</li>
+              <li>Free tier available; active development</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Gaps</div>
+            <ul>
+              <li>Paid tier pricing not yet published</li>
+              <li>Printer integration is screenshot-based, not live telemetry (yet)</li>
+              <li>No spare parts or machine maintenance tracking</li>
+              <li>Printago integration not yet publicly available</li>
+            </ul>
+          </div>
+        </div>
+        <div class="verdict">
+          <span class="verdict-label">Verdict</span>
+          <p>The tool to watch most closely in this category. If the Printago integration ships as described and pricing is reasonable, it becomes the default inventory layer for Printago users. Worth setting up now to be ahead of the integration launch.</p>
+        </div>
+
+        <h3>SimplyPrint (Print Farm plan)</h3>
+        <div class="tags">
+          <span class="tag">$31.49/mo</span>
+          <span class="tag">Live spool tracking</span>
+          <span class="tag">Integrated with fleet management</span>
+        </div>
+        <p>SimplyPrint's filament manager is the most tightly integrated inventory layer available — because it lives inside the same platform as fleet management. Spool weight updates automatically as printing progresses via live printer connection. Low-filament alerts fire before starting a print if the active spool can't complete the job. Cost per gram feeds directly into the Print Farm plan's cost calculation feature.</p>
+        <p>The limitation is scope: filament only. No spare parts tracking, no maintenance consumables, no reorder planning beyond alerts. And it only works inside SimplyPrint — operators not already on the platform can't access it without committing to the full subscription.</p>
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Live automatic spool weight updates during printing</li>
+              <li>Pre-print alert if filament insufficient to complete the job</li>
+              <li>Fully integrated with fleet management — no separate tool</li>
+              <li>Cost data flows directly into job cost calculations</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Gaps</div>
+            <ul>
+              <li>Filament only — no spare parts or maintenance consumables</li>
+              <li>No reorder planning or projected stock forecasting</li>
+              <li>Requires SimplyPrint subscription to access</li>
+            </ul>
+          </div>
+        </div>
+        <div class="verdict">
+          <span class="verdict-label">Verdict</span>
+          <p>The best filament tracking available if you're already on SimplyPrint. That is not a reason to choose SimplyPrint on its own, but is a meaningful bonus if fleet management is already the driver.</p>
+        </div>
+
+        <h3>3DPBOSS (Full tier)</h3>
+        <div class="tags">
+          <span class="tag tag-positive">$199 one-time</span>
+          <span class="tag">Filament + spare parts</span>
+          <span class="tag">Reorder planning</span>
+          <span class="tag">Maintenance tracking</span>
+        </div>
+        <p>The only tool in this list that covers both filament inventory and spare parts in the same system — nozzles, build plates, lubricants, any consumable tied to printer maintenance. Stock levels, usage history, reorder thresholds, and procurement tracking are all included. Maintenance scheduling ties directly to the parts inventory: when a maintenance task is logged, parts consumed are deducted from stock automatically.</p>
+        <p>The tradeoff is that 3DPBOSS has no live printer integration — all usage data is entered manually. For spare parts, that's fine; parts usage is an event, not a continuous stream. For filament, manual entry means the data is only as current as your last update.</p>
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Only verified tool covering spare parts alongside filament</li>
+              <li>Maintenance task integration deducts parts automatically</li>
+              <li>One-time cost — no recurring subscription</li>
+              <li>Reorder thresholds and procurement tracking included</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Gaps</div>
+            <ul>
+              <li>No live printer integration — manual filament usage entry</li>
+              <li>No public user reviews to validate depth of features</li>
+              <li>Requires $199 full tier — spare parts not in $49 Mini</li>
+            </ul>
+          </div>
+        </div>
+        <div class="verdict">
+          <span class="verdict-label">Verdict</span>
+          <p>Best choice if spare parts and maintenance consumables matter as much as filament — which they should for any shop running printers hard. The manual entry tradeoff is a hassle, but manageable for most shop sizes.</p>
+        </div>
+
+        <h3>Spreadsheet ERP</h3>
+        <div class="tags">
+          <span class="tag tag-positive">&lt;$75 one-time</span>
+          <span class="tag">Filament + spare parts</span>
+          <span class="tag">Machine maintenance logs</span>
+          <span class="tag">No live integration</span>
+        </div>
+        <p>Can cover filament inventory, machine maintenance logs, and BOM tracking in a single Excel workbook alongside job costing and customer records. No live printer integration — usage is entered manually after each job. For operators already using the spreadsheet ERP for job economics, the inventory layer is included at no additional cost and no additional tool to manage.</p>
+        <p>The same ceiling applies here as in job economics: single-user, no concurrent access, no automated alerts, no projected stock forecasting. It answers "what do I have" reliably. It may not tell you proactively when you're about to run out.</p>
+        <div class="verdict">
+          <span class="verdict-label">Verdict</span>
+          <p>The right choice for operators already using the spreadsheet ERP for job costing who want inventory in the same place. Not worth adopting separately if your main need is automated tracking — Filametrics or SimplyPrint serve that better.</p>
+        </div>
+
+        <h3>Spoolman</h3>
+        <div class="tags">
+          <span class="tag tag-positive">Free / open source</span>
+          <span class="tag">Self-hosted</span>
+          <span class="tag">OctoPrint + Klipper integration</span>
+          <span class="tag">Filament only</span>
+        </div>
+        <p>The established open-source standard for filament tracking. Self-hosted web service — runs on a Raspberry Pi or any local server. Integrates directly with OctoPrint and Klipper/Moonraker to automatically update spool weights as printing progresses. REST API enables custom integrations. Community-maintained database of manufacturers and filament profiles simplifies adding new spools.</p>
+        <p>Scope is deliberate and narrow: filament spools, only. No spare parts, no job costing connection, no reorder planning. What it does, it does well and for free. The self-hosting requirement is the main friction — Docker or Linux comfort required.</p>
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Live automatic spool tracking via OctoPrint/Klipper</li>
+              <li>Free, open source, no vendor dependency</li>
+              <li>REST API for custom integrations</li>
+              <li>Active community and ongoing development</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Gaps</div>
+            <ul>
+              <li>Self-hosting required — Docker/Linux comfort needed</li>
+              <li>Filament only — no spare parts, no cost rollup to jobs</li>
+              <li>No reorder planning or stock forecasting</li>
+              <li>OctoPrint/Klipper printers only — no Bambu native integration</li>
+            </ul>
+          </div>
+        </div>
+        <div class="verdict">
+          <span class="verdict-label">Verdict</span>
+          <p>Best for technically capable operators running OctoPrint or Klipper fleets who want automatic spool tracking at no cost. Not viable for Bambu-only farms or anyone who wants a hosted solution.</p>
+        </div>
+
+        <h2>How to choose</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>If you…</th>
+              <th>Consider</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Use Printago for fleet management</td>
+              <td>Filametrics — the integration is coming</td>
+            </tr>
+            <tr>
+              <td>Use SimplyPrint for fleet management</td>
+              <td>SimplyPrint's built-in filament manager</td>
+            </tr>
+            <tr>
+              <td>Need spare parts and maintenance consumables tracked</td>
+              <td>3DPBOSS full tier ($199 one-time)</td>
+            </tr>
+            <tr>
+              <td>Already using spreadsheet ERP for job costing</td>
+              <td>Spreadsheet ERP inventory layer (included)</td>
+            </tr>
+            <tr>
+              <td>Run OctoPrint/Klipper and want free automatic tracking</td>
+              <td>Spoolman</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>The direction this layer is heading</h2>
+
+        <p>Inventory has historically been the most disconnected layer in the print shop stack — a separate app, or a separate spreadsheet, updated manually and consulted separately from fleet management and job costing. That's starting to change.</p>
+
+        <p>SimplyPrint already connects live spool data to fleet management within its own platform. The Printago + Filametrics partnership, announced November 2025, goes further: filament telemetry feeding directly into job routing decisions, so printers are automatically assigned based on material availability rather than requiring an operator to check first.</p>
+
+        <div class="callout">
+          <span class="callout-label">What to watch</span>
+          <p>The Printago–Filametrics integration enters public beta in 2026. If it ships as described — real-time material data driving automated job routing — it will be the first end-to-end connection between inventory and fleet management available to commercial FDM print farms. Worth tracking closely before committing to a separate inventory tool.</p>
+        </div>
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>New tools, pricing changes, and honest takes — when there's something worth saying.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span class="page-label">3D Print Shop Software</span>
+          <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>
