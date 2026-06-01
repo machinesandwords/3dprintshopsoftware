@@ -42,12 +42,9 @@
     <div class="nav-section">
       <div class="nav-section-label">Comparisons</div>
       <a href="/comparisons" class="nav-item depth-0">All comparisons</a>
-      <a href="/comparisons/octoprint-vs-klipper" class="nav-item depth-1">├ OctoPrint vs Klipper</a>
-      <a href="/comparisons/mainsail-vs-fluidd" class="nav-item depth-1">├ Mainsail vs Fluidd</a>
-      <a href="/comparisons/printago-vs-simplyprint" class="nav-item depth-1">├ Printago vs SimplyPrint</a>
-      <a href="/comparisons/flowq-vs-simplyprint" class="nav-item depth-1">├ FlowQ vs SimplyPrint</a>
-      <a href="/comparisons/3dpboss-vs-3dprintops" class="nav-item depth-1">├ 3DPBoss vs 3DPrintOps</a>
-      <a href="/comparisons/3dprintops-vs-flowq" class="nav-item depth-1">├ OctoPrint vs Klipper</a>
+      <a href="/comparisons/octoprint-vs-klipper" class="nav-item depth-1">├ OctoPrint vs. Klipper</a>
+      <a href="/comparisons/3dpboss-vs-3dprintops" class="nav-item depth-1">├ 3DPBOSS vs. 3DPrintOps</a>
+      <a href="/comparisons" class="nav-item depth-1">└ More &rarr;</a>
     </div>
 
     <div class="nav-divider"></div>
@@ -55,10 +52,9 @@
     <div class="nav-section">
       <div class="nav-section-label">Guides</div>
       <a href="/guides" class="nav-item depth-0">All guides</a>
-      <a href="/guides/calculate-true-cost-of-sku" class="nav-item depth-1">├ How to calculate your true cost per SKU</a>
-      <a href="/guides/comparing-software-costs" class="nav-item depth-1">├ Comparing software costs</a>      
-      <a href="/guides/hiring-first-employee" class="nav-item depth-1">├ How to Hire Your First Employee</a>
-      <a href="/guides/hire-vs-equipment" class="nav-item depth-1 last">└ Hire or Buy Another Printer?</a>
+      <a href="/guides/calculate-true-cost-of-sku" class="nav-item depth-1">├ True cost per SKU</a>
+      <a href="/guides/hiring-first-employee" class="nav-item depth-1">├ Hire your first employee</a>
+      <a href="/guides" class="nav-item depth-1">└ More &rarr;</a>
     </div>
 
     <div class="nav-divider"></div>

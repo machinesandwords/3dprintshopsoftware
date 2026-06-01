@@ -609,4 +609,7 @@ tr:hover td { background: var(--bg); }
   .main { margin-left: 0; padding: 24px 20px 80px; }
   .pros-cons { grid-template-columns: 1fr; }
   .tool-header { flex-direction: column; }
+  .topbar-tagline { display: none; }
+  .topbar-brand { font-size: 10px; }
+  .topbar-right { font-size: 10px; }
 }
