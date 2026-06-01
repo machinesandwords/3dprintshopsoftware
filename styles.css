@@ -565,10 +565,48 @@ tr:hover td { background: var(--bg); }
   margin-top: 6px;
 }
 
+/* ── Mobile bottom nav ──────────────────────────────────────── */
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 52px;
+    background: var(--surface);
+    border-top: var(--hairline);
+    z-index: 100;
+  }
+  .mobile-nav a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    border-right: var(--hairline);
+    transition: color 0.1s, background 0.1s;
+  }
+  .mobile-nav a:last-child { border-right: none; }
+  .mobile-nav a:hover { color: var(--accent); text-decoration: none; }
+  .mobile-nav a.active {
+    color: var(--accent);
+    background: var(--accent-pale);
+  }
+}
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .sidebar { display: none; }
-  .main { margin-left: 0; padding: 24px 20px 64px; }
+  .main { margin-left: 0; padding: 24px 20px 80px; }
   .pros-cons { grid-template-columns: 1fr; }
   .tool-header { flex-direction: column; }
 }
