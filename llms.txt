@@ -1,0 +1,37 @@
+# 3D Print Shop Software
+
+> Vendor-neutral resource for commercial 3D print shop operators evaluating and managing software stacks. Covers printer control, fleet management, job economics, inventory, and customer management tools.
+
+## Core
+
+- [Home](https://3dprintshopsoftware.com/)
+- [Why Software Matters](https://3dprintshopsoftware.com/why/)
+- [Software Landscape](https://3dprintshopsoftware.com/landscape/)
+
+## Comparisons
+
+- [OctoPrint vs Klipper](https://3dprintshopsoftware.com/comparisons/octoprint-vs-klipper/)
+- [Mainsail vs Fluidd](https://3dprintshopsoftware.com/comparisons/mainsail-vs-fluidd/)
+- [Printago vs SimplyPrint](https://3dprintshopsoftware.com/comparisons/printago-vs-simplyprint/)
+- [FlowQ vs SimplyPrint](https://3dprintshopsoftware.com/comparisons/flowq-vs-simplyprint/)
+- [3DPBoss vs 3DPrintOps](https://3dprintshopsoftware.com/comparisons/3dpboss-vs-3dprintops/)
+- [3DPBoss vs Offset3D](https://3dprintshopsoftware.com/comparisons/3dpboss-vs-offset3d/)
+- [3DPrintOps vs Offset3D](https://3dprintshopsoftware.com/comparisons/3dprintops-vs-offset3d/)
+- [3DPBoss vs MRPeasy](https://3dprintshopsoftware.com/comparisons/3dpboss-vs-mrpeasy/)
+- [MRPeasy vs Offset3D](https://3dprintshopsoftware.com/comparisons/mrpeasy-vs-offset3d/)
+- [Filametrics vs Spoolman](https://3dprintshopsoftware.com/comparisons/filametrics-vs-spoolman/)
+
+## Guides
+
+- [Calculate True Cost of a SKU](https://3dprintshopsoftware.com/guides/calculate-true-cost-of-sku/)
+- [Comparing Software Costs](https://3dprintshopsoftware.com/guides/comparing-software-costs/)
+- [Hiring Your First Employee](https://3dprintshopsoftware.com/guides/hiring-first-employee/)
+- [Hire vs Buy Equipment](https://3dprintshopsoftware.com/guides/hire-vs-equipment/)
+
+## Tools
+
+- [Job Pricing Tool](https://3dprintshopsoftware.com/tools/job-pricing-tool/)
+- [Where's Your Operation Leaking](https://3dprintshopsoftware.com/tools/wheres-your-operation-leaking/)
+- [Does This Tool Pencil Out](https://3dprintshopsoftware.com/tools/does-this-tool-pencil-out/)
+- [Normalize Your Software Costs](https://3dprintshopsoftware.com/tools/normalize-your-software-costs/)
+- [What Does This Stack Cost to Run](https://3dprintshopsoftware.com/tools/what-does-this-stack-cost-to-run/)
