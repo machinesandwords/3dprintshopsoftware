@@ -33,7 +33,7 @@
       <a href="/tools/job-pricing-tool" class="nav-item depth-1">├ What should I charge for this job?</a>
       <a href="/tools/wheres-your-operation-leaking" class="nav-item depth-1">├ Where's your operation leaking?</a>
       <a href="/tools/does-this-tool-pencil-out" class="nav-item depth-1">├ Does this tool pencil out?</a>
-      <a href="/tools/tool-stack-builder" class="nav-item depth-1">├  What does this stack cost to run?</a>
+      <a href="/tools/what-does-this-stack-cost-to-run" class="nav-item depth-1">├  What does this stack cost to run?</a>
       <a href="/tools/normalize-your-software-costs" class="nav-item depth-1 last">└ Normalize your software costs</a>
     </div>
 
